@@ -11,7 +11,6 @@ import cls from './Header.module.css'
 export const Header = () => {
   const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false)
-  const router = useRouter()
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)

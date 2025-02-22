@@ -36,7 +36,7 @@ export default function Register() {
     <div className={cls.page}>
       <main className={cls.main}>
         <div className={cls.register_container}>   
-          <h1 className={cls.main_title}>Создайте аккаунт и откройте мир моды!</h1>
+          {/* <h1 className={cls.main_title}>Создайте аккаунт и откройте мир моды!</h1> */}
           <form className={cls.form} onSubmit={handleSubmit}>
             <label className={cls.label}>E-mail</label>
             <input className={cls.input} type="text" value={email} onChange={(e) => setEmail(e.target.value)} />

@@ -19,24 +19,28 @@ export default function ProductsPage() {
   const [products, setProducts] = React.useState<ProductTypes.Item[]>([])
   const [categories, setCategories] = React.useState<ProductTypes.Category[]>([])
   const [selectedCategory, setSelectedCategory] = React.useState<ProductTypes.Category | null>(null)
-  const [page, setPage] = React.useState(1)
-  const [hasMore, setHasMore] = React.useState(true)
-  const pageSize = 2
+  // const [page, setPage] = React.useState(1)
+  // const [hasMore, setHasMore] = React.useState(true)
+  // const pageSize = 2
 
-  const loadData = async (categorySlug?: string, pageNumber: number = 1) => {
+  const loadData = async (categorySlug?: string) => {
     try {
-      const productsData = await Api.products.ProductsGET(categorySlug, pageNumber)
+      const productsData = await Api.products.ProductsGET(categorySlug)
 
-      if (pageNumber === 1) {
-        setProducts(productsData.data)
-      } else {
-        setProducts(prev => [...prev, ...productsData.data])
-      }
-      if (productsData.data.length < pageSize) {
-        setHasMore(false)
-      } else {
-        setHasMore(true)
-      }
+      console.log('sd', productsData)
+
+      setProducts(productsData.data)
+
+      // if (pageNumber === 1) {
+      //   setProducts(productsData.data)
+      // } else {
+      //   setProducts(prev => [...prev, ...productsData.data])
+      // }
+      // if (productsData.data.length < pageSize) {
+      //   setHasMore(false)
+      // } else {
+      //   setHasMore(true)
+      // }
     } catch (error) {
       console.error('Ошибка загрузки продуктов:', error)
     }
@@ -45,8 +49,8 @@ export default function ProductsPage() {
   React.useEffect(() => {
     const fetchInitialData = async () => {
       setLoadingData(true)
-      setPage(1)
-      await loadData(selectedCategory ? selectedCategory.slug : undefined, 1)
+      // setPage(1)
+        await loadData(selectedCategory ? selectedCategory.slug : '')
 
       if (!categories.length) {
         try {
@@ -67,14 +71,14 @@ export default function ProductsPage() {
     setSelectedCategory(category)
   }
 
-  const handleChangePage = async () => {
-    const nextPage = page + 1
+  // const handleChangePage = async () => {
+  //   const nextPage = page + 1
 
-    setFilterLoading(true)
-    await loadData(selectedCategory ? selectedCategory.slug : undefined, nextPage)
-    setPage(nextPage)
-    setFilterLoading(false)
-  }
+  //   setFilterLoading(true)
+  //   await loadData(selectedCategory ? selectedCategory.slug : undefined, nextPage)
+  //   setPage(nextPage)
+  //   setFilterLoading(false)
+  // }
 
   return (
     <div className={styles.page}>
@@ -95,11 +99,11 @@ export default function ProductsPage() {
               <ProductCard key={product.slug} product={product} />
             ))}
           </motion.div>
-          {hasMore && (
+          {/* {hasMore && (
             <button onClick={handleChangePage} disabled={filterLoading}>
               {filterLoading ? 'Загрузка...' : 'Показать ещё'}
             </button>
-          )}
+          )} */}
         </main>
       )}
     </div>
