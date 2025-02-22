@@ -26,6 +26,7 @@
 .form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 16px;
     width: 100%;
     max-width: 320px;
@@ -69,4 +70,23 @@
 .button:hover{
     background-color: #fff;
     color: #000;
+}
+
+@media screen and (max-width: 600px) {
+    .resetPassword_container{
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .resetPassword_container{
+        width: auto;
+    }
+    .input{
+        width: 270px;
+    }
+
+    .button{
+        width: 270px;
+    }
 }

@@ -46,3 +46,22 @@
     background-color: #fff;
     color: #000;
 }
+
+@media screen and (max-width: 600px) {
+    .confirm_container{
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .confirm_container{
+        width: auto;
+    }
+    .input{
+        width: 270px;
+    }
+
+    .button{
+        width: 270px;
+    }
+}

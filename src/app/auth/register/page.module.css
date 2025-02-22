@@ -26,6 +26,7 @@
 .form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 16px;
     width: 100%;
     max-width: 320px;
@@ -36,12 +37,6 @@
     font-size: 16px;
     text-align: center;
     color: #000;
-}
-
-.main_title{
-    font-weight: 400;
-    margin-bottom: 12px;
-    text-align: center;
 }
   
 .input {
@@ -99,4 +94,23 @@
 .bottomText span {
     color: #000;
     cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .register_container{
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .register_container{
+        width: auto;
+    }
+    .input{
+        width: 270px;
+    }
+
+    .button{
+        width: 270px;
+    }
 }
