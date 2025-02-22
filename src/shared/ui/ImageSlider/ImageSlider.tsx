@@ -7,10 +7,10 @@ import Image from 'next/image'
 
 const ImageSlider = () => {
   const images = [
-    '/images/default_image_1.png',
-    '/images/default_image_2.png',
-    '/images/default_image_3.png',
-    '/images/default_image_4.png',
+    '/images/header/default_image_1.png',
+    '/images/header/default_image_2.png',
+    '/images/header/default_image_3.png',
+    '/images/header/default_image_4.png',
   ]
 
   const [currentImage, setCurrentImage] = useState(0)

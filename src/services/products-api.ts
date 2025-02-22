@@ -1,8 +1,6 @@
 export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 2) => {
   try {
-    const query = category_slug
-      ? `?category_slug=${category_slug}&page=${page}&limit=${limit}`
-      : `?page=${page}&limit=${limit}`
+    const query = category_slug ? `?category_slug=${category_slug}` : ''
 
     const response = await fetch(`/api/products${query}`, {
       method: 'GET',
