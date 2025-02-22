@@ -38,7 +38,6 @@ export default function Login() {
     <div className={cls.page}>
       <main className={cls.main}>
         <div className={cls.login_container}>
-          {/* <h1 className={cls.main_title}>Рады видеть вас снова!</h1> */}
           <form className={cls.form} onSubmit={handleSubmit}>
             <label className={cls.label}>E-mail</label>
             <input className={cls.input} value={email} onChange={(e) => setEmail(e.target.value)} type="text" />
