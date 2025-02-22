@@ -1,0 +1,102 @@
+.page {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+  
+.main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.register_container {
+    width: 502px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    border-radius: 3px;
+    border: 1px solid #000;
+}
+  
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 320px;
+    color: #fff;
+}
+  
+.label {
+    font-size: 16px;
+    text-align: center;
+    color: #000;
+}
+
+.main_title{
+    font-weight: 400;
+    margin-bottom: 12px;
+    text-align: center;
+}
+  
+.input {
+    width: 320px;
+    height: 50px;
+    border: 1px solid #000;
+    border-radius: 6px;
+    outline: none;
+    background-color: #fff;
+    padding: 0 8px;
+    font-size: 16px;
+}
+  
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+}
+
+.forgotPassword{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.forgotPassword span{
+    color: #000;
+    font-size: 11px;
+    cursor: pointer;
+}
+  
+.button {
+    width: 320px;
+    height: 50px;
+    background-color: #000;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    border: 1px solid #000;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+}
+
+.button:hover{
+    background-color: #fff;
+    color: #000;
+}
+  
+.bottomText {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+}
+.bottomText span {
+    color: #000;
+    cursor: pointer;
+}
