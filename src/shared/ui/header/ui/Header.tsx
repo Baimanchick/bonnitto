@@ -4,10 +4,12 @@ import React from 'react'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import cls from './Header.module.css'
 
 export const Header = () => {
+  const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false)
 
   const toggleMenu = () => {
@@ -28,19 +30,20 @@ export const Header = () => {
 
           <div className={cls.item_logo}>
             <Image
-              src={isOpen ? '/icons/logo_light.svg' : '/icons/logo.svg'}
+              src={isOpen ? '/icons/header/logo_light.svg' : '/icons/header/logo.svg'}
               alt="Logo"
               width={270}
               height={75}
+              priority
             />
           </div>
 
           <div className={cls.item}>
             <div className={cls.actions}>
-              <Image src={isOpen ? '/icons/search_light.svg' : '/icons/search.svg'} alt="search_products" width={22} height={22} />
-              <Image src={isOpen ? '/icons/user_light.svg' : '/icons/user.svg'} alt="profile" width={22} height={22} />
-              <Image src={isOpen ? '/icons/heart_light.svg' : '/icons/heart.svg'} alt="favorites_products" width={22} height={22} />
-              <Image src={isOpen ? '/icons/cart_light.svg' : '/icons/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
+              <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products" width={22} height={22} />
+              <Image src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} onClick={() => router.push('/auth/register')} alt="profile" width={22} height={22} />
+              <Image src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
+              <Image src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
             </div>
           </div>
         </div>
@@ -86,7 +89,7 @@ export const Header = () => {
                     <div className={cls.city}>
                       <h4 className={cls.menu_title}>ВАШ ГОРОД</h4>
                       <p className={cls.point_city}>
-                        <Image src={'/icons/pin.svg'} alt="pin" width={10} height={11} /> Бишкек
+                        <Image src={'/icons/header/pin.svg'} alt="pin" width={10} height={11} /> Бишкек
                       </p>
                     </div>
                   </div>
@@ -98,7 +101,7 @@ export const Header = () => {
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Image src="/images/default_image_1.png" alt="Магазины" width={300} height={400} />
+                    <Image src="/images/header/default_image_1.png" alt="Магазины" width={300} height={400} />
                     <p>МАГАЗИНЫ</p>
                   </motion.div>
 
@@ -107,7 +110,7 @@ export const Header = () => {
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Image src="/images/default_image_2.png" alt="О бренде" width={300} height={400} />
+                    <Image src="/images/header/default_image_2.png" alt="О бренде" width={300} height={400} />
                     <p>О БРЕНДЕ</p>
                   </motion.div>
                 </div>
