@@ -1,4 +1,7 @@
+'use client'
+
 import { Header } from '@/shared/ui/header/ui/Header'
+import ImageSlider from '@/shared/ui/ImageSlider/ImageSlider'
 
 import styles from './page.module.css'
 
@@ -8,7 +11,7 @@ export default function Home() {
       <Header/>
 
       <main>
-        <h1>hello</h1>
+        <ImageSlider/>
       </main>
     </div>
   )

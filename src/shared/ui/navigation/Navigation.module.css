@@ -1,0 +1,21 @@
+.categories {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+
+}
+
+.category_item {
+    text-transform: uppercase;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+.category_item:hover {
+    color: #6e6e6e99;
+}

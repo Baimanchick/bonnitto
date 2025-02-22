@@ -4,11 +4,13 @@ import React from 'react'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import cls from './Header.module.css'
 
 export const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false)
+  const router = useRouter()
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
@@ -70,7 +72,7 @@ export const Header = () => {
                     <li>Популярное</li>
                     <li>Новогодняя коллекция</li>
                     <li>Sale</li>
-                    <li>Весь ассортимент</li>
+                    <li onClick={() => router.push('/products/')}>Весь ассортимент</li>
                   </ul>
 
                   <div className={cls.menuBlock}>

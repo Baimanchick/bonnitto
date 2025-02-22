@@ -1,0 +1,34 @@
+.page {
+    /* background-image: url('../../../public/images/ProductsBackground.jpg'); */
+}
+
+.list_products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 25px;
+    grid-row-gap: 80px;
+}
+
+.flex_page {
+    display: flex;
+    margin-top: 15px;
+    overflow: visible;
+    align-items: flex-start;
+}
+
+.load_more_button {
+    border: 2px solid black;
+    background-color: initial;
+    width: 150px;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.btn_block {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
