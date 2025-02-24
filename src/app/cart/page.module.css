@@ -267,3 +267,17 @@
     cursor: pointer;
     border: 1px solid black;
 }
+
+@media (max-width: 768px) {
+    .delete {
+        display: none;
+    }
+    .flex_page {
+        flex-direction: column;
+    }
+    .aaaa {
+        height: auto;
+        margin-top: 20px;
+        width: 100%;
+    }
+}

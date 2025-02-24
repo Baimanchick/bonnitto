@@ -1,15 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    const body = await request.json()
-
-    console.log('body', body)
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/orders/from-cart/`, {
       method: 'POST',
-      body: JSON.stringify(body),
+      body: JSON.stringify({}),
     })
+
+    console.log('res', response)
 
     const data = await response.json()
 

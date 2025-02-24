@@ -1,3 +1,4 @@
+import * as Cart from './cart-api'
 import * as Categories from './categories-api'
 import * as MainImages from './main-images-api'
 import * as Order from './order-api'
@@ -8,4 +9,5 @@ export const Api = {
   categories: Categories,
   mainImages: MainImages,
   order: Order,
+  cart: Cart,
 }
