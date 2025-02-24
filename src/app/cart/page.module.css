@@ -1,0 +1,269 @@
+.flex_page {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    column-gap: 40px;
+}
+
+.flex_page_item {
+    width: 70%;
+}
+
+.aaaa {
+    width: 30%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex_page_item_cart {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.cart_title {
+    font-size: 29px;
+    font-weight: 600;
+    margin: 20px 0px 20px 0px;
+}
+
+.delete {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete span {
+    color: #000000AB;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.cart_items {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart_item_image_info {
+    display: flex;
+    column-gap: 25px;
+}
+
+.price_actions {
+    display: flex;
+    column-gap: 90px;
+    margin-top: 12px;
+}
+
+.cart_image img {
+    object-fit: cover;
+}
+
+.cart_info {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart_item_title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    width: 350px;
+}
+
+.cart_info span {
+    font-size: 12px;
+    color: #000000AB;
+    line-height: 18px;
+}
+
+.action_block {
+    width: max-content;
+    height: max-content;
+    padding: 5px;
+    border: 1px solid #00000080;
+}
+
+.actions {
+    display: flex;
+    column-gap: 15px;
+    align-items: center;
+}
+
+.add {
+    font-size: 29px;
+    line-height: 15px;
+    cursor: pointer;
+}
+
+.delete_svg {
+    cursor: pointer;
+}
+
+.cart_card {
+    width: 100%;
+    background-color: #D9D9D980;
+    padding: 10px 40px;
+}
+
+.cart_card_dop_info {
+    width: 100%;
+    background-color: #D9D9D980;
+    display: flex;
+    align-items: center;
+    column-gap: 25px;
+    padding: 20px 40px;
+}
+
+.cart_card_dop_info_text {
+    font-size: 11px;
+    width: 200px;
+    line-height: 16px;
+}
+
+.cart_card_title {
+    font-size: 20px;
+}
+
+.cart_card_list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart_card_list_info {
+    font-size: 12px;
+    color: #000000AB;
+}
+
+.cart_card_list_price {
+    font-size: 12px;
+    color: #000000AB;
+}
+
+.list {
+    margin: 20px 0px;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total_title {
+    font-size: 20px;
+}
+
+.total_price {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.order_btn {
+    margin-top: 20px;
+    width: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.actions_add {
+    width: max-content;
+    padding: 3px 10px;
+    border: 1px solid #000000;
+    background-color: initial;
+    border-radius: 5px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.actions_remove {
+    width: max-content;
+    padding: 3px 10px;
+    border: 1px solid #000000;
+    background-color: initial;
+    border-radius: 5px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.quantity {
+    font-size: 18px;
+}
+
+.price_block {
+    width: 100px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.empty {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flexx {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.btn {
+    border: 2px solid black;
+    background-color: initial;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin-top: 10px;
+}
+
+.input {
+    width: 100%;
+    height: 40px;
+    padding: 0px 10px;
+    background-color: initial;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.btn_cancel {
+    width: 100%;
+    background-color: initial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid black;
+}

@@ -13,3 +13,10 @@ a {
   max-width: 1300px;
   margin: 0 auto;
 }
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

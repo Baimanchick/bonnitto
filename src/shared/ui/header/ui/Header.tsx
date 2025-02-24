@@ -18,14 +18,23 @@ export const Header = () => {
 
   return (
     <header className={`${cls.header} ${isOpen ? cls.headerOpen : ''}`}>
-      <div className={cls.container}>
+      <div className={'container'}>
         <div className={cls.items}>
-          <div className={cls.item} onClick={toggleMenu}>
+          <div className={`${cls.item}`} onClick={toggleMenu}>
             <div className={`${cls.burger} ${isOpen ? cls.open : ''}`}>
               <span />
               <span />
               <span />
             </div>
+          </div>
+
+          <div className={`${cls.item_mobile}`} onClick={toggleMenu}>
+            <div className={`${cls.burger} ${isOpen ? cls.open : ''}`}>
+              <span />
+              <span />
+              <span />
+            </div>
+            <Image src={isOpen ? '/icons/search_light.svg' : '/icons/search.svg'} alt="search_products" width={22} height={22} />
           </div>
 
           <div className={cls.item_logo}>
@@ -42,7 +51,14 @@ export const Header = () => {
               <Image src={isOpen ? '/icons/search_light.svg' : '/icons/search.svg'} alt="search_products" width={22} height={22} />
               <Image src={isOpen ? '/icons/user_light.svg' : '/icons/user.svg'} alt="profile" width={22} height={22} />
               <Image src={isOpen ? '/icons/heart_light.svg' : '/icons/heart.svg'} alt="favorites_products" width={22} height={22} />
-              <Image src={isOpen ? '/icons/cart_light.svg' : '/icons/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
+              <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/cart_light.svg' : '/icons/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
+            </div>
+          </div>
+
+          <div className={cls.item_mobile}>
+            <div className={cls.actions}>
+              <Image src={isOpen ? '/icons/heart_light.svg' : '/icons/heart.svg'} alt="favorites_products" width={22} height={22} />
+              <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/cart_light.svg' : '/icons/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
             </div>
           </div>
         </div>
