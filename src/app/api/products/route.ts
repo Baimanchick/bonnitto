@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       ? `?category_slug=${category_slug}`
       : ''
 
-      console.log('q', query)
+    console.log('q', query)
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/products/${query}`, {
       cache: 'no-store',
@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ success: true, data: data.results })
   } catch (error) {
     console.log('error', error)
+
     return NextResponse.json({ success: false, error: error }, { status: 500 })
   }
 }

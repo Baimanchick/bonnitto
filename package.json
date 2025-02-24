@@ -15,7 +15,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
-    "react-redux": "^9.1.2"
+    "react-redux": "^9.1.2",
+    "yet-another-react-lightbox": "^3.21.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
