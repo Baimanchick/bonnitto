@@ -11,8 +11,37 @@ export namespace ProductTypes {
         composition: string
         collection: string
     }
+    export interface ItemDetail {
+        slug: string;
+        title: string;
+        article: string;
+        composition: string
+        produced: string
+        category: Category;
+        main_image: string;
+        description: string;
+        base_price: string;
+        available_colors: Color[];
+        available_sizes: Size[];
+      }
+
     export interface Category {
-        slug: string
-        title: string
+        slug: string;
+        title: string;
+    }
+
+    export interface Color {
+        id: number;
+        name: string;
+        hex_code: string;
+        images: {
+          id: number;
+          image: string;
+        }[];
+    }
+
+    export interface Size {
+        id: number;
+        name: string;
     }
 }
