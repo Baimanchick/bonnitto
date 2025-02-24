@@ -44,4 +44,21 @@ export namespace ProductTypes {
         id: number;
         name: string;
     }
+    export interface Variants {
+        id: number
+        product: Item
+        color: Color
+        size: Size
+        price: string
+        stock: number
+    }
+    export interface Color {
+        id: number
+        name: string
+        hex_code: string
+    }
+    export interface Size {
+        id: number
+        name: string
+    }
 }

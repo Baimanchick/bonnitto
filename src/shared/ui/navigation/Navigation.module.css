@@ -19,3 +19,21 @@
 .category_item:hover {
     color: #6e6e6e99;
 }
+
+@media (max-width: 768px) {
+    .categories {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: static;
+        max-width: none;
+        flex-direction: row;
+        column-gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+    .category_item {
+        width: max-content;
+    }
+}

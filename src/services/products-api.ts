@@ -1,4 +1,4 @@
-export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 2) => {
+export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 10) => {
   try {
     const query = category_slug ? `?category_slug=${category_slug}` : ''
 
@@ -23,6 +23,21 @@ export const ProductSlugGET = async (products_slug: string | string[] | undefine
     const data = await response.json()
 
     return data.data
+  } catch (error) {
+    console.log('error getting product detail', error)
+  }
+}
+
+export const ProductsVariantsGET = async (variants_id: number[]) => {
+  try {
+    const queryString = variants_id.join(',')
+    const response = await fetch(`/api/products/variants?variant_ids=${queryString}`, {
+      method: 'GET',
+    })
+
+    const data = await response.json()
+
+    return data
   } catch (error) {
     console.log('error getting product detail', error)
   }

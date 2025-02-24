@@ -9,8 +9,8 @@ import { useRouter } from 'next/navigation'
 import cls from './Header.module.css'
 
 export const Header = () => {
-  const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false)
+  const router = useRouter()
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
@@ -18,14 +18,23 @@ export const Header = () => {
 
   return (
     <header className={`${cls.header} ${isOpen ? cls.headerOpen : ''}`}>
-      <div className={cls.container}>
+      <div className={'container'}>
         <div className={cls.items}>
-          <div className={cls.item} onClick={toggleMenu}>
+          <div className={`${cls.item}`} onClick={toggleMenu}>
             <div className={`${cls.burger} ${isOpen ? cls.open : ''}`}>
               <span />
               <span />
               <span />
             </div>
+          </div>
+
+          <div className={`${cls.item_mobile}`} onClick={toggleMenu}>
+            <div className={`${cls.burger} ${isOpen ? cls.open : ''}`}>
+              <span />
+              <span />
+              <span />
+            </div>
+            <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products" width={22} height={22} />
           </div>
 
           <div className={cls.item_logo}>
@@ -34,16 +43,22 @@ export const Header = () => {
               alt="Logo"
               width={270}
               height={75}
-              priority
             />
           </div>
 
           <div className={cls.item}>
             <div className={cls.actions}>
               <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products" width={22} height={22} />
-              <Image src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} onClick={() => router.push('/auth/register')} alt="profile" width={22} height={22} />
+              <Image src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} alt="profile" width={22} height={22} />
               <Image src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
-              <Image src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
+              <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
+            </div>
+          </div>
+
+          <div className={cls.item_mobile}>
+            <div className={cls.actions}>
+              <Image src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
+              <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
             </div>
           </div>
         </div>

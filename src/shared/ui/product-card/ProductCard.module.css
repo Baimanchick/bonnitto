@@ -32,3 +32,22 @@
 .price {
     font-size: 15px;
 }
+
+@media (max-width: 768px) {
+    .card {
+        max-width: 190px;
+    }
+    .image {
+        width: 100%;
+        height: 250px;
+    }
+    .title {
+        font-size: 12px;
+    }
+    .description {
+        font-size: 9px;
+    }
+    .price {
+        font-size: 12px;
+    }
+}
