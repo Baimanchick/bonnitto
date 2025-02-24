@@ -1,0 +1,67 @@
+.page {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+  
+.main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm_container {
+    width: 400px;
+    padding: 20px;
+    text-align: center;
+    border: 1px #000 solid
+}
+
+.confirm_container p{
+    margin-top: 10px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.button {
+    width: 320px;
+    height: 50px;
+    background-color: #000;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    border: 1px solid #000;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+}
+
+.button:hover{
+    background-color: #fff;
+    color: #000;
+}
+
+@media screen and (max-width: 600px) {
+    .confirm_container{
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .confirm_container{
+        width: auto;
+    }
+    .input{
+        width: 270px;
+    }
+
+    .button{
+        width: 270px;
+    }
+}
