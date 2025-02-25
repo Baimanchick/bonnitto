@@ -22,6 +22,8 @@ export namespace ProductTypes {
         main_image: string
         description: string
         base_price: string
+        in_cart: boolean
+        in_favorite: boolean
         available_colors: Color[]
         available_sizes: Size[]
     }
@@ -32,22 +34,6 @@ export namespace ProductTypes {
         id: number
         price: any
         stock: number
-        product: ItemDetailProduct
-    }
-
-    export interface ItemDetailProduct {
-        slug: string;
-        category: Category;
-        title: string;
-        description: string;
-        base_price: number;
-        main_image: string;
-        article: string;
-        produced: string;
-        composition: string;
-        created_at: Date;
-        collection: string;
-        in_favorite: boolean;
     }
 
     export interface Category {

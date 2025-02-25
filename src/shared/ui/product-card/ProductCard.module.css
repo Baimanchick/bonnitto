@@ -8,6 +8,12 @@
     cursor: pointer;
 }
 
+.info_section {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
 .description {
     max-height: 40px;
     overflow: hidden;
@@ -32,6 +38,21 @@
 .price {
     font-size: 15px;
 }
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.heart_icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
 
 @media (max-width: 768px) {
     .card {

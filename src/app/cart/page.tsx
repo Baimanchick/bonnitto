@@ -289,7 +289,7 @@ export default function CartsPage() {
                           </div>
 
                           <div className={cls.cart_card_dop_info}>
-                            <Image src={'/icons/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
+                            <Image src={'/icons/cart/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
                             <p className={cls.cart_card_dop_info_text}>Доступные способы оплаты: на сайте или  при получении</p>
                           </div>
                         </div>
@@ -381,7 +381,7 @@ export default function CartsPage() {
                     </div>
 
                     <div className={cls.cart_card_dop_info}>
-                      <Image src={'/icons/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
+                      <Image src={'/icons/cart/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
                       <p className={cls.cart_card_dop_info_text}>Доступные способы оплаты: на сайте или  при получении</p>
                     </div>
                   </div>

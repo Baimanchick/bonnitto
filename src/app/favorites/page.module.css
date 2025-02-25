@@ -1,0 +1,22 @@
+.empty {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flexx {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.btn {
+    border: 2px solid black;
+    background-color: initial;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
