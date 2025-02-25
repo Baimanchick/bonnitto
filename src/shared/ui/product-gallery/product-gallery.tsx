@@ -19,31 +19,29 @@ interface ProductGalleryProps {
 
 export default function ProductGallery({ images, big_image }: ProductGalleryProps) {
   const [open, setOpen] = React.useState(false)
-
   const slides = images?.map((img) => ({ src: img }))
 
   return (
     <>
       <div className={cls.mainImage_conatiner}>
         <Image
-          src={big_image}
+          src={images && images.length > 0 ? images[0] : big_image}
           alt="Product image"
           width={0}
           height={0}
           sizes="100vw"
           className={cls.main_image}
-          onClick={() => images?.length !== 0 ? setOpen(true) : toast.error('У продукта нет картинок')}
           priority
+          onClick={() => images && images.length !== 0 ? setOpen(true) : toast.error('У продукта нет картинок')}
         />
       </div>
       <div className={cls.image_container}>
-        {images?.map((imgUrl, idx) => (
-          // eslint-disable-next-line @next/next/no-img-element
+        {images?.map((item, index) => (
           <Image
             // eslint-disable-next-line react/no-array-index-key
-            key={idx}
-            src={imgUrl}
-            alt={`Product image ${idx}`}
+            key={index}
+            src={item}
+            alt={`Product image ${index}`}
             width={0}
             height={0}
             sizes="100vw"
@@ -52,7 +50,6 @@ export default function ProductGallery({ images, big_image }: ProductGalleryProp
           />
         ))}
       </div>
-
       <Lightbox
         open={open}
         close={() => setOpen(false)}

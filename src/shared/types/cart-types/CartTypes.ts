@@ -39,4 +39,8 @@ export namespace CartTypes {
             }
         }
     }
+    export interface Form {
+        quantity: number
+        variant: number
+    }
 }

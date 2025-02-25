@@ -11,38 +11,63 @@ export namespace ProductTypes {
         composition: string
         collection: string
     }
-    export interface ItemDetail {
-        slug: string;
-        title: string;
-        article: string;
+
+    export interface DefaultItemDetail {
+        slug: string
+        title: string
+        article: string
         composition: string
         produced: string
+        category: Category
+        main_image: string
+        description: string
+        base_price: string
+        available_colors: Color[]
+        available_sizes: Size[]
+    }
+
+    export interface ItemDetail {
+        color: Color
+        size: Size
+        id: number
+        price: any
+        stock: number
+        product: ItemDetailProduct
+    }
+
+    export interface ItemDetailProduct {
+        slug: string;
         category: Category;
-        main_image: string;
+        title: string;
         description: string;
-        base_price: string;
-        available_colors: Color[];
-        available_sizes: Size[];
-      }
+        base_price: number;
+        main_image: string;
+        article: string;
+        produced: string;
+        composition: string;
+        created_at: Date;
+        collection: string;
+        in_favorite: boolean;
+    }
 
     export interface Category {
-        slug: string;
-        title: string;
+        slug: string
+        title: string
     }
 
     export interface Color {
-        id: number;
-        name: string;
-        hex_code: string;
+        id: number
+        name: string
+        hex_code: string
         images: {
-          id: number;
-          image: string;
-        }[];
+          id: number
+          image: string
+        }[]
     }
 
     export interface Size {
-        id: number;
-        name: string;
+        id: number
+        name: string
     }
     export interface Variants {
         id: number

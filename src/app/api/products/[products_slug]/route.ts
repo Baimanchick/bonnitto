@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest, { params }: { params: { products_slug: string } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ products_slug: string }> }) {
+  const { products_slug } = await context.params
+
   try {
-    const { products_slug } = params
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/products/${products_slug}/`,
