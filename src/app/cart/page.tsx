@@ -2,6 +2,7 @@
 'use client'
 
 import React from 'react'
+import toast from 'react-hot-toast'
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -114,6 +115,7 @@ export default function CartsPage() {
 
     if (newQuantity < 1) {
       await Api.cart.CartDELETE(id)
+      toast.success('Вы успешно удалили продукт')
       const response = await Api.cart.CartListGET()
 
       setProductsCart(response)
@@ -147,9 +149,9 @@ export default function CartsPage() {
       if (response.success === true) {
         localStorage.removeItem('cartItems')
         router.push('/products')
-        alert('Мы добавили ваш заказ')
+        toast.success('Мы добавили ваш заказ')
       } else {
-        alert('Что то пошло не так!')
+        toast.error('Что то пошло не так!')
       }
     } catch (error) {
       console.log('Submit error:', error)
@@ -167,9 +169,9 @@ export default function CartsPage() {
 
       if (response) {
         router.push('/products')
-        alert('Мы добавили ваш заказ')
+        toast.success('Мы добавили ваш заказ')
       } else {
-        alert('Что то пошло не так!')
+        toast.error('Что то пошло не так!')
       }
     } catch (error) {
       console.log('Submit error:', error)
