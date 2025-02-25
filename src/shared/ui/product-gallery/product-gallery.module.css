@@ -1,0 +1,42 @@
+.image_container{
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+}
+
+.main_image{
+    max-width: 500px;
+    width: 488px;
+    height: 651px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.image_container__item{
+    width: 80px;
+    height: 99px;
+    max-width: 100px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 950px) {
+    .main_image{
+        width: 388px;
+        height: 551px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main_image{
+        max-width: initial;
+        width: 100%;
+        height: auto;
+    }
+    .image_container__item{
+        width: 70px;
+        height: 89px;
+    }
+}
