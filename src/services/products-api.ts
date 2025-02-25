@@ -63,8 +63,6 @@ export const ProductSlugVariantsGET = async (products_slug: string | string[] | 
       method: 'GET',
     })
 
-    console.log('response', response)
-
     const data = await response.json()
 
     return data

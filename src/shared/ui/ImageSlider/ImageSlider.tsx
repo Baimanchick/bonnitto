@@ -36,7 +36,7 @@ const ImageSlider = () => {
 
         return () => clearInterval(interval)
       } catch (error) {
-        console.error('Failed to load images:', error)
+        console.log('Failed to load images:', error)
       }
     }
 

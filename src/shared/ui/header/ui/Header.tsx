@@ -43,13 +43,14 @@ export const Header = () => {
               alt="Logo"
               width={270}
               height={75}
+              priority
             />
           </div>
 
           <div className={cls.item}>
             <div className={cls.actions}>
               <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products" width={22} height={22} />
-              <Image src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} alt="profile" width={22} height={22} />
+              <Image onClick={() => router.push('/auth/register')} src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} alt="profile" width={22} height={22} />
               <Image src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
               <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
             </div>
