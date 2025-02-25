@@ -87,6 +87,12 @@
     border: 0.3px solid #00000080;
 }
 
+.stock span{
+    font-size: 15px;
+    font-weight: 400;
+    color: #000000E5;
+}
+
 .colors{
     display: flex;
     align-items: center;
@@ -104,11 +110,19 @@
     gap: 8px;
 }
 
-.color_container div {
-    width: 15px;
-    height: 15px;
+.rectangle {
+    width: 15px !important;
+    height: 15px !important;
     cursor: pointer;
     border: 0.3px solid #00000080;
+}
+
+.color_line{
+    margin-top: 3px;
+    height: 1px;
+    width: 100%;
+    border: none;
+    background: #000;
 }
 
 .composition{
