@@ -1,4 +1,6 @@
 .header {
+
+  justify-content: space-between;
   width: 100%;
   height: 80px;
   background-color: #ffffff;
@@ -22,7 +24,7 @@
 }
 
 .item_logo img {
-  cursor: pointer;
+  cursor: pointer
 }
 
 .item {
@@ -192,6 +194,7 @@
   font-size: 12px;
   outline: none;
   color: #000000;
+  display: block;
 }
 
 .searchInput.darkTheme {
@@ -256,66 +259,104 @@
 
 @media (max-width: 768px) {
   .item_logo img {
-      width: 110px;
-      height: 40px;
+    width: 110px;
+    height: 40px;
   }
+
   .header {
-      height: 45px;
+    height: 45px;
   }
+
   .burger {
-      width: 20px;
-      height: 15px;
+    width: 20px;
+    height: 15px;
   }
+
   .burger span {
-      height: 1.5px;
+    height: 1.5px;
   }
+
   .item_mobile {
-      width: max-content;
-      display: flex;
-      align-items: center;
-      column-gap: 25px;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    column-gap: 25px;
   }
+
   .item {
-      display: none;
+    display: none;
   }
+
   .actions {
-      width: max-content;
-      display: flex;
-      column-gap: 25px;
+    width: max-content;
+    display: flex;
+    column-gap: 25px;
   }
+
   .container_menu {
-      max-width: 400px;
+    max-width: 400px;
   }
+
   .menu {
-      top: 45px;
-      display: block;
-      height: 100%;
+    top: 45px;
+    display: block;
+    height: 100%;
   }
+
   .menuContent {
-      flex-direction: column;
+    flex-direction: column;
   }
+
   .menuRight {
-      display: none;
+    display: none;
   }
+
   .menuLeft {
-      width: 100%;
-      flex-direction: column;
+    width: 100%;
+    flex-direction: column;
   }
+
   .menuBlock {
-      margin-top: 20px;
+    margin-top: 20px;
   }
+
   .burger.open span:nth-child(1) {
-      transform: translateY(5.5px) rotate(45deg);
+    transform: translateY(5.5px) rotate(45deg);
   }
+
   .searchInput {
     width: 140px;
+    display: block;
+  }
+
+  /* Уменьшение размера логотипа на мобильных устройствах */
+  .item_logo img {
+    width: 110px;
+    height: 30px;
+  }
+
+  @media (max-width: 480px) {
+    .item_logo img {
+      width: 90px;
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .item_logo img {
+      width: 70px;
+      height: 25px;
+    }
   }
 }
 
 /* Mobile first styles */
 .item_mobile .searchContainer {
   position: relative;
-  z-index: 1002;
+  right: 0;
+  top: 50%;
+  width: 35px;
+  height: 24px;
 }
 
 .item_mobile .searchWrapper {
@@ -326,11 +367,9 @@
   width: 90px;
   height: 24px;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  right: 100%;
+  background: #fff;
   top: 50%;
   transform: translateY(-50%);
-  margin-right: 10px;
-  background: #fff;
 }
 
 .item_mobile .searchWrapper.darkTheme {
@@ -364,9 +403,210 @@
   border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Планшеты и выше */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .item_mobile .searchContainer {
     display: none;
+  }
+}
+
+@media (min-width: 360px) {
+  .item_mobile .item_logo img {
+    width: 60px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .item_logo img {
+    width: 110px;
+    height: 40px;
+  }
+
+  .header {
+    height: 45px;
+  }
+
+  .burger {
+    width: 20px;
+    height: 15px;
+  }
+
+  .burger span {
+    height: 1.5px;
+  }
+
+  .item_mobile {
+    width: max-content;
+    display: flex;
+    align-items: center;
+    column-gap: 25px;
+  }
+
+  .item {
+    display: none;
+  }
+
+  .actions {
+    width: max-content;
+    display: flex;
+    column-gap: 25px;
+  }
+
+  .container_menu {
+    max-width: 400px;
+  }
+
+  .menu {
+    top: 45px;
+    display: block;
+    height: 100%;
+  }
+
+  .menuContent {
+    flex-direction: column;
+  }
+
+  .menuRight {
+    display: none;
+  }
+
+  .menuLeft {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .menuBlock {
+    margin-top: 20px;
+  }
+
+  .burger.open span:nth-child(1) {
+    transform: translateY(5.5px) rotate(45deg);
+  }
+
+  .searchInput {
+    width: 140px;
+    display: block;
+  }
+
+  /* Уменьшение размера логотипа на мобильных устройствах */
+  .item_logo img {
+    width: 110px;
+    height: 30px;
+  }
+
+  @media (max-width: 480px) {
+    .item_logo img {
+      width: 90px;
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .item_logo img {
+      width: 70px;
+      height: 25px;
+    }
+  }
+}
+
+/* Mobile first styles */
+.item_mobile .searchContainer {
+  position: relative;
+  right: 0;
+  top: 50%;
+  width: 35px;
+  height: 24px;
+}
+
+.item_mobile .searchWrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  width: 90px;
+  height: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: #fff;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.item_mobile .searchWrapper.darkTheme {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: #000;
+}
+
+.item_mobile .searchInput {
+  width: calc(100% - 24px);
+  height: 100%;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  outline: none;
+  color: #000000;
+}
+
+.item_mobile .searchIconWrapper {
+  width: 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  border-left: none;
+  cursor: pointer;
+}
+
+.item_mobile .searchIconWrapper.darkTheme {
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (min-width: 769px) {
+  .item_mobile .searchContainer {
+    display: none;
+  }
+}
+
+@media (min-width: 360px) {
+  .item_mobile .item_logo img {
+    width: 60px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .item_mobile .searchContainer {
+    display: block;
+  }
+
+  .item_mobile .searchWrapper {
+    left: 0;
+    right: auto;
+    transform: translateY(-50%);
+    margin-right: 0;
+    
+  }
+
+  .item_mobile .searchIconWrapper {
+    border-right: none;
+    border-left: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .item_mobile .searchIconWrapper.darkTheme {
+    border-right: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Новый стиль для смещения логотипа */
+  .item_mobile .searchWrapper:not(:empty)~.item_logo {
+    transform: translateX(100px);
+    transition: transform 0.3s ease;
+  }
+
+  /* Стиль для возврата логотипа в исходное положение */
+  .item_logo {
+    transform: translateX(0);
+    transition: transform 0.3s ease;
   }
 }

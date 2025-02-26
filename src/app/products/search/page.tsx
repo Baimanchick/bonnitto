@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useEffect } from 'react'
-
+import React, { useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 import { Api } from '@/services'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
@@ -16,20 +15,35 @@ import styles from '../page.module.css'
 
 export default function SearchResultsPage() {
   const searchParams = useSearchParams()
+  const router = useRouter()
 
   const query = searchParams.get('query') || ''
 
-  const [loadingData, setLoadingData] = React.useState(false)
-  const [products, setProducts] = React.useState<ProductTypes.Item[]>([])
+  const [loadingData, setLoadingData] = useState(false)
+  const [products, setProducts] = useState<ProductTypes.Item[]>([])
+  const [categories, setCategories] = useState<ProductTypes.Category[]>([])
 
+  // Получение списка категорий при первом рендере
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await Api.categories.CategoriesGET()
+        setCategories(categoriesData.data)
+      } catch (error) {
+        console.error('Ошибка загрузки категорий:', error)
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  // Выполнение поиска товаров по query
   useEffect(() => {
     const fetchSearchResults = async () => {
-      if (!query) return
+      if (!query) return  // не выполнять поиск, если запрос пустой
 
       setLoadingData(true)
       try {
         const result = await Api.searchProducts.searchProductsApi(query)
-
         if (result.success) {
           setProducts(result.data.results)
         } else {
@@ -45,6 +59,14 @@ export default function SearchResultsPage() {
     fetchSearchResults()
   }, [query])
 
+  // Обработчик выбора категории – переход на страницу товаров с этой категорией
+  const handleCategorySelect = useCallback(
+    (category: ProductTypes.Category) => {
+      router.push(`/products?category=${category.slug}`)
+    },
+    [router]
+  )
+
   return (
     <div className={styles.page}>
       <Header />
@@ -53,7 +75,12 @@ export default function SearchResultsPage() {
       ) : (
         <main className={'container'}>
           <div className={styles.flex_page}>
-            <Navigation navigationItems={[]} onCategorySelect={() => {}} />
+            {/* Навигация по категориям слева */}
+            <Navigation 
+              navigationItems={categories} 
+              onCategorySelect={handleCategorySelect} 
+            />
+            {/* Результаты поиска или сообщение об отсутствии результатов */}
             <motion.div
               className={styles.list_products}
               initial={{ opacity: 0 }}

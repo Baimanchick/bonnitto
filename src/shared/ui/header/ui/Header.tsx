@@ -1,10 +1,12 @@
 'use client'
 
-import React from 'react'
+import React, { useCallback, useMemo, useRef, useEffect, useState } from 'react';
+
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { debounce } from 'lodash'
 
 import { useAppSelector } from '@/shared/hooks/reduxHook'
 
@@ -13,58 +15,64 @@ import cls from './Header.module.css'
 export const Header = () => {
   const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
-  const searchInputRef = React.useRef<any>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const searchRef = React.useRef<any>(null)
   const [isOpen, setIsOpen] = React.useState(false)
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState('')
 
   const toggleMenu = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setIsOpen(!isOpen)
-  }
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  };
 
   const handleSearchIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setIsSearchOpen(!isSearchOpen)
+    e.stopPropagation();
     if (isSearchOpen) {
-      setSearchQuery('')
+      // Если закрываем поиск, сбрасываем запрос и переходим на общую страницу товаров
+      if (searchQuery.trim()) {
+        router.replace('/products');
+      }
+      setSearchQuery('');
+      setIsSearchOpen(false);
+    } else {
+      setIsSearchOpen(true);
+      // Фокусируем поле ввода при открытии
+      // (фокус с помощью useEffect ниже или autoFocus, в зависимости от реализации)
     }
-  }
+  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
 
-    setSearchQuery(value)
-  }
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && searchQuery.trim()) {
-      router.push(`/products/search?query=${encodeURIComponent(searchQuery.trim())}`)
-      setIsSearchOpen(false)
-      setSearchQuery('')
-    }
-  }
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      if (query.trim()) {
+        router.push(`/products/search?query=${encodeURIComponent(query.trim())}`)
+      } else {
+        router.push('/products')
+      }
+    }, 700),
+    [router]
+  );
 
   React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsSearchOpen(false)
-        setSearchQuery('')
+    return () => {
+      debouncedSearch.cancel?.();
+    };
+  }, [debouncedSearch]);
 
-      }
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
 
+    setSearchQuery(value)
+    debouncedSearch(value)
+  }
+
+  useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       searchInputRef.current.focus()
     }
-
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isSearchOpen, setSearchQuery])
+  }, [isSearchOpen])
 
   return (
     <header className={`${cls.header} ${isOpen ? cls.headerOpen : ''}`}>
@@ -91,10 +99,10 @@ export const Header = () => {
               {isSearchOpen ? (
                 <div className={`${cls.searchWrapper} ${isOpen ? cls.darkTheme : ''}`}>
                   <input
+                    ref={searchInputRef}
                     type="text"
                     value={searchQuery}
                     onChange={handleInputChange}
-                    onKeyDown={handleSearch}
                     placeholder="Поиск"
                     className={`${cls.searchInput} ${isOpen ? cls.darkTheme : ''}`}
                     autoFocus
@@ -103,9 +111,7 @@ export const Header = () => {
                     className={`${cls.searchIconWrapper} ${isOpen ? cls.darkTheme : ''}`}
                     onClick={handleSearchIconClick}
                   >
-                    <Image
-                      src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'}
-                      alt="search_products"
+                    <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products"
                       width={16}
                       height={16}
                       style={{
@@ -113,8 +119,7 @@ export const Header = () => {
                         height: 'auto',
                         maxWidth: '100%',
                         maxHeight: '100%',
-                      }}
-                    />
+                      }} />
                   </div>
                 </div>
               ) : (
@@ -123,8 +128,8 @@ export const Header = () => {
                   alt="search_products"
                   width={22}
                   height={22}
-                  onClick={handleSearchIconClick}
                   style={{ cursor: 'pointer' }}
+                  onClick={handleSearchIconClick}
                 />
               )}
             </div>
@@ -150,7 +155,7 @@ export const Header = () => {
                       type="text"
                       value={searchQuery}
                       onChange={handleInputChange}
-                      onKeyDown={handleSearch}
+
                       placeholder="Поиск"
                       className={`${cls.searchInput} ${isOpen ? cls.darkTheme : ''}`}
                       autoFocus
