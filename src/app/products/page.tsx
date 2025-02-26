@@ -93,8 +93,8 @@ export default function ProductsPage() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {products.map((product) => (
-                <ProductCard key={product.slug} product={product} />
+              {products.map((product: ProductTypes.Item) => (
+                <ProductCard  key={product.slug} product={product} />
               ))}
             </motion.div>
           </div>

@@ -68,7 +68,7 @@ async function refreshAccessToken(): Promise<string | undefined> {
       return
     }
     const { data } = await axios.post<{ access: string }>(
-      `${API_URL}/login/jwt/refresh/`,
+      `${API_URL}/users/refresh/`,
       {
         refresh: tokens.refresh,
       },

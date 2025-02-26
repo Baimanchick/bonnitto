@@ -4,11 +4,14 @@ import React from 'react'
 import toast from 'react-hot-toast'
 
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import { Api } from '@/services'
+import { addFavorite } from '@/services/favorite'
+import { ProductSlugGET } from '@/services/products-api'
 import { useAppSelector } from '@/shared/hooks/reduxHook'
 import { CartTypes } from '@/shared/types/cart-types/CartTypes'
+import { FavoritesType } from '@/shared/types/favorite-types/favorite'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 import { Header } from '@/shared/ui/header/ui/Header'
 import ProductGallery from '@/shared/ui/product-gallery/product-gallery'
@@ -17,6 +20,7 @@ import { Spin } from '@/shared/ui/spin/Spin'
 import cls from './page.module.css'
 
 export default function Page() {
+  const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
   const { products_slug } = useParams()
 
@@ -28,9 +32,12 @@ export default function Page() {
 
   const loadData = async () => {
     try {
-      const productData = await Api.products.ProductSlugGET(products_slug)
+      const productData = await ProductSlugGET(products_slug)
 
       setDefaultProductDetail(productData)
+      if (isAuth && productData.in_cart) {
+        setIsAdded(true)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -58,6 +65,12 @@ export default function Page() {
       console.error('Ошибка при выборе цвета:', error)
     }
   }, [products_slug])
+
+  React.useEffect(() => {
+    if (isAuth) {
+      localStorage.removeItem('cartItems')
+    }
+  })
 
   React.useEffect(() => {
     if (productDetail && productDetail.length > 0) {
@@ -122,6 +135,33 @@ export default function Page() {
       toast.success('Вы успешно добавили продукт в корзину')
     }
   }, [selectedVariant, isAuth])
+
+  const handleAddToFavorite = React.useCallback(async () => {
+    if (!isAuth) {
+      toast.error('Вы должны сначало авторизоваться')
+      router.push('/auth/register')
+
+      return
+    }
+
+    if (!products_slug) {
+      toast.error('Информация о продукте не загружена')
+
+      return
+    }
+
+    try {
+      const dataToSend: FavoritesType.Form = {
+        product: products_slug,
+      }
+
+      await addFavorite(dataToSend)
+      toast.success('Вы успешно добавили продукт в избранные')
+      loadData()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [isAuth])
 
   React.useEffect(() => {
     if (products_slug) {
@@ -223,10 +263,20 @@ export default function Page() {
                 </div>
               </div>
               <div className={cls.btn_actions}>
-                <button onClick={handleAddToCart} disabled={isAdded}>
-                  {isAdded ? 'В КОРЗИНЕ ✓' : 'В КОРЗИНУ'}
-                </button>
-                <Image src={'/icons/product_detail/detail_heart.svg'} alt="heart svg" className={cls.heart_icon} width={21} height={18} />
+                {isAdded ? (
+                  <button onClick={() => router.push('/cart')}>
+                    В КОРЗИНЕ ✓
+                  </button>
+                ) : (
+                  <button onClick={handleAddToCart}>
+                    В КОРЗИНУ
+                  </button>
+                )}
+                {defaultProductDetail.in_favorite ? (
+                  <Image onClick={() => router.push('/favorites')} src={'/icons/product_detail/detail_heartFilled.svg'} alt="heart svg" className={cls.heart_icon} width={21} height={18} />
+                ) : (
+                  <Image onClick={handleAddToFavorite} src={'/icons/product_detail/detail_heart.svg'} alt="heart svg" className={cls.heart_icon} width={21} height={18} />
+                )}
               </div>
             </div>
           </div>

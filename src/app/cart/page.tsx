@@ -2,6 +2,7 @@
 'use client'
 
 import React from 'react'
+import toast from 'react-hot-toast'
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -25,6 +26,7 @@ export default function CartsPage() {
   const [phone_number, setPhoneNumber] = React.useState('')
   const [address, setAddress] = React.useState('')
   const [isBtnClicked, setIsBtnClicked] = React.useState(false)
+  const [isProductsLoading, setIsProductsLoading] = React.useState(false)
 
   const storedToken = localStorage.getItem('tokens')
   const tokens = storedToken ? JSON.parse(storedToken) : ''
@@ -62,16 +64,15 @@ export default function CartsPage() {
           console.error('Failed to parse cart items:', error)
         }
       } else if (tokens.access) {
-        const response = await Api.cart.CartListGET()
-
-        console.log('r', response)
+        setIsProductsLoading(true)
+        const response = await Api.cart.CartListGET().finally(() => {
+          setIsProductsLoading(false)
+        })
 
         setProductsCart(response)
 
-        const initialQuantities = response.reduce((acc: { [key: number]: number }, product: ProductTypes.Variants) => {
-          const cartItem = response.find((item: { variant: number }) => item.variant === product.id)
-
-          acc[product.id] = cartItem?.quantity ?? 1
+        const initialQuantities = response.reduce((acc: { [key: number]: number }, cartItem: { variant: { id: number }; quantity: number }) => {
+          acc[cartItem.variant.id] = cartItem.quantity
 
           return acc
         }, {})
@@ -109,14 +110,21 @@ export default function CartsPage() {
     })
   }
 
-  const handleQuantityChangeWithUser = async (id: number, change: number) => {
-    const newQuantity = (quantities[id] || 0) + change
+  const handleQuantityChangeWithUser = async (id: number, change: number, variantId: number) => {
+    const newQuantity = (quantities[variantId] || 0) + change
 
-    if (newQuantity < 1) return
+    if (newQuantity < 1) {
+      await Api.cart.CartDELETE(id)
+      toast.success('Вы успешно удалили продукт')
+      const response = await Api.cart.CartListGET()
 
-    setQuantities(prev => ({ ...prev, [id]: newQuantity }))
+      setProductsCart(response)
+    } else {
+      setQuantities(prev => ({ ...prev, [variantId]: newQuantity }))
 
-    await Api.cart.CartPATCH(id, newQuantity)
+      await Api.cart.CartPATCH(id, newQuantity)
+    }
+
   }
 
   const handleOrderWithoutUser = async (e: React.FormEvent) => {
@@ -138,13 +146,12 @@ export default function CartsPage() {
 
       const response = await Api.order.OrderWithoutUserPOST(dataToSend)
 
-      console.log('Order response:', response)
       if (response.success === true) {
         localStorage.removeItem('cartItems')
         router.push('/products')
-        alert('Мы добавили ваш заказ')
+        toast.success('Мы добавили ваш заказ')
       } else {
-        alert('Что то пошло не так!')
+        toast.error('Что то пошло не так!')
       }
     } catch (error) {
       console.log('Submit error:', error)
@@ -160,12 +167,11 @@ export default function CartsPage() {
     try {
       const response = await Api.order.OrderWithUserPOST()
 
-      console.log('Order response:', response)
       if (response) {
         router.push('/products')
-        alert('Мы добавили ваш заказ')
+        toast.success('Мы добавили ваш заказ')
       } else {
-        alert('Что то пошло не так!')
+        toast.error('Что то пошло не так!')
       }
     } catch (error) {
       console.log('Submit error:', error)
@@ -285,7 +291,7 @@ export default function CartsPage() {
                           </div>
 
                           <div className={cls.cart_card_dop_info}>
-                            <Image src={'/icons/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
+                            <Image src={'/icons/cart/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
                             <p className={cls.cart_card_dop_info_text}>Доступные способы оплаты: на сайте или  при получении</p>
                           </div>
                         </div>
@@ -332,9 +338,9 @@ export default function CartsPage() {
                       <div className={cls.price_actions}>
                         <div className={cls.action_block}>
                           <div className={cls.actions}>
-                            <button className={cls.actions_add} onClick={() => handleQuantityChangeWithUser(item.id, -1)}>-</button>
-                            <span className={cls.quantity}>{quantities[item.id] ?? 1}</span>
-                            <button className={cls.actions_remove} onClick={() => handleQuantityChangeWithUser(item.id, 1)}>+</button>
+                            <button className={cls.actions_add} onClick={() => handleQuantityChangeWithUser(item.id, -1, item.variant.id)}>-</button>
+                            <span className={cls.quantity}>{`${quantities[`${item.variant.id}`]}`}</span>
+                            <button className={cls.actions_remove} onClick={() => handleQuantityChangeWithUser(item.id, 1, item.variant.id)}>+</button>
                           </div>
                         </div>
 
@@ -358,8 +364,8 @@ export default function CartsPage() {
                         {
                           productsCart.map((item) => (
                             <div key={item.id} className={cls.cart_card_list}>
-                              <span className={cls.cart_card_list_info}>Товары: {quantities[item.id] ?? 1} шт.</span>
-                              <span className={cls.cart_card_list_price}>{Number(item.variant.price) * (quantities[item.id] ?? 1)} С</span>
+                              <span className={cls.cart_card_list_info}>Товары: {quantities[item.variant.id] ?? 1} шт.</span>
+                              <span className={cls.cart_card_list_price}>{Number(item.variant.price) * (quantities[item.variant.id] ?? 1)} С</span>
                             </div>
                           ))
                         }
@@ -368,7 +374,7 @@ export default function CartsPage() {
                       <div className={cls.total}>
                         <h3 className={cls.total_title}>ИТОГО</h3>
                         <span className={cls.total_price}>
-                          {productsCart.reduce((acc, item) => acc + Number(item.variant.price) * (quantities[item.id] ?? 1), 0)} с
+                          {productsCart.reduce((acc, item) => acc + Number(item.variant.price) * (quantities[item.variant.id] ?? 1), 0)} с
                         </span>
                       </div>
 
@@ -377,19 +383,23 @@ export default function CartsPage() {
                     </div>
 
                     <div className={cls.cart_card_dop_info}>
-                      <Image src={'/icons/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
+                      <Image src={'/icons/cart/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
                       <p className={cls.cart_card_dop_info_text}>Доступные способы оплаты: на сайте или  при получении</p>
                     </div>
                   </div>
                 </div>
               </React.Fragment>
             ) : (
-              <div className={cls.empty}>
-                <div className={cls.flexx}>
-                  <h2 className={cls.empty_title}>В корзине пусто</h2>
-                  <button className={cls.btn} onClick={() => router.back()}>Вернуться назад</button>
+              isProductsLoading ? (
+                <Spin/>
+              ) : (
+                <div className={cls.empty}>
+                  <div className={cls.flexx}>
+                    <h2 className={cls.empty_title}>В корзине пусто</h2>
+                    <button className={cls.btn} onClick={() => router.back()}>Вернуться назад</button>
+                  </div>
                 </div>
-              </div>
+              )
             )
           }
         </main>

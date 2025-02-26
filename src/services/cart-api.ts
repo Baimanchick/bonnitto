@@ -33,3 +33,13 @@ export const CartPOST = async (dataToSend: CartTypes.Form) => {
     console.log('error change cart', error)
   }
 }
+
+export const CartDELETE = async (cart_id: number) => {
+  try {
+    const response = await $axios.delete(`${API_URL}/cart/${cart_id}/`)
+
+    return response.data
+  } catch (error) {
+    console.log('delete cart error', error)
+  }
+}
