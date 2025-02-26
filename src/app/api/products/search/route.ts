@@ -5,12 +5,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('query') || ''
 
-    console.log('Received search request with query:', query)
-
     const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/products/search/?search=${encodeURIComponent(query)}`
 
-    console.log('Making request to:', apiUrl)
-
+    console.log('apiUrl extracted', apiUrl)
     const res = await fetch(apiUrl, {
       cache: 'no-store',
       method: 'GET',
@@ -20,29 +17,15 @@ export async function GET(request: NextRequest) {
     })
 
     if (!res.ok) {
-      console.error('API responded with status:', res.status)
       throw new Error(`API responded with status: ${res.status}`)
     }
 
     const data = await res.json()
 
-    console.log('Backend API response:', data)
-
-    if (!data.results) {
-      console.log('No results in response')
-
-      return NextResponse.json({
-        success: true,
-        data: {
-          results: [],
-        },
-      })
-    }
-
     return NextResponse.json({
       success: true,
       data: {
-        results: data.results,
+        results: data.results || [],
       },
     })
   } catch (error) {

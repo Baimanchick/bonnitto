@@ -21,6 +21,7 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = React.useState<ProductTypes.Category | null>(null)
   const [page, setPage] = React.useState(1)
   const [hasMore, setHasMore] = React.useState(true)
+
   const pageSize = 10
 
   const loadData = async (categorySlug?: string, pageNumber: number = 1) => {
@@ -92,14 +93,18 @@ export default function ProductsPage() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {products.map((product: ProductTypes.Item) => (
+              {products.map((product) => (
                 <ProductCard key={product.slug} product={product} />
               ))}
             </motion.div>
           </div>
           {hasMore && (
             <div className={styles.btn_block}>
-              <button className={styles.load_more_button} onClick={handleChangePage} disabled={filterLoading}>
+              <button
+                className={styles.load_more_button}
+                onClick={handleChangePage}
+                disabled={filterLoading}
+              >
                 {filterLoading ? 'Загрузка...' : 'Показать ещё'}
               </button>
             </div>

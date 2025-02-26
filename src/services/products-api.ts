@@ -70,22 +70,3 @@ export const ProductSlugVariantsGET = async (products_slug: string | string[] | 
     console.log('error getting product detail', error)
   }
 }
-
-export const ProductsSearchGET = async (query: string) => {
-  try {
-    console.log('Making search request with query:', query)
-    const response = await fetch(`/api/products/search/?query=${encodeURIComponent(query)}`, {
-      method: 'GET',
-    })
-
-    const data = await response.json()
-
-    console.log('Search API client response:', data)
-
-    return data
-  } catch (error) {
-    console.log('error searching products', error)
-
-    return { success: false, data: { results: [] } }
-  }
-}
