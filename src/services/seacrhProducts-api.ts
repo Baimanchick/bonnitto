@@ -10,7 +10,7 @@ interface SearchResponse {
 
 export const searchProductsApi = async (query: string): Promise<SearchResponse> => {
   try {
-    const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`)
+    const response = await fetch(`/api/products/search?query=${encodeURIComponent(query)}`)
 
     if (!response.ok) {
       throw new Error(`API responded with status: ${response.status}`)

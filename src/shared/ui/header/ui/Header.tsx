@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -11,10 +11,13 @@ import { useAppSelector } from '@/shared/hooks/reduxHook'
 import cls from './Header.module.css'
 
 export const Header = () => {
+  const router = useRouter()
+  const isAuth = useAppSelector((state) => state.auth.user !== null)
+  const searchInputRef = React.useRef<any>(null)
+  const searchRef = React.useRef<any>(null)
   const [isOpen, setIsOpen] = React.useState(false)
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState('')
-  const router = useRouter()
 
   const toggleMenu = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -43,7 +46,7 @@ export const Header = () => {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setIsSearchOpen(false)
@@ -124,7 +127,6 @@ export const Header = () => {
                   style={{ cursor: 'pointer' }}
                 />
               )}
-
             </div>
           </div>
 
