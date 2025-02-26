@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import { useAppSelector } from '@/shared/hooks/reduxHook'
 import { Header } from '@/shared/ui/header/ui/Header'
+import Footer from '@/widgets/footer/ui/Footer'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -28,6 +29,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <>
       <Header/>
       {children}
+      <div style={{backgroundColor: 'lightgray', padding: '20px'}}>Footer Placeholder</div>
+      
     </>
   )
 }

@@ -1,217 +1,217 @@
 .header {
-    width: 100%;
-    height: 80px;
-    background-color: #ffffff;
-    transition: background-color 0.3s ease;
-    border-bottom: 0.6px solid #00000033;
+  width: 100%;
+  height: 80px;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+  border-bottom: 0.6px solid #00000033;
 }
 
 .headerOpen {
-    background-color: #000000;
+  background-color: #000000;
 }
 
 .container {
-    max-width: 1300px;
-    margin: 0 auto;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .items {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .item_logo img {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .item {
-    width: 200px;
+  width: 200px;
 }
 
 .actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .actions img {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .burger {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 20px;
-    cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
 }
 
 .burger span {
-    display: block;
-    height: 3px;
-    width: 100%;
-    background-color: #333;
-    transition: all 0.3s ease;
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #333;
+  transition: all 0.3s ease;
 }
 
 .burger.open span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
 
 .burger.open span:nth-child(2) {
-    opacity: 0;
+  opacity: 0;
 }
 
 .burger.open span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 .burger.open span {
-    background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 .menu {
-    position: absolute;
-    top: 80px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 80px);
-    background-color: #000000;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 40px;
-    z-index: 100;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 80px);
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  z-index: 100;
 }
 
 .menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-transform: uppercase;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-transform: uppercase;
 }
 
 .menu ul li {
-    padding: 10px 0;
-    font-size: 15px;
-    cursor: pointer;
-    transition: color 0.3s ease;
+  padding: 10px 0;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .menu ul li:hover {
-    color: #999;
+  color: #999;
 }
 
 .container_menu {
-    width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .menuContent {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .menuLeft {
-    display: flex;
-    justify-content: space-between;
-    width: 40%;
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
 }
 
 .menu_title {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 17px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 17px;
 }
 
 .city {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .default_title {
-    color: #FFFFFF99;
+  color: #FFFFFF99;
 }
 
 .menuRight {
-    display: flex;
-    column-gap: 20px;
+  display: flex;
+  column-gap: 20px;
 }
 
 
 .menuRight .menuImage {
-    position: relative;
-    cursor: pointer;
+  position: relative;
+  cursor: pointer;
 }
 
 .menuRight .menuImage p {
-    position: absolute;
-    bottom: 10px;
-    left: 30%;
-    padding: 5px 10px;
-    color: white;
-    font-weight: bold;
-    text-align: center;
+  position: absolute;
+  bottom: 10px;
+  left: 30%;
+  padding: 5px 10px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
 }
 
 .item_mobile {
-    display: none;
+  display: none;
 }
 
 @media (max-width: 768px) {
-    .item_logo img {
-        width: 110px;
-        height: 40px;
-    }
-    .header {
-        height: 45px;
-    }
-    .burger {
-        width: 20px;
-        height: 15px;
-    }
-    .burger span {
-        height: 1.5px;
-    }
-    .item_mobile {
-        width: max-content;
-        display: flex;
-        align-items: center;
-        column-gap: 25px;
-    }
-    .item {
-        display: none;
-    }
-    .actions {
-        width: max-content;
-        display: flex;
-        column-gap: 25px;
-    }
-    .container_menu {
-        max-width: 400px;
-    }
-    .menu {
-        top: 45px;
-        display: block;
-        height: 100%;
-    }
-    .menuContent {
-        flex-direction: column;
-    }
-    .menuRight {
-        display: none;
-    }
-    .menuLeft {
-        width: 100%;
-        flex-direction: column;
-    }
-    .menuBlock {
-        margin-top: 20px;
-    }
-    .burger.open span:nth-child(1) {
-        transform: translateY(5.5px) rotate(45deg);
-    }
+  .item_logo img {
+      width: 110px;
+      height: 40px;
+  }
+  .header {
+      height: 45px;
+  }
+  .burger {
+      width: 20px;
+      height: 15px;
+  }
+  .burger span {
+      height: 1.5px;
+  }
+  .item_mobile {
+      width: max-content;
+      display: flex;
+      align-items: center;
+      column-gap: 25px;
+  }
+  .item {
+      display: none;
+  }
+  .actions {
+      width: max-content;
+      display: flex;
+      column-gap: 25px;
+  }
+  .container_menu {
+      max-width: 400px;
+  }
+  .menu {
+      top: 45px;
+      display: block;
+      height: 100%;
+  }
+  .menuContent {
+      flex-direction: column;
+  }
+  .menuRight {
+      display: none;
+  }
+  .menuLeft {
+      width: 100%;
+      flex-direction: column;
+  }
+  .menuBlock {
+      margin-top: 20px;
+  }
+  .burger.open span:nth-child(1) {
+      transform: translateY(5.5px) rotate(45deg);
+  }
 }
