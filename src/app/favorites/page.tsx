@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
@@ -9,6 +10,7 @@ import { FavoritesType } from '@/shared/types/favorite-types/favorite'
 import { Header } from '@/shared/ui/header/ui/Header'
 import { ProductCard } from '@/shared/ui/product-card/ProductCard'
 import { Spin } from '@/shared/ui/spin/Spin'
+import Footer from '@/widgets/footer/ui/Footer'
 
 import cls from './page.module.css'
 
@@ -63,7 +65,7 @@ export default function Favorites() {
           </div>
         )
       )}
-
+      <Footer/>
     </div>
   )
 }

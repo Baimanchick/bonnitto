@@ -6,7 +6,6 @@ import { motion } from 'framer-motion'
 
 import { Api } from '@/services'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
-import { Header } from '@/shared/ui/header/ui/Header'
 import { Navigation } from '@/shared/ui/navigation/Navigation'
 import { ProductCard } from '@/shared/ui/product-card/ProductCard'
 import { Spin } from '@/shared/ui/spin/Spin'
@@ -72,7 +71,6 @@ export default function ProductsPage() {
 
   return (
     <div className={styles.page}>
-      <Header />
       {loadingData ? (
         <Spin />
       ) : (

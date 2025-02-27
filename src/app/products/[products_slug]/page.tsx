@@ -13,7 +13,6 @@ import { useAppSelector } from '@/shared/hooks/reduxHook'
 import { CartTypes } from '@/shared/types/cart-types/CartTypes'
 import { FavoritesType } from '@/shared/types/favorite-types/favorite'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
-import { Header } from '@/shared/ui/header/ui/Header'
 import ProductGallery from '@/shared/ui/product-gallery/product-gallery'
 import { Spin } from '@/shared/ui/spin/Spin'
 
@@ -201,7 +200,6 @@ export default function Page() {
 
   return (
     <div className={cls.page}>
-      <Header />
       {(!productDetail || !defaultProductDetail || !selectedVariant) ? <Spin /> : (
         <div className={cls.main}>
           <div className={cls.wrapper}>

@@ -7,7 +7,6 @@ import { useSearchParams, useRouter } from 'next/navigation'
 
 import { Api } from '@/services'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
-import { Header } from '@/shared/ui/header/ui/Header'
 import { Navigation } from '@/shared/ui/navigation/Navigation'
 import { ProductCard } from '@/shared/ui/product-card/ProductCard'
 import { Spin } from '@/shared/ui/spin/Spin'
@@ -70,7 +69,6 @@ export default function SearchResultsPage() {
 
   return (
     <div className={styles.page}>
-      <Header />
       {loadingData ? (
         <Spin />
       ) : (

@@ -4,7 +4,6 @@ import { Header } from '@/shared/ui/header/ui/Header'
 import ImageSlider from '@/shared/ui/ImageSlider/ImageSlider'
 
 import styles from './page.module.css'
-import Footer from '@/widgets/footer/ui/Footer'
 
 export default function Home() {
   return (
@@ -15,7 +14,6 @@ export default function Home() {
         <ImageSlider/>
       </main>
 
-      <Footer/>
     </div>
   )
 }
