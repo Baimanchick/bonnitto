@@ -4,8 +4,12 @@
   grid-column-gap: 25px;
   grid-row-gap: 80px;
 }
-
+.page {
+  flex: 1;
+  display: flex;
+}
 .flex_page {
+  flex: 1;
   display: flex;
   margin-top: 15px;
   overflow: visible;

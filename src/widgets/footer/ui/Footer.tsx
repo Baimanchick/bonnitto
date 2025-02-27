@@ -1,58 +1,58 @@
-import React from 'react';
-import styles from './Footer.module.css';
-import Image from 'next/image';
-import cls from './Footer.module.css';
-import {IBM_Plex_Sans_Devanagari} from 'next/font/google'
+import React from 'react'
+
+import Image from 'next/image'
+
+import cls from './Footer.module.css'
+import styles from './Footer.module.css'
 
 const footerData = [
   {
-    title: null,
+    id: 'logo',
     logo: '/icons/footer/Bonnitto.svg',
   },
   {
-    title: null,
+    id: 'column1',
     links: [
-      { text: 'Оплата и доставка', href: '#' },
-      { text: 'Возврат и обмен', href: '#' },
-      { text: 'Контакты', href: '#' },
+      { text: 'Оплата и доставка', href: '/payment-delivery' },
+      { text: 'Возврат и обмен', href: '/return-exchange' },
+      { text: 'Контакты', href: '/contacts' },
     ],
   },
   {
-    title: null,
+    id: 'column2',
     links: [
-      { text: 'Политика конфиденциальности', href: '#' },
-      { text: 'Договор-оферта', href: '#' },
+      { text: 'Политика конфиденциальности', href: '/privacy-policy' },
+      { text: 'Договор-оферта', href: '/offer-agreement' },
     ],
   },
   {
-    title: null,
+    id: 'column3',
     links: [
-      { text: 'О нас', href: '#' },
-      { text: 'Найти нас', href: '#' },
+      { text: 'О нас', href: '/about-us' },
+      { text: 'Найти нас', href: '/find-us' },
     ],
   },
-];
+]
 
 const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.links}>
-          {footerData.map((column, index) => (
-            <div key={index} className={styles.column}>
+          {footerData.map((column) => (
+            <div key={column.id} className={styles.column}>
               {column.logo ? (
                 <div className={cls.logoWrapper}>
                   <Image
                     src={column.logo}
                     alt="Bonnito Logo"
                     fill
-                    style={{ objectFit: 'contain'  }}
+                    style={{ objectFit: 'contain' }}
                   />
                 </div>
-
               ) : (
-                column.links && column.links.map((link, linkIndex) => (
-                  <a key={linkIndex} href={link.href}>
+                column.links && column.links.map((link) => (
+                  <a key={link.href} href={link.href}>
                     {link.text}
                   </a>
                 ))
@@ -62,8 +62,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-
-export default Footer;
+export default Footer

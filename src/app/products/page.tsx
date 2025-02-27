@@ -27,7 +27,7 @@ export default function ProductsPage() {
   const loadData = useCallback(async (categorySlug?: string, pageNumber: number = 1) => {
     try {
       const productsData = await Api.products.ProductsGET(categorySlug, pageNumber)
-      
+
       setProducts(prev => (pageNumber === 1 ? productsData.data : [...prev, ...productsData.data]))
       setHasMore(productsData.data.length >= pageSize)
     } catch (error) {
@@ -39,10 +39,11 @@ export default function ProductsPage() {
     setLoadingData(true)
     setPage(1)
     await loadData(selectedCategory ? selectedCategory.slug : undefined, 1)
-    
+
     if (!categories.length) {
       try {
         const categoriesData = await Api.categories.CategoriesGET()
+
         setCategories(categoriesData.data)
       } catch (error) {
         console.error('Ошибка загрузки категорий:', error)
@@ -62,6 +63,7 @@ export default function ProductsPage() {
 
   const handleChangePage = useCallback(async () => {
     const nextPage = page + 1
+
     setFilterLoading(true)
     await loadData(selectedCategory ? selectedCategory.slug : undefined, nextPage)
     setPage(nextPage)

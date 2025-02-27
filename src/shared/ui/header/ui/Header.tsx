@@ -1,50 +1,46 @@
 'use client'
 
-import React, { useCallback, useMemo, useRef, useEffect, useState } from 'react';
-
+import React from 'react'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { debounce } from 'lodash'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { useAppSelector } from '@/shared/hooks/reduxHook'
+import { debounce } from '@/shared/tools/debounce'
 
 import cls from './Header.module.css'
 
 export const Header = () => {
   const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
-  const searchRef = React.useRef<any>(null)
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [isOpen, setIsOpen] = React.useState(false)
-  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
-  const [searchQuery, setSearchQuery] = React.useState('')
 
-  const toggleMenu = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsOpen((prev) => !prev);
-  };
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get('query') || ''
+  const [isSearchOpen, setIsSearchOpen] = React.useState(!!initialQuery)
+  const [searchQuery, setSearchQuery] = React.useState(initialQuery)
 
-  const handleSearchIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const toggleMenu = React.useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    setIsOpen((prev) => !prev)
+  }, [])
+
+  const handleSearchIconClick = React.useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
     if (isSearchOpen) {
-      // Если закрываем поиск, сбрасываем запрос и переходим на общую страницу товаров
       if (searchQuery.trim()) {
-        router.replace('/products');
+        router.replace(`/products/search?query=${encodeURIComponent(searchQuery.trim())}`)
+      } else {
+        router.replace('/products')
       }
-      setSearchQuery('');
-      setIsSearchOpen(false);
     } else {
-      setIsSearchOpen(true);
-      // Фокусируем поле ввода при открытии
-      // (фокус с помощью useEffect ниже или autoFocus, в зависимости от реализации)
+      setIsSearchOpen(true)
     }
-  };
+  }, [isSearchOpen, searchQuery, router])
 
-
-
-  const debouncedSearch = useCallback(
+  const debouncedSearch = React.useCallback(
     debounce((query: string) => {
       if (query.trim()) {
         router.push(`/products/search?query=${encodeURIComponent(query.trim())}`)
@@ -52,23 +48,23 @@ export const Header = () => {
         router.push('/products')
       }
     }, 700),
-    [router]
-  );
+    [router],
+  )
 
   React.useEffect(() => {
     return () => {
-      debouncedSearch.cancel?.();
-    };
-  }, [debouncedSearch]);
+      debouncedSearch.cancel?.()
+    }
+  }, [debouncedSearch])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
 
     setSearchQuery(value)
     debouncedSearch(value)
-  }
+  }, [debouncedSearch])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       searchInputRef.current.focus()
     }
@@ -119,7 +115,8 @@ export const Header = () => {
                         height: 'auto',
                         maxWidth: '100%',
                         maxHeight: '100%',
-                      }} />
+                      }}
+                    />
                   </div>
                 </div>
               ) : (

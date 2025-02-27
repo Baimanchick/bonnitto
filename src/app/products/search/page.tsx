@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React from 'react'
+
 import { motion } from 'framer-motion'
 import { useSearchParams, useRouter } from 'next/navigation'
 
@@ -19,52 +20,52 @@ export default function SearchResultsPage() {
 
   const query = searchParams.get('query') || ''
 
-  const [loadingData, setLoadingData] = useState(false)
-  const [products, setProducts] = useState<ProductTypes.Item[]>([])
-  const [categories, setCategories] = useState<ProductTypes.Category[]>([])
+  const [loadingData, setLoadingData] = React.useState(false)
+  const [products, setProducts] = React.useState<ProductTypes.Item[]>([])
+  const [categories, setCategories] = React.useState<ProductTypes.Category[]>([])
 
-  // Получение списка категорий при первом рендере
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categoriesData = await Api.categories.CategoriesGET()
-        setCategories(categoriesData.data)
-      } catch (error) {
-        console.error('Ошибка загрузки категорий:', error)
-      }
+  const fetchCategories = React.useCallback(async () => {
+    try {
+      const categoriesData = await Api.categories.CategoriesGET()
+
+      setCategories(categoriesData.data)
+    } catch (error) {
+      console.error('Ошибка загрузки категорий:', error)
     }
-    fetchCategories()
   }, [])
 
-  // Выполнение поиска товаров по query
-  useEffect(() => {
-    const fetchSearchResults = async () => {
-      if (!query) return  // не выполнять поиск, если запрос пустой
+  React.useEffect(() => {
+    fetchCategories()
+  }, [fetchCategories])
 
-      setLoadingData(true)
-      try {
-        const result = await Api.searchProducts.searchProductsApi(query)
-        if (result.success) {
-          setProducts(result.data.results)
-        } else {
-          console.error('Search failed:', result.error)
-        }
-      } catch (error) {
-        console.error('Error in search effect:', error)
-      } finally {
-        setLoadingData(false)
+  const fetchSearchResults = React.useCallback(async () => {
+    if (!query) return
+
+    setLoadingData(true)
+    try {
+      const result = await Api.searchProducts.searchProductsApi(query)
+
+      if (result.success) {
+        setProducts(result.data.results)
+      } else {
+        console.error('Search failed:', result.error)
       }
+    } catch (error) {
+      console.error('Error in search effect:', error)
+    } finally {
+      setLoadingData(false)
     }
-
-    fetchSearchResults()
   }, [query])
 
-  // Обработчик выбора категории – переход на страницу товаров с этой категорией
-  const handleCategorySelect = useCallback(
+  React.useEffect(() => {
+    fetchSearchResults()
+  }, [fetchSearchResults])
+
+  const handleCategorySelect = React.useCallback(
     (category: ProductTypes.Category) => {
       router.push(`/products?category=${category.slug}`)
     },
-    [router]
+    [router],
   )
 
   return (
@@ -75,12 +76,10 @@ export default function SearchResultsPage() {
       ) : (
         <main className={'container'}>
           <div className={styles.flex_page}>
-            {/* Навигация по категориям слева */}
-            <Navigation 
-              navigationItems={categories} 
-              onCategorySelect={handleCategorySelect} 
+            <Navigation
+              navigationItems={categories}
+              onCategorySelect={handleCategorySelect}
             />
-            {/* Результаты поиска или сообщение об отсутствии результатов */}
             <motion.div
               className={styles.list_products}
               initial={{ opacity: 0 }}
