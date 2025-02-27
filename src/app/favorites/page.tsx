@@ -30,7 +30,6 @@ export default function Favorites() {
         return
       }
 
-      console.log(response)
       setFavorites(response)
     } catch (error) {
       console.log(error)
