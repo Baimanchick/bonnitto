@@ -1,9 +1,11 @@
+'use client'
+
 import React from 'react'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import cls from './Footer.module.css'
-import styles from './Footer.module.css'
 
 const footerData = [
   {
@@ -13,48 +15,51 @@ const footerData = [
   {
     id: 'column1',
     links: [
-      { text: 'Оплата и доставка', href: '/payment-delivery' },
-      { text: 'Возврат и обмен', href: '/return-exchange' },
-      { text: 'Контакты', href: '/contacts' },
+      { text: 'Оплата и доставка' },
+      { text: 'Возврат и обмен' },
+      { text: 'Контакты' },
     ],
   },
   {
     id: 'column2',
     links: [
-      { text: 'Политика конфиденциальности', href: '/privacy-policy' },
-      { text: 'Договор-оферта', href: '/offer-agreement' },
+      { text: 'Политика конфиденциальности' },
+      { text: 'Договор-оферта' },
     ],
   },
   {
     id: 'column3',
     links: [
-      { text: 'О нас', href: '/about-us' },
-      { text: 'Найти нас', href: '/find-us' },
+      { text: 'О нас' },
+      { text: 'Найти нас' },
     ],
   },
 ]
 
 const Footer: React.FC = () => {
+  const router = useRouter()
+
   return (
-    <footer className={styles.footer}>
-      <div className={styles.container}>
-        <div className={styles.links}>
+    <footer className={cls.footer}>
+      <div className={cls.container}>
+        <div className={cls.links}>
           {footerData.map((column) => (
-            <div key={column.id} className={styles.column}>
+            <div key={column.id} className={cls.column}>
               {column.logo ? (
                 <div className={cls.logoWrapper}>
                   <Image
                     src={column.logo}
                     alt="Bonnito Logo"
                     fill
-                    style={{ objectFit: 'contain' }}
+                    className={cls.logo}
+                    onClick={() => router.push('/')}
                   />
                 </div>
               ) : (
                 column.links && column.links.map((link) => (
-                  <a key={link.href} href={link.href}>
+                  <div key={link.text.length}>
                     {link.text}
-                  </a>
+                  </div>
                 ))
               )}
             </div>

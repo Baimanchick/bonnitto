@@ -2,6 +2,12 @@
   background-color: #ffffff;
   padding: 20px 0;
   display: fixed;
+  margin-top: 12vh;
+}
+
+.logo {
+  object-fit: contain;
+  cursor: pointer;
 }
 
 .container {
@@ -9,8 +15,6 @@
   margin: 0 auto;
   padding: 0 20px;
 }
-
-
 
 .links {
   display: flex;
@@ -29,10 +33,11 @@
   margin-bottom: 0;
 }
 
-.column a {
+.column div {
   color: #333;
   text-decoration: none;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .logoWrapper {
@@ -62,8 +67,6 @@
     
   }
 
-
-
   .links {
     flex-direction: row;
     justify-content: space-between;
@@ -73,6 +76,5 @@
   .column {
     margin-bottom: 0;
   }
-
   
 }

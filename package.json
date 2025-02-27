@@ -12,6 +12,7 @@
     "axios": "^1.7.9",
     "framer-motion": "^12.4.7",
     "next": "15.1.7",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",

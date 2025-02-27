@@ -3,7 +3,6 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch } from '@/shared/hooks/reduxHook'
@@ -49,8 +48,8 @@ export default function Login() {
             <button type="submit" className={cls.button}>{loading ? 'Загрузка...' : 'Войти'}</button>
             <div className={cls.bottomText}>
               <div className={cls.google_sign}>
-                <span>Войти с помощью :</span>
-                <Image src={'/icons/login/google.svg'} alt="google svg" className={cls.icon} width={22} height={22} onClick={() => router.push('/auth/login')}/>
+                {/* <span>Войти с помощью :</span>
+                <Image src={'/icons/login/google.svg'} alt="google svg" className={cls.icon} width={22} height={22} onClick={() => router.push('/auth/login')}/> */}
               </div>
               <div className={cls.bottomText_item}>
                 <span onClick={() => router.push('/auth/register')}>Регистрация</span>
