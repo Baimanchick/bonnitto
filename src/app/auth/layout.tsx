@@ -1,18 +1,19 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { useRouter } from 'next/navigation'
 
 import { useAppSelector } from '@/shared/hooks/reduxHook'
 import { Header } from '@/shared/ui/header/ui/Header'
+import Footer from '@/widgets/footer/ui/Footer'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = React.useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isAuth) {
       router.push('/')
     } else {
@@ -28,6 +29,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <>
       <Header/>
       {children}
+      <Footer/>
     </>
   )
 }

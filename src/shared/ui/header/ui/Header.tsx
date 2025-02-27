@@ -4,20 +4,71 @@ import React from 'react'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { useAppSelector } from '@/shared/hooks/reduxHook'
+import { debounce } from '@/shared/tools/debounce'
 
 import cls from './Header.module.css'
 
 export const Header = () => {
-  const [isOpen, setIsOpen] = React.useState(false)
   const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
+  const [isOpen, setIsOpen] = React.useState(false)
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get('query') || ''
+  const [isSearchOpen, setIsSearchOpen] = React.useState(!!initialQuery)
+  const [searchQuery, setSearchQuery] = React.useState(initialQuery)
+
+  const toggleMenu = React.useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    setIsOpen((prev) => !prev)
+  }, [])
+
+  const handleSearchIconClick = React.useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (isSearchOpen) {
+      if (searchQuery.trim()) {
+        router.replace(`/products/search?query=${encodeURIComponent(searchQuery.trim())}`)
+      } else {
+        router.replace('/products')
+      }
+    } else {
+      setIsSearchOpen(true)
+    }
+  }, [isSearchOpen, searchQuery, router])
+
+  const debouncedSearch = React.useCallback(
+    debounce((query: string) => {
+      if (query.trim()) {
+        router.push(`/products/search?query=${encodeURIComponent(query.trim())}`)
+      } else {
+        router.push('/products')
+      }
+    }, 700),
+    [router],
+  )
+
+  React.useEffect(() => {
+    return () => {
+      debouncedSearch.cancel?.()
+    }
+  }, [debouncedSearch])
+
+  const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+
+    setSearchQuery(value)
+    debouncedSearch(value)
+  }, [debouncedSearch])
+
+  React.useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus()
+    }
+  }, [isSearchOpen])
 
   return (
     <header className={`${cls.header} ${isOpen ? cls.headerOpen : ''}`}>
@@ -31,13 +82,54 @@ export const Header = () => {
             </div>
           </div>
 
-          <div className={`${cls.item_mobile}`} onClick={toggleMenu}>
-            <div className={`${cls.burger} ${isOpen ? cls.open : ''}`}>
+          <div className={`${cls.item_mobile}`}>
+            <div
+              className={`${cls.burger} ${isOpen ? cls.open : ''}`}
+              onClick={toggleMenu}
+            >
               <span />
               <span />
               <span />
             </div>
-            <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products" width={22} height={22} />
+            <div className={cls.searchContainer}>
+              {isSearchOpen ? (
+                <div className={`${cls.searchWrapper} ${isOpen ? cls.darkTheme : ''}`}>
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleInputChange}
+                    placeholder="Поиск"
+                    className={`${cls.searchInput} ${isOpen ? cls.darkTheme : ''}`}
+                    autoFocus
+                  />
+                  <div
+                    className={`${cls.searchIconWrapper} ${isOpen ? cls.darkTheme : ''}`}
+                    onClick={handleSearchIconClick}
+                  >
+                    <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products"
+                      width={16}
+                      height={16}
+                      style={{
+                        width: 'auto',
+                        height: 'auto',
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <Image
+                  src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'}
+                  alt="search_products"
+                  width={22}
+                  height={22}
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleSearchIconClick}
+                />
+              )}
+            </div>
           </div>
 
           <div className={cls.item_logo}>
@@ -53,7 +145,48 @@ export const Header = () => {
 
           <div className={cls.item}>
             <div className={cls.actions}>
-              <Image src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'} alt="search_products" width={22} height={22} />
+              <div className={cls.searchContainer}>
+                {isSearchOpen ? (
+                  <div className={`${cls.searchWrapper} ${isOpen ? cls.darkTheme : ''}`}>
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={handleInputChange}
+
+                      placeholder="Поиск"
+                      className={`${cls.searchInput} ${isOpen ? cls.darkTheme : ''}`}
+                      autoFocus
+                    />
+                    <div
+                      className={`${cls.searchIconWrapper} ${isOpen ? cls.darkTheme : ''}`}
+                      onClick={handleSearchIconClick}
+                    >
+                      <Image
+                        src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'}
+                        alt="search_products"
+                        width={22}
+                        height={22}
+                        style={{
+                          width: 'auto',
+                          height: 'auto',
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <Image
+                    src={isOpen ? '/icons/header/search_light.svg' : '/icons/header/search.svg'}
+                    alt="search_products"
+                    width={22}
+                    height={22}
+                    onClick={handleSearchIconClick}
+                    style={{ cursor: 'pointer' }}
+                  />
+                )}
+
+              </div>
               <Image onClick={() => router.push('/auth/register')} src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} style={{ display: `${isAuth ? 'none' : ''}` }} alt="profile" width={22} height={22} />
               <Image onClick={() => router.push('/favorites/')} src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
               <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />

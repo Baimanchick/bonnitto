@@ -5,7 +5,6 @@ import { Inter } from 'next/font/google'
 import { StoreProvider } from '@/providers/StoreProvider'
 
 import type { Metadata } from 'next'
-
 import '@/shared/assets/styles/globals.css'
 
 const inter = Inter({ subsets: ['latin'] })

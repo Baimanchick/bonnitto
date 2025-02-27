@@ -13,6 +13,7 @@ export default function Home() {
       <main>
         <ImageSlider/>
       </main>
+
     </div>
   )
 }
