@@ -29,60 +29,68 @@ export default function CartsPage() {
   const [isBtnClicked, setIsBtnClicked] = React.useState(false)
   const [isProductsLoading, setIsProductsLoading] = React.useState(false)
 
-  const storedToken = localStorage.getItem('tokens')
-  const tokens = storedToken ? JSON.parse(storedToken) : ''
+  let storedCart: any
+
+  if (typeof window !== 'undefined') {
+    storedCart = localStorage.getItem('tokens')
+  }
+
+  const tokens = storedCart ? JSON.parse(storedCart) : ''
 
   const router = useRouter()
 
   React.useEffect(() => {
-    const storedCart = localStorage.getItem('cartItems')
+    if (typeof window !== 'undefined') {
+      const storedCart = localStorage.getItem('cartItems')
 
-    const loadData = async () => {
-      if (storedCart && !tokens.access) {
-        try {
-          const parsedCart = JSON.parse(storedCart)
+      const loadData = async () => {
+        if (storedCart && !tokens.access) {
+          try {
+            const parsedCart = JSON.parse(storedCart)
 
-          if (parsedCart.length === 0) {
-            setCartItems(null)
-          } else {
-            setCartItems(parsedCart)
+            if (parsedCart.length === 0) {
+              setCartItems(null)
+            } else {
+              setCartItems(parsedCart)
+            }
+
+            const response = await Api.products.ProductsVariantsGET(parsedCart.map((item: {quantity: number, variant: number}) => item.variant))
+
+            setProducts(response.data)
+
+            const initialQuantities = response.data.reduce((acc: { [key: number]: number }, product: ProductTypes.Variants) => {
+              const cartItem = parsedCart.find((item: { variant: number }) => item.variant === product.id)
+
+              acc[product.id] = cartItem?.quantity ?? 1
+
+              return acc
+            }, {})
+
+            setQuantities(initialQuantities)
+          } catch (error) {
+            console.error('Failed to parse cart items:', error)
           }
+        } else if (tokens.access) {
+          setIsProductsLoading(true)
+          const response = await Api.cart.CartListGET().finally(() => {
+            setIsProductsLoading(false)
+          })
 
-          const response = await Api.products.ProductsVariantsGET(parsedCart.map((item: {quantity: number, variant: number}) => item.variant))
+          setProductsCart(response)
 
-          setProducts(response.data)
-
-          const initialQuantities = response.data.reduce((acc: { [key: number]: number }, product: ProductTypes.Variants) => {
-            const cartItem = parsedCart.find((item: { variant: number }) => item.variant === product.id)
-
-            acc[product.id] = cartItem?.quantity ?? 1
+          const initialQuantities = response.reduce((acc: { [key: number]: number }, cartItem: { variant: { id: number }; quantity: number }) => {
+            acc[cartItem.variant.id] = cartItem.quantity
 
             return acc
           }, {})
 
           setQuantities(initialQuantities)
-        } catch (error) {
-          console.error('Failed to parse cart items:', error)
         }
-      } else if (tokens.access) {
-        setIsProductsLoading(true)
-        const response = await Api.cart.CartListGET().finally(() => {
-          setIsProductsLoading(false)
-        })
-
-        setProductsCart(response)
-
-        const initialQuantities = response.reduce((acc: { [key: number]: number }, cartItem: { variant: { id: number }; quantity: number }) => {
-          acc[cartItem.variant.id] = cartItem.quantity
-
-          return acc
-        }, {})
-
-        setQuantities(initialQuantities)
       }
+
+      loadData()
     }
 
-    loadData()
   }, [])
 
   const handleQuantityChange = (variantId: number, change: number) => {

@@ -38,8 +38,6 @@ const ImageSlider = () => {
     loadData()
   }, [])
 
-  console.log('main data', mainData)
-
   const imageVariants = {
     hidden: { opacity: 0, x: 100 },
     visible: { opacity: 1, x: 0 },

@@ -16,7 +16,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     query = `?size_id=${sized_id}`
   }
 
-  console.log('Fetching:', `${process.env.NEXT_PUBLIC_BASE_URL}/products/${products_slug}/variants/${query}`)
   try {
 
     const res = await fetch(

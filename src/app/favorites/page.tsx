@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import toast from 'react-hot-toast'
 
 import { useRouter } from 'next/navigation'
 
@@ -17,11 +18,17 @@ import cls from './page.module.css'
 export default function Favorites() {
   const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
-  const [favorites, setFavorites] = useState<FavoritesType.ApiResponse | null>(null)
+  const [favorites, setFavorites] = React.useState<FavoritesType.ApiResponse | null>(null)
 
   const loadFavorite = async () => {
     try {
       const response = await favoritesGET()
+
+      if (!response) {
+        toast.error('ошибка')
+
+        return
+      }
 
       console.log(response)
       setFavorites(response)
@@ -30,9 +37,12 @@ export default function Favorites() {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return
     if (!isAuth) {
       router.push('/auth/register')
+
+      return
     }
     loadFavorite()
   }, [isAuth])

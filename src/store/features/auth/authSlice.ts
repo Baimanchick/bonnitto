@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import $axios from '@/shared/api/axios'
 import { API_URL } from '@/shared/utils/const'
@@ -37,13 +37,15 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem('user') || 'null'),
-  tokens: JSON.parse(localStorage.getItem('tokens') || 'null'),
+  user: typeof window !== 'undefined' && localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user')!)
+    : null,
+  tokens: typeof window !== 'undefined' && localStorage.getItem('tokens')
+    ? JSON.parse(localStorage.getItem('tokens')!)
+    : null,
   isValidToken: true,
   error: null,
-  isAuth:
-    !!JSON.parse(localStorage.getItem('tokens') || 'null') &&
-    !!JSON.parse(localStorage.getItem('user') || 'null'),
+  isAuth: typeof window !== 'undefined' && !!localStorage.getItem('tokens') && !!localStorage.getItem('user'),
 }
 
 const authSlice = createSlice({
@@ -140,7 +142,7 @@ export const passwordReset = createAsyncThunk<unknown, PasswordReset>(
   'auth/register',
   async (data: PasswordReset, { rejectWithValue }) => {
     try {
-      await $axios.post(`${API_URL}/users/password-reset/`, data)
+      await axios.post(`${API_URL}/users/password-reset/`, data)
 
     } catch (error) {
       const err = error as AxiosError

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Toaster } from 'react-hot-toast'
 
 import { Inter } from 'next/font/google'
@@ -24,8 +25,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <StoreProvider>
-          <Toaster position="top-center" />
-          {children}
+          <Suspense>
+            <Toaster position="top-center" />
+            {children}
+          </Suspense>
         </StoreProvider>
       </body>
     </html>
