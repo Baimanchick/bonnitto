@@ -280,4 +280,18 @@
         margin-top: 20px;
         width: 100%;
     }
+    .cart_items {
+        flex-direction: column;
+    }
+    .cart_item_title {
+        width: 100%;
+    }
+    .flex_page_item {
+        width: 100%;
+    }
+    .price_actions {
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
 }

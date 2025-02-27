@@ -14,15 +14,10 @@ import styles from './ImageSlider.module.css'
 
 const ImageSlider = () => {
   const [currentImage, setCurrentImage] = useState(0)
-  const [screenHeight, setScreenHeight] = useState<number>(0)
   const [imageData, setImageData] = useState<string[]>([])
   const [mainData, setMainData] = useState<MainImageTypes.Item[]>([])
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setScreenHeight(window.innerHeight)
-    }
-
     const loadData = async () => {
       try {
         const { data } = await Api.mainImages.MainImagesGET()
@@ -51,11 +46,9 @@ const ImageSlider = () => {
     exit: { opacity: 0, x: -100 },
   }
 
-  const result = screenHeight - 80
-
   return imageData.length > 0 && mainData.length > 0 ? (
     <div className={styles.main_block}>
-      <div className={styles.slider} style={{ height: result }}>
+      <div className={styles.slider}>
         <div className={styles.imageContainer}>
           <AnimatePresence>
             <motion.div
