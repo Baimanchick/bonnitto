@@ -1,7 +1,7 @@
 .slider {
     display: flex;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 80px); 
   }
   
   .imageContainer {
@@ -27,11 +27,12 @@
   .info {
     display: none;
   }
-  
+
   @media (max-width: 768px) {
     .slider {
       flex-direction: column;
       position: relative;
+      height: calc(100vh - 45px); 
     }
     .imageContainer2 {
         display: none;
