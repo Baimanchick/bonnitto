@@ -169,9 +169,9 @@ export default function Page() {
   }, [products_slug])
 
   React.useEffect(() => {
-    // if (defaultProductDetail && defaultProductDetail.available_colors.length) {
-    loadColorData()
-    // }
+    if (defaultProductDetail && defaultProductDetail.available_colors.length) {
+      loadColorData()
+    }
   }, [defaultProductDetail])
 
   const images = React.useMemo(() => {
@@ -197,8 +197,6 @@ export default function Page() {
 
     return description
   }, [defaultProductDetail, expanded])
-
-  console.log(defaultProductDetail)
 
   return (
     <div className={cls.page}>
