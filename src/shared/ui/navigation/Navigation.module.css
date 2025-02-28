@@ -20,6 +20,13 @@
     color: #6e6e6e99;
 }
 
+.search {
+    width: 200px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    outline: none;
+}
+
 @media (max-width: 768px) {
     .categories {
         width: 100%;

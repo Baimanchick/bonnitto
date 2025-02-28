@@ -40,7 +40,7 @@
     .info {
         display: flex;
         position: absolute;
-        bottom: 100;
+        bottom: 100px;
         width: 100%;
         justify-content: center;
         align-items: center;
