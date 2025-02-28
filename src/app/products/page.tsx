@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 
 import { Api } from '@/services'
+import { debounce } from '@/shared/tools/debounce'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 import { Navigation } from '@/shared/ui/navigation/Navigation'
 import { ProductCard } from '@/shared/ui/product-card/ProductCard'
@@ -20,6 +21,7 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState<ProductTypes.Category | null>(null)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
+  const [notFound, setNotFound] = React.useState(false)
 
   const pageSize = 10
 
@@ -37,7 +39,7 @@ export default function ProductsPage() {
   const fetchInitialData = useCallback(async () => {
     setLoadingData(true)
     setPage(1)
-    await loadData(selectedCategory ? selectedCategory.slug : undefined, 1)
+    await loadData(undefined, 1)
 
     if (!categories.length) {
       try {
@@ -48,16 +50,18 @@ export default function ProductsPage() {
         console.error('Ошибка загрузки категорий:', error)
       }
     }
+
     setLoadingData(false)
-  }, [loadData, selectedCategory, categories.length])
+  }, [loadData])
 
   useEffect(() => {
     fetchInitialData()
   }, [fetchInitialData])
 
-  const handleCategorySelect = useCallback((category: ProductTypes.Category) => {
+  const handleCategorySelect = useCallback(async (category: ProductTypes.Category) => {
     setSelectedCategory(category)
     setPage(1)
+    await loadData(category ? category.slug : undefined, 1)
   }, [])
 
   const handleChangePage = useCallback(async () => {
@@ -69,6 +73,25 @@ export default function ProductsPage() {
     setFilterLoading(false)
   }, [page, selectedCategory, loadData])
 
+  const debouncedSearch = debounce(async (value: string) => {
+    setFilterLoading(true)
+
+    const response = await Api.searchProducts.searchProductsApi(value)
+
+    if (response.data.results.length === 0) {
+      setNotFound(true)
+      setFilterLoading(false)
+    } else {
+      setProducts(response.data.results)
+      setNotFound(false)
+      setFilterLoading(false)
+    }
+  }, 700)
+
+  const searchProducts = (value: string) => {
+    debouncedSearch(value)
+  }
+
   return (
     <div className={styles.page}>
       {loadingData ? (
@@ -76,7 +99,7 @@ export default function ProductsPage() {
       ) : (
         <main className={'container'}>
           <div className={styles.flex_page}>
-            <Navigation navigationItems={categories} onCategorySelect={handleCategorySelect} />
+            <Navigation navigationItems={categories} onCategorySelect={handleCategorySelect} onSearchChange={(value) => searchProducts(value)} />
             <motion.div
               className={styles.list_products}
               initial={{ opacity: 0 }}
@@ -84,9 +107,15 @@ export default function ProductsPage() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {products.map((product: ProductTypes.Item) => (
-                <ProductCard key={product.slug} product={product} />
-              ))}
+              {
+                notFound ? (
+                  <h1>Не нашли ваш товар</h1>
+                ) : (
+                  products.map((product: ProductTypes.Item) => (
+                    <ProductCard key={product.slug} product={product} />
+                  ))
+                )
+              }
             </motion.div>
           </div>
           {hasMore && (

@@ -2,3 +2,27 @@
     overflow: hidden;
     height: 100%;
 }
+
+.not_found {
+    width: 100%;
+    height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.btn {
+    width: max-content;
+    height: 40px;
+    padding: 5px 10px;
+    background-color: initial;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.text {
+    max-width: 300px;
+    text-align: center;
+}
