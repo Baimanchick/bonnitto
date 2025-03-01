@@ -1,11 +1,17 @@
 import $axios from '@/shared/api/axios'
 import { API_URL } from '@/shared/utils/const'
 
-export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 10) => {
+export const ProductsGET = async (
+  category_slug?: string,
+  page: number = 1,
+  limit: number = 10,
+  collection_slug?: string,
+) => {
   try {
-    const query = category_slug
-      ? `?category_slug=${category_slug}&page=${page}&limit=${limit}`
-      : `?page=${page}&limit=${limit}`
+    const query =
+      category_slug || collection_slug
+        ? `?${category_slug ? `category_slug=${category_slug}&` : ''}${collection_slug ? `collection_slug=${collection_slug}&` : ''}page=${page}&limit=${limit}`
+        : `?page=${page}&limit=${limit}`
 
     const response = await fetch(`/api/products${query}`, {
       method: 'GET',
@@ -67,5 +73,18 @@ export const ProductSlugVariantsGET = async (products_slug: string | string[] | 
     return data
   } catch (error) {
     console.log('error getting product detail', error)
+  }
+}
+
+export const ProductsCollectionGET = async (collection_slug: string) => {
+  try {
+    const response = await fetch(`/api/products/collection/${collection_slug}`, {
+      method: 'GET',
+    })
+    const data = await response.json()
+
+    return data.data.results
+  } catch (error) {
+    console.log('collection products error', error)
   }
 }

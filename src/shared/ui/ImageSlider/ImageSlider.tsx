@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import { Api } from '@/services'
 import { MainImageTypes } from '@/shared/types/main-images/MainImage'
@@ -16,6 +17,7 @@ const ImageSlider = () => {
   const [currentImage, setCurrentImage] = useState(0)
   const [imageData, setImageData] = useState<string[]>([])
   const [mainData, setMainData] = useState<MainImageTypes.Item[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     const loadData = async () => {
@@ -63,6 +65,13 @@ const ImageSlider = () => {
                 alt="Slider Image 1"
                 fill
                 style={{ objectFit: 'cover' }}
+                onClick={() => {
+                  if (mainData[currentImage].collection) {
+                    router.push(`/collections/${mainData[currentImage].collection.slug}/?collection_title=${mainData[currentImage].collection.title}`)
+                  } else {
+                    router.push('/products')
+                  }
+                }}
               />
             </motion.div>
           </AnimatePresence>
@@ -84,6 +93,7 @@ const ImageSlider = () => {
                 alt="Slider Image 2"
                 fill
                 style={{ objectFit: 'cover' }}
+                onClick={() => router.push(`/collections/${mainData[currentImage].collection.slug}`)}
               />
             </motion.div>
           </AnimatePresence>
