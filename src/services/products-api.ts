@@ -1,12 +1,4 @@
-import $axios from '@/shared/api/axios'
-import { API_URL } from '@/shared/utils/const'
-
-export const ProductsGET = async (
-  category_slug?: string,
-  page: number = 1,
-  limit: number = 10,
-  collection_slug?: string,
-) => {
+export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 10, collection_slug?: string) => {
   try {
     const query =
       category_slug || collection_slug
@@ -27,9 +19,11 @@ export const ProductsGET = async (
 
 export const ProductSlugGET = async (products_slug: string | string[] | undefined) => {
   try {
-    const response = await $axios.get(`${API_URL}/products/${products_slug}`)
+    const response = await fetch(`/api/products/${products_slug}/`)
 
-    return response.data
+    const data = await response.json()
+
+    return data
   } catch (error) {
     console.log(error)
   }

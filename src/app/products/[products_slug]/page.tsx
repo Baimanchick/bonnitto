@@ -33,7 +33,7 @@ export default function Page() {
     try {
       const productData = await ProductSlugGET(products_slug)
 
-      setDefaultProductDetail(productData)
+      setDefaultProductDetail(productData.data)
       if (isAuth && productData.in_cart) {
         setIsAdded(true)
       }

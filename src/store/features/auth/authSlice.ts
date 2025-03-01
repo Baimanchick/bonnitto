@@ -91,7 +91,7 @@ export const login = createAsyncThunk<unknown, LoginUser>(
   'auth/login',
   async (data: LoginUser, { dispatch, rejectWithValue }) => {
     try {
-      const { data: response } = await $axios.post(`${API_URL}/users/login/`, data)
+      const { data: response } = await axios.post(`${API_URL}/users/login/`, data)
 
       const { refresh, access, user } = response
 
@@ -109,7 +109,7 @@ export const register = createAsyncThunk<unknown, RegisterUser>(
   'auth/register',
   async (data: RegisterUser, { rejectWithValue }) => {
     try {
-      const response = await $axios.post(`${API_URL}/users/registration/`, data)
+      const response = await axios.post(`${API_URL}/users/registration/`, data)
 
       return response.data
     } catch (error) {
@@ -124,7 +124,7 @@ export const activateUser = createAsyncThunk<unknown, ActivateUser>(
   'auth/register',
   async (data: ActivateUser, { dispatch, rejectWithValue }) => {
     try {
-      const { data: response } = await $axios.post(`${API_URL}/users/activation/`, data)
+      const { data: response } = await axios.post(`${API_URL}/users/activation/`, data)
 
       const { refresh, access, user } = response
 
@@ -156,7 +156,7 @@ export const passwordResetConfirm = createAsyncThunk<unknown, PasswordResetConfi
   'auth/register',
   async (data: PasswordResetConfirm, { rejectWithValue }) => {
     try {
-      await $axios.post(`${API_URL}/users/password-reset-confirm/`, data)
+      await axios.post(`${API_URL}/users/password-reset-confirm/`, data)
     } catch (error) {
       const err = error as AxiosError
 
