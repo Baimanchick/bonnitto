@@ -7,7 +7,6 @@ export async function GET(request: NextRequest) {
 
     const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/products/search/?search=${encodeURIComponent(query)}`
 
-    console.log('apiUrl extracted', apiUrl)
     const res = await fetch(apiUrl, {
       cache: 'no-store',
       method: 'GET',

@@ -7,8 +7,6 @@ export async function POST() {
       body: JSON.stringify({}),
     })
 
-    console.log('res', response)
-
     const data = await response.json()
 
     return NextResponse.json({ success: true, data: data })
