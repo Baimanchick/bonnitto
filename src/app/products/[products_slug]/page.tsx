@@ -199,8 +199,6 @@ export default function Page() {
     return description
   }, [defaultProductDetail, expanded])
 
-  console.log(defaultProductDetail)
-
   return (
     <div className={cls.page}>
       {(!productDetail || !defaultProductDetail || !selectedVariant) ? <Spin /> : (
