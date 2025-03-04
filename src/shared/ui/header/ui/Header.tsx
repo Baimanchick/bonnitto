@@ -47,14 +47,28 @@ export const Header = () => {
           </div>
 
           <div className={cls.item_logo}>
-            <Image
-              src={isOpen ? '/icons/header/logo_light.svg' : '/icons/header/logo_main.svg'}
-              onClick={() => router.push('/')}
-              alt="Logo"
-              width={50}
-              height={75}
-              priority
-            />
+            {
+              isOpen ? (
+                <Image
+                  src={'/icons/header/logo_light.svg'}
+                  onClick={() => router.push('/')}
+                  alt="Logo"
+                  width={140}
+                  height={45}
+                  priority
+                  className={cls.logo_light}
+                />
+              ) : (
+                <Image
+                  src={'/icons/header/logo_main.svg'}
+                  onClick={() => router.push('/')}
+                  alt="Logo"
+                  width={50}
+                  height={75}
+                  priority
+                />
+              )
+            }
             {
               !isOpen && (
                 <Image
