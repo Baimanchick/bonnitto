@@ -4,7 +4,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pro
   const { products_slug } = await context.params
 
   try {
-    console.log('request' ,`${process.env.NEXT_PUBLIC_BASE_URL}/products/${products_slug}/`)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/products/${products_slug}/`,
       {
