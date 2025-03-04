@@ -34,8 +34,8 @@ export default function Page() {
     try {
       const productData = await ProductSlugGET(products_slug)
 
-      setDefaultProductDetail(productData.data)
-      if (isAuth && productData.in_cart) {
+      setDefaultProductDetail(productData)
+      if (isAuth && productData?.in_cart) {
         setIsAdded(true)
       }
     } catch (error) {
@@ -198,6 +198,8 @@ export default function Page() {
 
     return description
   }, [defaultProductDetail, expanded])
+
+  console.log(defaultProductDetail)
 
   return (
     <div className={cls.page}>
