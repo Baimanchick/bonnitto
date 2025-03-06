@@ -1,6 +1,7 @@
 .page {
     overflow: hidden;
     height: 100%;
+    background-color: #ffffff;
 }
 
 .not_found {

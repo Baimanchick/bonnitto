@@ -266,6 +266,10 @@
 }
 
 @media (max-width: 768px) {
+  .logo_light {
+    width: 140px !important;
+    height: 45px !important;
+  }
   .logo_text {
     width: 100px !important;
     height: 40px !important;
