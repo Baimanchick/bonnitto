@@ -1,11 +1,13 @@
 import $axios from '@/shared/api/axios'
 import { API_URL } from '@/shared/utils/const'
 
-export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 10, collection_slug?: string) => {
+export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 10, collection_slug?: string, isArrived?: boolean) => {
   try {
     const query =
-      category_slug || collection_slug
-        ? `?${category_slug ? `category_slug=${category_slug}&` : ''}${collection_slug ? `collection_slug=${collection_slug}&` : ''}page=${page}&limit=${limit}`
+      category_slug || collection_slug || isArrived
+        ? `?${category_slug ? `category_slug=${category_slug}&` : ''}${
+          collection_slug ? `collection_slug=${collection_slug}&` : ''
+        }${isArrived ? `isArrived=${isArrived}&` : ''}page=${page}&limit=${limit}`
         : `?page=${page}&limit=${limit}`
 
     const response = await fetch(`/api/products${query}`, {

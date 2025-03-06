@@ -53,8 +53,8 @@ export const Header = () => {
                   src={'/icons/header/logo_light.svg'}
                   onClick={() => router.push('/')}
                   alt="Logo"
-                  width={140}
-                  height={45}
+                  width={220}
+                  height={75}
                   priority
                   className={cls.logo_light}
                 />
@@ -107,8 +107,9 @@ export const Header = () => {
           className={cls.menu}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
+          exit={{ opacity: 0, y: 20 }}
+          // transition={{ duration: 0.3 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           <div className={cls.container_menu}>
             <AnimatePresence mode="wait">
@@ -122,7 +123,7 @@ export const Header = () => {
               >
                 <div className={cls.menuLeft}>
                   <ul>
-                    <h4 className={cls.menu_title}>Новинки</h4>
+                    <li onClick={() => router.push('/products')}>Новинки</li>
                     <li onClick={() => router.push('/popular')}>Популярное</li>
                     <li onClick={() => router.push('/new-year')}>Новогодняя коллекция</li>
                     <li onClick={() => router.push('/sale')}>Sale</li>
@@ -134,17 +135,10 @@ export const Header = () => {
                     <ul>
                       <li className={cls.default_title} onClick={() => router.push('/about')}>О бренде</li>
                       <li className={cls.default_title} onClick={() => router.push('/shops')}>Магазины</li>
-                      <li className={cls.default_title} onClick={() => router.push('/dostavka')}>Доставка и оплата</li>
-                      <li className={cls.default_title} onClick={() => router.push('/return')}>Обмен и возврат</li>
+                      <li className={cls.default_title} onClick={() => router.push('/shipping-payment')}>Доставка и оплата</li>
+                      <li className={cls.default_title} onClick={() => router.push('/return-exchanges')}>Обмен и возврат</li>
                       <li className={cls.default_title} onClick={() => router.push('/contacts')}>Контакты</li>
                     </ul>
-
-                    {/* <div className={cls.city}>
-                      <h4 className={cls.menu_title}>ВАШ ГОРОД</h4>
-                      <p className={cls.point_city}>
-                        <Image src={'/icons/header/pin.svg'} alt="pin" width={10} height={11} /> Бишкек
-                      </p>
-                    </div> */}
                   </div>
                 </div>
 

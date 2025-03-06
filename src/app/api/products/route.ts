@@ -7,17 +7,22 @@ export async function GET(request: NextRequest) {
     const collection_slug = searchParams.get('collection_slug')
     const page = searchParams.get('page') || '1'
     const limit = searchParams.get('limit') || '2'
+    const isArrived = searchParams.get('isArrived')
 
     const offset = (parseInt(page) - 1) * parseInt(limit)
 
     const query =
-    (category_slug ? `&category_slug=${category_slug}` : '') +
-    (collection_slug ? `&collection_slug=${collection_slug}` : '')
+      (category_slug ? `&category_slug=${category_slug}` : '') +
+      (collection_slug ? `&collection_slug=${collection_slug}` : '') +
+      (isArrived ? `&is_arrived=${isArrived}` : '')
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/products/?offset=${offset}&limit=${limit}${query}`, {
-      cache: 'no-store',
-      method: 'GET',
-    })
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/products/?offset=${offset}&limit=${limit}${query}`,
+      {
+        cache: 'no-store',
+        method: 'GET',
+      },
+    )
 
     const data = await res.json()
 
