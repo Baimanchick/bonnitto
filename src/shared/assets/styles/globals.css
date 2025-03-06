@@ -4,6 +4,15 @@
   margin: 0;
 }
 
+html, body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+} *
+
 a {
   color: inherit;
   text-decoration: none;
@@ -12,6 +21,14 @@ a {
 .container {
   max-width: 1300px;
   margin: 0 auto;
+}
+
+body {
+  background-image: url('../../../../public/images/ProductsBackground.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
 @media (max-width: 768px) {

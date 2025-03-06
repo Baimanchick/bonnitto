@@ -3,6 +3,7 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 
@@ -33,8 +34,8 @@ export default function Page() {
     try {
       const productData = await ProductSlugGET(products_slug)
 
-      setDefaultProductDetail(productData.data)
-      if (isAuth && productData.in_cart) {
+      setDefaultProductDetail(productData)
+      if (isAuth && productData?.in_cart) {
         setIsAdded(true)
       }
     } catch (error) {
@@ -202,7 +203,13 @@ export default function Page() {
     <div className={cls.page}>
       {(!productDetail || !defaultProductDetail || !selectedVariant) ? <Spin /> : (
         <div className={cls.main}>
-          <div className={cls.wrapper}>
+          <motion.div
+            className={cls.wrapper}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <div className={cls.wrapper__left}>
               <ProductGallery big_image={defaultProductDetail.main_image} images={images} />
             </div>
@@ -277,7 +284,7 @@ export default function Page() {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
     </div>
