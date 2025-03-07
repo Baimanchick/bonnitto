@@ -104,6 +104,11 @@
     cursor: pointer;
 }
 
+.errorText{
+    color: red;
+    font-size: 12px;
+}
+
 @media screen and (max-width: 600px) {
     .login_container{
         width: auto;

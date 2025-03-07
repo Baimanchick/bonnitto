@@ -16,14 +16,30 @@ export default function Confirm() {
   const dispatch = useAppDispatch()
   const [pin, setPin] = React.useState<string[]>(Array(6).fill(''))
   const [loading, setLoading] = React.useState(false)
+  const [errors, setErrors] = React.useState<string | null>(null)
+
+  const validate = React.useCallback(() => {
+    if (pin.length !== 6 || pin.some(digit => digit === '')) {
+      setErrors('Пин-код должен содержать 6 цифр')
+
+      return false
+    }
+    setErrors(null)
+
+    return true
+  }, [pin])
 
   const handleSubmit = React.useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!validate()) {
+      toast.error('Пожалуйста, исправьте ошибки в пин-коде')
+
+      return
+    }
+
     const code = pin.join('')
 
-    if (code.length !== 6) {
-      toast.error('Введите все цифры из пин-кода')
-    }
     setLoading(true)
     try {
       await dispatch(activateUser({ email, activation_code: code })).unwrap()
@@ -36,7 +52,7 @@ export default function Confirm() {
     } finally {
       setLoading(false)
     }
-  }, [pin, dispatch, email, router])
+  }, [pin, dispatch, email, router, validate])
 
   return (
     <div className={cls.page}>
@@ -45,7 +61,10 @@ export default function Confirm() {
           <h2>Введите код подтверждения</h2>
           <p>Мы отправили код на вашу почту</p>
           <form onSubmit={handleSubmit} className={cls.form}>
-            <PincodeField pin={pin} setPin={setPin} />
+            <div>
+              <PincodeField pin={pin} setPin={setPin} />
+              {errors && <span className={cls.errorText}>{errors}</span>}
+            </div>
             <button type="submit" className={cls.button} disabled={loading}>
               {loading ? 'Загрузка...' : 'Подтвердить'}
             </button>
