@@ -96,6 +96,11 @@
     cursor: pointer;
 }
 
+.errorText{
+    color: red;
+    font-size: 12px;
+}
+
 @media screen and (max-width: 600px) {
     .register_container{
         width: auto;

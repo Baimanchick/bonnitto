@@ -15,17 +15,46 @@ export default function Register() {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [loading, setLoading] = React.useState(false)
+  const [errors, setErrors] = React.useState<{ email?: string, password?: string, agree?: string }>({})
+
+  const validate = React.useCallback(() => {
+    const newErrors: { email?: string, password?: string, agree?: string } = {}
+
+    if (!email) {
+      newErrors.email = 'E-mail не может быть пустым!'
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Некорректный E-mail'
+    }
+
+    if (!password) {
+      newErrors.password = 'Пароль не может быть пустым!'
+    } else if (password.length < 6) {
+      newErrors.password = 'Пароль должен содержать минимум 6 символов'
+    }
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }, [email, password])
 
   const handleSubmit = React.useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+
+    if (!validate()) {
+      toast.error('Пожалуйста, исправьте ошибки в форме')
+      setLoading(false)
+
+      return
+    }
+
     try {
       await dispatch(register({ email, password })).unwrap()
       localStorage.setItem('email', email)
-      toast('Пложалуйтса подтвердите почту ')
+      toast('Пожалуйста, подтвердите почту')
       router.push('/auth/confirm')
     } catch (error) {
-      console.log('ошибка при регистрации',error)
+      console.log('ошибка при регистрации', error)
       toast.error('Произошла ошибка при регистрации, попробуйте еще раз')
     } finally {
       setLoading(false)
@@ -38,13 +67,35 @@ export default function Register() {
         <div className={cls.register_container}>
           <form className={cls.form} onSubmit={handleSubmit}>
             <label className={cls.label}>E-mail</label>
-            <input className={cls.input} type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <div>
+              <input
+                className={`${cls.input} ${errors.email ? cls.inputError : ''}`}
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && <span className={cls.errorText}>{errors.email}</span>}
+            </div>
+
             <label className={cls.label}>Пароль</label>
-            <input className={cls.input} type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <div>
+              <input
+                className={`${cls.input} ${errors.password ? cls.inputError : ''}`}
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errors.password && <span className={cls.errorText}>{errors.password}</span>}
+            </div>
+
             <div className={cls.forgotPassword}>
-              <input className={cls.checkbox} type="checkbox" />
+              <input
+                className={`${cls.checkbox} ${errors.agree ? cls.inputError : ''}`}
+                type="checkbox"
+              />
               <span>Я согласен с условиями использования</span>
             </div>
+
             <button className={cls.button} type="submit">{loading ? 'Загрузка...' : 'Регистрация'}</button>
             <div onClick={() => router.push('/auth/login')} className={cls.bottomText}>
               <span>Есть аккаунт?</span>

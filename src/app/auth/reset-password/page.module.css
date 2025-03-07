@@ -72,6 +72,11 @@
     color: #000;
 }
 
+.errorText{
+    color: red;
+    font-size: 12px;
+}
+
 @media screen and (max-width: 600px) {
     .resetPassword_container{
         width: auto;

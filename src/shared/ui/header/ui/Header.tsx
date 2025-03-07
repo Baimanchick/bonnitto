@@ -6,11 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-import { useAppSelector } from '@/shared/hooks/reduxHook'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/reduxHook'
+import { setLogout } from '@/store/features/auth/authSlice'
 
 import cls from './Header.module.css'
 
 export const Header = () => {
+  const dispatch = useAppDispatch()
   const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
   const [isOpen, setIsOpen] = React.useState(false)
@@ -19,6 +21,10 @@ export const Header = () => {
     e.stopPropagation()
     setIsOpen((prev) => !prev)
   }, [])
+
+  const handleLogout = () => {
+    dispatch(setLogout())
+  }
 
   return (
     <header className={`${cls.header} ${isOpen ? cls.headerOpen : ''}`}>
@@ -73,7 +79,11 @@ export const Header = () => {
 
           <div className={cls.item}>
             <div className={cls.actions}>
-              <Image onClick={() => router.push('/auth/register')} src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} style={{ display: `${isAuth ? 'none' : ''}` }} alt="profile" width={22} height={22} />
+              {!isAuth ? (
+                <Image onClick={() => router.push('/auth/register')} src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} alt="profile" width={22} height={22} />
+              ) : (
+                <Image onClick={handleLogout} src={isOpen ? '/icons/header/logout-icon-white.svg' : '/icons/header/logout-icon.svg'} alt="profile" width={22} height={22} />
+              )}
               <Image onClick={() => router.push('/favorites/')} src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
               <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
             </div>
