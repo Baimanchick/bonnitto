@@ -217,4 +217,11 @@
         padding: 0px 20px;
         margin-top: 40px;
     }
+    .page{
+        background-image: url('../../../../public/images/detail/white-back.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+    }
 }
