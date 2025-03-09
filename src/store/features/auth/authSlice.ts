@@ -207,5 +207,5 @@ export const userMe = createAsyncThunk<unknown, void>(
   },
 )
 
-export const { setUser, setLogout } = authSlice.actions
+export const { setUser, setLogout, setTokens } = authSlice.actions
 export default authSlice.reducer
