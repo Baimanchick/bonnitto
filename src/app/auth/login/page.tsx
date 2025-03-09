@@ -55,8 +55,8 @@ export default function Login() {
 
   const handleGoogleLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
-    const redirectUri = 'http://localhost:3000/auth/login'
-    // const redirectUri = 'https://www.bonnitto.ru/auth/login'
+    // const redirectUri = 'http://localhost:3000/auth/login/'
+    const redirectUri = 'https://www.bonnitto.ru/auth/login/'
     const scope = 'openid profile email'
     const responseType = 'code'
     const prompt = 'consent'
@@ -83,10 +83,7 @@ export default function Login() {
 
     if (!password) {
       newErrors.password = 'Пароль не может быть пустым!'
-    } else if (password.length < 6) {
-      newErrors.password = 'Пароль должен содержать минимум 6 символов'
     }
-
     setErrors(newErrors)
 
     return Object.keys(newErrors).length === 0
