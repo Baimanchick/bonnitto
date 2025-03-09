@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/reduxHook'
-import { setLogout } from '@/store/features/auth/authSlice'
+import { setLogout, setUser, setTokens } from '@/store/features/auth/authSlice'
 
 import cls from './Header.module.css'
 
@@ -16,6 +16,19 @@ export const Header = () => {
   const router = useRouter()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
   const [isOpen, setIsOpen] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
+
+  // Отложенная отрисовка на клиенте, чтобы избежать гидратационных ошибок
+  React.useEffect(() => {
+    setMounted(true)
+    const storedUser = localStorage.getItem('user')
+    const storedTokens = localStorage.getItem('tokens')
+
+    if (storedUser && storedTokens) {
+      dispatch(setUser(JSON.parse(storedUser)))
+      dispatch(setTokens(JSON.parse(storedTokens)))
+    }
+  }, [dispatch])
 
   const toggleMenu = React.useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
@@ -26,9 +39,11 @@ export const Header = () => {
     dispatch(setLogout())
   }
 
+  if (!mounted) return null
+
   return (
     <header className={`${cls.header} ${isOpen ? cls.headerOpen : ''}`}>
-      <div className={'container'}>
+      <div className="container">
         <div className={cls.items}>
           <div className={`${cls.item}`} onClick={toggleMenu}>
             <div className={`${cls.burger} ${isOpen ? cls.open : ''}`}>
@@ -39,74 +54,110 @@ export const Header = () => {
           </div>
 
           <div className={`${cls.item_mobile}`}>
-            <div
-              className={`${cls.burger} ${isOpen ? cls.open : ''}`}
-              onClick={toggleMenu}
-            >
+            <div className={`${cls.burger} ${isOpen ? cls.open : ''}`} onClick={toggleMenu}>
               <span />
               <span />
               <span />
             </div>
             <div className={cls.searchContainer}>
-              <Image onClick={() => router.push('/auth/register')} src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} style={{ display: `${isAuth ? 'none' : ''}` }} alt="profile" width={22} height={22} />
+              <Image
+                onClick={() => router.push('/auth/register')}
+                src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'}
+                style={{ display: `${isAuth ? 'none' : ''}` }}
+                alt="profile"
+                width={22}
+                height={22}
+              />
             </div>
           </div>
 
           <div className={cls.item_logo}>
-            {
-              isOpen ? (
-                <Image
-                  src={'/icons/header/logo_light.svg'}
-                  onClick={() => router.push('/')}
-                  alt="Logo"
-                  width={220}
-                  height={75}
-                  priority
-                  className={cls.logo_light}
-                />
-              ) : (
-                <Image
-                  src={'/icons/header/logo_main.svg'}
-                  onClick={() => router.push('/')}
-                  alt="Logo"
-                  width={50}
-                  height={75}
-                  priority
-                />
-              )
-            }
-            {
-              !isOpen && (
-                <Image
-                  src={'/icons/header/logo_text.svg'}
-                  onClick={() => router.push('/')}
-                  alt="Logo"
-                  width={270}
-                  height={75}
-                  className={cls.logo_text}
-                  priority
-                  style={{ marginLeft: '10px' }}
-                />
-              )
-            }
+            {isOpen ? (
+              <Image
+                src="/icons/header/logo_light.svg"
+                onClick={() => router.push('/')}
+                alt="Logo"
+                width={220}
+                height={75}
+                priority
+                className={cls.logo_light}
+              />
+            ) : (
+              <Image
+                src="/icons/header/logo_main.svg"
+                onClick={() => router.push('/')}
+                alt="Logo"
+                width={50}
+                height={75}
+                priority
+              />
+            )}
+            {!isOpen && (
+              <Image
+                src="/icons/header/logo_text.svg"
+                onClick={() => router.push('/')}
+                alt="Logo"
+                width={270}
+                height={75}
+                className={cls.logo_text}
+                priority
+                style={{ marginLeft: '10px' }}
+              />
+            )}
           </div>
 
           <div className={cls.item}>
             <div className={cls.actions}>
               {!isAuth ? (
-                <Image onClick={() => router.push('/auth/register')} src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'} alt="profile" width={22} height={22} />
+                <Image
+                  onClick={() => router.push('/auth/register')}
+                  src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'}
+                  alt="profile"
+                  width={22}
+                  height={22}
+                />
               ) : (
-                <Image onClick={handleLogout} src={isOpen ? '/icons/header/logout-icon-white.svg' : '/icons/header/logout-icon.svg'} alt="profile" width={22} height={22} />
+                <Image
+                  onClick={handleLogout}
+                  src={isOpen ? '/icons/header/logout-icon-white.svg' : '/icons/header/logout-icon.svg'}
+                  alt="profile"
+                  width={22}
+                  height={22}
+                />
               )}
-              <Image onClick={() => router.push('/favorites/')} src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
-              <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
+              <Image
+                onClick={() => router.push('/favorites/')}
+                src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'}
+                alt="favorites_products"
+                width={22}
+                height={22}
+              />
+              <Image
+                onClick={() => router.push('/cart/')}
+                src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'}
+                alt="cart_products"
+                width={22}
+                height={22}
+              />
             </div>
           </div>
 
           <div className={cls.item_mobile}>
             <div className={cls.actions}>
-              <Image onClick={() => router.push('/favorites/')} src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'} alt="favorites_products" width={22} height={22} />
-              <Image onClick={() => router.push('/cart/')} src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'} alt="cart_products" width={22} height={22} />
+              <Image
+                onClick={() => router.push('/favorites/')}
+                src={isOpen ? '/icons/header/heart_light.svg' : '/icons/header/heart.svg'}
+                alt="favorites_products"
+                width={22}
+                height={22}
+              />
+              <Image
+                onClick={() => router.push('/cart/')}
+                src={isOpen ? '/icons/header/cart_light.svg' : '/icons/header/shopping_bag.svg'}
+                alt="cart_products"
+                width={22}
+                height={22}
+              />
             </div>
           </div>
         </div>
@@ -118,7 +169,6 @@ export const Header = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          // transition={{ duration: 0.3 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           <div className={cls.container_menu}>
@@ -143,11 +193,21 @@ export const Header = () => {
                   <div className={cls.menuBlock}>
                     <h4 className={cls.menu_title}>ПОКУПАТЕЛЯМ</h4>
                     <ul>
-                      <li className={cls.default_title} onClick={() => router.push('/about')}>О бренде</li>
-                      <li className={cls.default_title} onClick={() => router.push('/shops')}>Магазины</li>
-                      <li className={cls.default_title} onClick={() => router.push('/shipping-payment')}>Доставка и оплата</li>
-                      <li className={cls.default_title} onClick={() => router.push('/return-exchanges')}>Обмен и возврат</li>
-                      <li className={cls.default_title} onClick={() => router.push('/contacts')}>Контакты</li>
+                      <li className={cls.default_title} onClick={() => router.push('/about')}>
+                        О бренде
+                      </li>
+                      <li className={cls.default_title} onClick={() => router.push('/shops')}>
+                        Магазины
+                      </li>
+                      <li className={cls.default_title} onClick={() => router.push('/shipping-payment')}>
+                        Доставка и оплата
+                      </li>
+                      <li className={cls.default_title} onClick={() => router.push('/return-exchanges')}>
+                        Обмен и возврат
+                      </li>
+                      <li className={cls.default_title} onClick={() => router.push('/contacts')}>
+                        Контакты
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -176,7 +236,6 @@ export const Header = () => {
           </div>
         </motion.div>
       )}
-
     </header>
   )
 }
