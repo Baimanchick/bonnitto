@@ -10,6 +10,7 @@ export namespace CartTypes {
         phone_number: string
         address: string
         items: Item[]
+        promocode?: string
     }
     export interface OrderWithUserData {
         email: string

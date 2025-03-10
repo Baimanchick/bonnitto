@@ -152,14 +152,22 @@ export default function CartsPage() {
         phone_number,
         address,
         items,
+        promocode,
       }
 
       const response = await Api.order.OrderWithoutUserPOST(dataToSend)
 
       if (response.success === true) {
         localStorage.removeItem('cartItems')
-        router.push('/products')
-        toast.success('Мы добавили ваш заказ')
+        const total = Number(response.data.total)
+
+        if (total !== products.reduce((acc, item) => acc + Number(item.price) * (quantities[item.id] ?? 1), 0))  {
+          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} c`)
+          router.push('/products')
+        } else {
+          toast.success('Мы добавили ваш заказ')
+          router.push('/products')
+        }
       } else {
         toast.error('Что то пошло не так!')
       }
@@ -178,7 +186,6 @@ export default function CartsPage() {
       const response = await Api.order.OrderWithUserPOST(data)
 
       if (response) {
-        // router.push('/products')
         const total = Number(response.total)
 
         if (total !== productsCart.reduce((acc, item) => acc + Number(item.variant.price) * (quantities[item.variant.id] ?? 1), 0)) {
@@ -186,6 +193,7 @@ export default function CartsPage() {
           router.push('/products')
         } else {
           toast.success('Мы добавили ваш заказ')
+          router.push('/products')
         }
       } else {
         toast.error('Что то пошло не так!')
@@ -276,6 +284,7 @@ export default function CartsPage() {
                                 <input placeholder="Введите ваш email" name="email" type="email" className={cls.input} required value={email} onChange={(e) => setEmail(e.target.value)} />
                                 <input placeholder="Введите номер телефона" name="phone_number" type="text" className={cls.input} required value={phone_number} onChange={(e) => setPhoneNumber(e.target.value)} />
                                 <input placeholder="Введите адрес" name="address" type="text" className={cls.input} required value={address} onChange={(e) => setAddress(e.target.value)} />
+                                <input placeholder="ПРОМОКОД" name="promocode" type="text" className={cls.input} value={promocode} onChange={(e) => setPromocode(e.target.value)} />
                                 <button className={cls.order_btn} onClick={handleOrderWithoutUser} disabled={isBtnClicked}>Заказать</button>
                                 <button className={cls.btn_cancel} onClick={() => setOrderActive(false)} disabled={isBtnClicked}>Отменить</button>
                               </form>
