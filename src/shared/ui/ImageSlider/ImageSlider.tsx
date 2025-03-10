@@ -101,7 +101,14 @@ const ImageSlider = () => {
 
         <div className={styles.info}>
           <h1 className={styles.collection_title}>{mainData[currentImage].collection ? mainData[currentImage].collection.title : ''}</h1>
-          <p className={styles.collection_text}>{mainData[currentImage].text || 'НОВИНКИ'}</p>
+          <p className={styles.collection_text} onClick={() => {
+            if (mainData[currentImage].collection) {
+              router.push(`/collections/${mainData[currentImage].collection.slug}/?collection_title=${mainData[currentImage].collection.title}`)
+            } else {
+              router.push('/products')
+            }
+          }}
+          >{mainData[currentImage].text || 'НОВИНКИ'}</p>
         </div>
       </div>
     </div>
