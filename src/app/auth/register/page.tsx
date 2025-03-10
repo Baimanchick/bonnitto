@@ -2,9 +2,12 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 
-import { useRouter } from 'next/navigation'
+import axios from 'axios'
+import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { useAppDispatch } from '@/shared/hooks/reduxHook'
+import { API_URL } from '@/shared/utils/const'
 import { register } from '@/store/features/auth/authSlice'
 
 import cls from './page.module.css'
@@ -16,6 +19,58 @@ export default function Register() {
   const [password, setPassword] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [errors, setErrors] = React.useState<{ email?: string, password?: string, agree?: string }>({})
+
+  const searchParams = useSearchParams()
+  const code = searchParams.get('code')
+
+  React.useEffect(() => {
+    if (code) {
+      handleGoogleAuth(code)
+      router.push('/')
+    }
+  }, [code])
+
+  const handleGoogleAuth = async (authorizationCode: string) => {
+    try {
+      const { data } = await axios.post(`${API_URL}/users/auth/google/`, {
+
+        code: authorizationCode,
+      })
+
+      const { refresh, access, user } = data
+
+      localStorage.setItem('tokens', JSON.stringify({ refresh, access }))
+      localStorage.setItem('user', JSON.stringify(user))
+
+      // dispatch(authSlice.actions.setTokens({ refresh, access }))
+      // dispatch(authSlice.actions.setUser(user))
+
+      toast.success('Вы успешно вошли через Google!')
+      router.push('/')
+    } catch (error) {
+      console.error('Google OAuth error', error)
+      toast.error('Ошибка входа через Google')
+    }
+  }
+
+  const handleGoogleLogin = () => {
+    const clientId = '621400015086-rd89l55lb24pgh4rbmjgg6fcr7cqkf5m.apps.googleusercontent.com'
+    // const redirectUri = 'http://localhost:3000/auth/login/'
+    const redirectUri = 'https://www.bonnitto.ru/auth/login/'
+    const scope = 'openid profile email'
+    const responseType = 'code'
+    const prompt = 'consent'
+
+    const googleUrl =
+      'https://accounts.google.com/o/oauth2/v2/auth' +
+      `?client_id=${clientId}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&response_type=${responseType}` +
+      `&scope=${encodeURIComponent(scope)}` +
+      `&prompt=${prompt}`
+
+    window.location.href = googleUrl
+  }
 
   const validate = React.useCallback(() => {
     const newErrors: { email?: string, password?: string, agree?: string } = {}
@@ -88,17 +143,18 @@ export default function Register() {
               {errors.password && <span className={cls.errorText}>{errors.password}</span>}
             </div>
 
-            <div className={cls.forgotPassword}>
-              <input
-                className={`${cls.checkbox} ${errors.agree ? cls.inputError : ''}`}
-                type="checkbox"
-              />
-              <span>Я согласен с условиями использования</span>
-            </div>
-
             <button className={cls.button} type="submit">{loading ? 'Загрузка...' : 'Регистрация'}</button>
+            <div className={cls.google_sign} onClick={handleGoogleLogin}>
+              <span>Войти с помощью :</span>
+              <Image
+                src={'/icons/login/google.svg'}
+                alt="google svg"
+                className={cls.icon}
+                width={22}
+                height={22}
+              />
+            </div>
             <div onClick={() => router.push('/auth/login')} className={cls.bottomText}>
-              <span>Есть аккаунт?</span>
               <span>Вход</span>
             </div>
           </form>

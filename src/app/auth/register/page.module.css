@@ -22,6 +22,21 @@
     border-radius: 3px;
     border: 1px solid #000;
 }
+
+.google_sign {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 14px;
+}
+.google_sign .icon {
+    cursor: pointer;
+}
+
+.google_sign span {
+    color: #000;
+}
+
   
 .form {
     display: flex;
