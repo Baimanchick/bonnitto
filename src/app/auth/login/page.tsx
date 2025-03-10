@@ -28,6 +28,7 @@ export default function Login() {
   React.useEffect(() => {
     if (code) {
       handleGoogleAuth(code)
+      router.push('/')
     }
   }, [code])
 
