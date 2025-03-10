@@ -2,11 +2,13 @@
 
 import React from 'react'
 
+import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/reduxHook'
+import { API_URL } from '@/shared/utils/const'
 import { setLogout, setUser, setTokens } from '@/store/features/auth/authSlice'
 
 import cls from './Header.module.css'
@@ -17,6 +19,7 @@ export const Header = () => {
   const isAuth = useAppSelector((state) => state.auth.user !== null)
   const [isOpen, setIsOpen] = React.useState(false)
   const [mounted, setMounted] = React.useState(false)
+  const [collection, setCollection] = React.useState([])
 
   // Отложенная отрисовка на клиенте, чтобы избежать гидратационных ошибок
   React.useEffect(() => {
@@ -38,6 +41,28 @@ export const Header = () => {
   const handleLogout = () => {
     dispatch(setLogout())
   }
+
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  React.useEffect(() => {
+    const loadData = async () => {
+      const response = await axios.get(`${API_URL}/collections/`)
+
+      setCollection(response.data.results)
+    }
+
+    loadData()
+  }, [])
 
   if (!mounted) return null
 
@@ -188,21 +213,18 @@ export const Header = () => {
                       setIsOpen(false)
                     }}
                     >Новинки</li>
-                    <li onClick={() => {
-                      router.push('/popular')
-                      setIsOpen(false)
-                    }}
-                    >Популярное</li>
-                    <li onClick={() => {
-                      router.push('/new-year')
-                      setIsOpen(false)
-                    }}
-                    >Новогодняя коллекция</li>
-                    <li onClick={() => {
-                      router.push('/sale')
-                      setIsOpen(false)
-                    }}
-                    >Sale</li>
+                    {
+                      collection.length > 0 && (
+                        collection.map((item: any, i) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <li key={i} onClick={() => {
+                            router.push(`/collections/${item.slug}?collection_title=${item.title}`)
+                            setIsOpen(false)
+                          }}
+                          >{item.title}</li>
+                        ))
+                      )
+                    }
                     <li onClick={() => {
                       router.push('/products/')
                       setIsOpen(false)
@@ -261,6 +283,7 @@ export const Header = () => {
                       router.push('/shops')
                       setIsOpen(false)
                     }}
+                    style={{ height: '400px' }}
                   >
                     <Image src="/images/header/default_image_1.png" alt="Магазины" width={300} height={400} />
                     <p>МАГАЗИНЫ</p>
@@ -274,6 +297,7 @@ export const Header = () => {
                       router.push('/brands')
                       setIsOpen(false)
                     }}
+                    style={{ height: '400px' }}
                   >
                     <Image src="/images/header/default_image_2.png" alt="О бренде" width={300} height={400} />
                     <p>О БРЕНДЕ</p>
