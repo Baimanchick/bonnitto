@@ -183,29 +183,69 @@ export const Header = () => {
               >
                 <div className={cls.menuLeft}>
                   <ul>
-                    <li onClick={() => router.push('/products')}>Новинки</li>
-                    <li onClick={() => router.push('/popular')}>Популярное</li>
-                    <li onClick={() => router.push('/new-year')}>Новогодняя коллекция</li>
-                    <li onClick={() => router.push('/sale')}>Sale</li>
-                    <li onClick={() => router.push('/products/')}>Весь ассортимент</li>
+                    <li onClick={() => {
+                      router.push('/products')
+                      setIsOpen(false)
+                    }}
+                    >Новинки</li>
+                    <li onClick={() => {
+                      router.push('/popular')
+                      setIsOpen(false)
+                    }}
+                    >Популярное</li>
+                    <li onClick={() => {
+                      router.push('/new-year')
+                      setIsOpen(false)
+                    }}
+                    >Новогодняя коллекция</li>
+                    <li onClick={() => {
+                      router.push('/sale')
+                      setIsOpen(false)
+                    }}
+                    >Sale</li>
+                    <li onClick={() => {
+                      router.push('/products/')
+                      setIsOpen(false)
+                    }}
+                    >Весь ассортимент</li>
                   </ul>
 
                   <div className={cls.menuBlock}>
                     <h4 className={cls.menu_title}>ПОКУПАТЕЛЯМ</h4>
                     <ul>
-                      <li className={cls.default_title} onClick={() => router.push('/about')}>
+                      <li className={cls.default_title} onClick={() => {
+                        router.push('/about')
+                        setIsOpen(false)
+                      }}
+                      >
                         О бренде
                       </li>
-                      <li className={cls.default_title} onClick={() => router.push('/shops')}>
+                      <li className={cls.default_title} onClick={() => {
+                        router.push('/shops')
+                        setIsOpen(false)
+                      }}
+                      >
                         Магазины
                       </li>
-                      <li className={cls.default_title} onClick={() => router.push('/shipping-payment')}>
+                      <li className={cls.default_title} onClick={() => {
+                        router.push('/shipping-payment')
+                        setIsOpen(false)
+                      }}
+                      >
                         Доставка и оплата
                       </li>
-                      <li className={cls.default_title} onClick={() => router.push('/return-exchanges')}>
+                      <li className={cls.default_title} onClick={() => {
+                        router.push('/return-exchanges')
+                        setIsOpen(false)
+                      }}
+                      >
                         Обмен и возврат
                       </li>
-                      <li className={cls.default_title} onClick={() => router.push('/contacts')}>
+                      <li className={cls.default_title} onClick={() => {
+                        router.push('/contacts')
+                        setIsOpen(false)
+                      }}
+                      >
                         Контакты
                       </li>
                     </ul>
@@ -217,6 +257,10 @@ export const Header = () => {
                     className={cls.menuImage}
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}
+                    onClick={() => {
+                      router.push('/shops')
+                      setIsOpen(false)
+                    }}
                   >
                     <Image src="/images/header/default_image_1.png" alt="Магазины" width={300} height={400} />
                     <p>МАГАЗИНЫ</p>
@@ -226,6 +270,10 @@ export const Header = () => {
                     className={cls.menuImage}
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}
+                    onClick={() => {
+                      router.push('/brands')
+                      setIsOpen(false)
+                    }}
                   >
                     <Image src="/images/header/default_image_2.png" alt="О бренде" width={300} height={400} />
                     <p>О БРЕНДЕ</p>
