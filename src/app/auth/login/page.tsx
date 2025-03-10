@@ -54,7 +54,7 @@ export default function Login() {
   }
 
   const handleGoogleLogin = () => {
-    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+    const clientId = '621400015086-rd89l55lb24pgh4rbmjgg6fcr7cqkf5m.apps.googleusercontent.com'
     // const redirectUri = 'http://localhost:3000/auth/login/'
     const redirectUri = 'https://www.bonnitto.ru/auth/login/'
     const scope = 'openid profile email'
