@@ -28,6 +28,7 @@ export default function CartsPage() {
   const [address, setAddress] = React.useState('')
   const [isBtnClicked, setIsBtnClicked] = React.useState(false)
   const [isProductsLoading, setIsProductsLoading] = React.useState(false)
+  const [promocode, setPromocode] = React.useState('')
 
   let storedCart: any
 
@@ -169,16 +170,23 @@ export default function CartsPage() {
     }
   }
 
-  const handleOrderWithUser = async (e: React.FormEvent) => {
+  const handleOrderWithUser = async (e: React.FormEvent, data: any) => {
     e.preventDefault()
     setIsBtnClicked(true)
 
     try {
-      const response = await Api.order.OrderWithUserPOST()
+      const response = await Api.order.OrderWithUserPOST(data)
 
       if (response) {
-        router.push('/products')
-        toast.success('Мы добавили ваш заказ')
+        // router.push('/products')
+        const total = Number(response.total)
+
+        if (total !== productsCart.reduce((acc, item) => acc + Number(item.variant.price) * (quantities[item.variant.id] ?? 1), 0)) {
+          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${response.total}`)
+          router.push('/products')
+        } else {
+          toast.success('Мы добавили ваш заказ')
+        }
       } else {
         toast.error('Что то пошло не так!')
       }
@@ -388,7 +396,30 @@ export default function CartsPage() {
                           </span>
                         </div>
 
-                        <button className={cls.order_btn} onClick={handleOrderWithUser} disabled={isBtnClicked}>ОФОРМИТЬ ЗАКАЗ</button>
+                        {
+                          !orderActive && (
+                            <button className={cls.order_btn} onClick={() => {
+                              setOrderActive(true)
+                            }} disabled={isBtnClicked}
+                            >ОФОРМИТЬ ЗАКАЗ</button>
+                          )
+                        }
+
+                        {
+                          orderActive && (
+                            <>
+                              <form className={cls.form}>
+                                <input placeholder="Введите ваш email" name="email" type="email" className={cls.input} required value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input placeholder="Введите номер телефона" name="phone_number" type="text" className={cls.input} required value={phone_number} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                <input placeholder="Введите адрес" name="address" type="text" className={cls.input} required value={address} onChange={(e) => setAddress(e.target.value)} />
+                                <input placeholder="ПРОМОКОД" name="promocode" type="text" className={cls.input} value={promocode} onChange={(e) => setPromocode(e.target.value)} />
+                                <button className={cls.order_btn} onClick={(e) => handleOrderWithUser(e, { email: email, phone_number: phone_number, address: address, promocode: promocode })} disabled={isBtnClicked}>Заказать</button>
+                                <button className={cls.btn_cancel} onClick={() => setOrderActive(false)} disabled={isBtnClicked}>Отменить</button>
+                              </form>
+
+                            </>
+                          )
+                        }
 
                       </div>
 
