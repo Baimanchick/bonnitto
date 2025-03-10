@@ -86,6 +86,7 @@
   align-items: center;
   padding-top: 40px;
   z-index: 100;
+  overflow: scroll;
 }
 
 .menu ul {
