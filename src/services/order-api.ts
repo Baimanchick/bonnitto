@@ -17,9 +17,9 @@ export const OrderWithoutUserPOST = async (data: CartTypes.OrderWithoutUserData)
   }
 }
 
-export const OrderWithUserPOST = async () => {
+export const OrderWithUserPOST = async (data: any) => {
   try {
-    const response = await $axios.post(`${API_URL}/orders/from-cart/`)
+    const response = await $axios.post(`${API_URL}/orders/from-cart/`, data)
 
     return response.data
   } catch (error) {
