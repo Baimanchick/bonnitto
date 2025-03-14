@@ -4,6 +4,7 @@ export namespace ProductTypes {
         category: Category
         title: string
         description: string
+        discount: string
         base_price: string
         main_image: string
         article: string
@@ -18,6 +19,8 @@ export namespace ProductTypes {
         article: string
         composition: string
         produced: string
+        related_products: RelatedProducts[]
+        discount: any
         category: Category
         main_image: string
         description: string
@@ -28,6 +31,12 @@ export namespace ProductTypes {
         available_sizes: Size[]
     }
 
+    interface RelatedProducts {
+        slug: string;
+        title: string;
+        main_image: string;
+        type: string;
+    }
     export interface ItemDetail {
         color: Color
         size: Size
@@ -60,7 +69,7 @@ export namespace ProductTypes {
         product: Item
         color: Color
         size: Size
-        price: string
+        price: number
         stock: number
     }
     export interface Color {
