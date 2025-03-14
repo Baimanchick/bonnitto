@@ -238,7 +238,9 @@ export default function Page() {
                 ) : (
                   <h2 className={cls.product_price__h2}>{parseInt(selectedVariant.price)} сом</h2>
                 )}
-                <span>Артикул: {defaultProductDetail.article}</span>
+                {defaultProductDetail.article ? (
+                  <span>Артикул: {defaultProductDetail.article}</span>
+                ) : null}
               </div>
               <div className={cls.product_info}>
                 <div className={cls.colors}>
