@@ -199,6 +199,10 @@ export default function Page() {
     return description
   }, [defaultProductDetail, expanded])
 
+  const calculateDiscountedPrice = React.useCallback((originalPrice: number, discountPercent: number) => {
+    return originalPrice * (1 - discountPercent / 100)
+  }, [])
+
   return (
     <div className={cls.page}>
       {(!productDetail || !defaultProductDetail || !selectedVariant) ? <Spin /> : (
@@ -226,7 +230,14 @@ export default function Page() {
                 </p>
               </div>
               <div className={cls.product_price}>
-                <h2>{parseInt(selectedVariant.price as string)} сом</h2>
+                {parseInt(defaultProductDetail.discount) ? (
+                  <div className={cls.product_price__container}>
+                    <h2 className={`${cls.product_price__h2} ${cls.base_price__h2}`}>{parseInt(defaultProductDetail.base_price)} сом</h2>
+                    <h2 className={cls.product_price__h2}>{calculateDiscountedPrice(parseInt(selectedVariant.price), parseInt(defaultProductDetail.discount))} сом</h2>
+                  </div>
+                ) : (
+                  <h2 className={cls.product_price__h2}>{parseInt(selectedVariant.price)} сом</h2>
+                )}
                 <span>Артикул: {defaultProductDetail.article}</span>
               </div>
               <div className={cls.product_info}>
@@ -266,6 +277,27 @@ export default function Page() {
                 <div className={cls.produced}>
                   Производство: {defaultProductDetail.produced}
                 </div>
+                {defaultProductDetail.related_products.length ? (
+                  <>
+                    <div className={cls.part_title}>Собери свой образ:</div>
+                    <div className={cls.part_container}>
+                      {defaultProductDetail.related_products.map((item, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div onClick={() => router.push(`/products/${item.slug}/`)} className={cls.part_image__container} key={index}>
+                          <Image
+                            width={0}
+                            height={0}
+                            sizes="100vw"
+                            alt={item.title}
+                            src={item.main_image}
+                            className={cls.part_image}
+                          />
+                          <div className={cls.part_image__title}>{item.title}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : null}
               </div>
               <div className={cls.btn_actions}>
                 {isAdded ? (

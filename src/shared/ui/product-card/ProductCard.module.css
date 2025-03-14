@@ -39,6 +39,11 @@
     font-size: 15px;
 }
 
+.discount_price__h2{
+    text-decoration: line-through;
+    color: gray;
+}
+
 .imageWrapper {
     position: relative;
     width: 100%;
@@ -53,6 +58,10 @@
     cursor: pointer;
 }
 
+.product_price__container{
+    display: flex;
+    gap: 15px;
+}
 
 @media (max-width: 768px) {
     .card {
