@@ -1,0 +1,50 @@
+.aboutPage {
+    /* Общий контейнер для страницы */
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  .heroSection {
+    background: url('/images/flowers-bg.jpg') no-repeat center/cover;
+    padding: 60px 0;
+    text-align: center;
+  }
+  
+  .heroTitle {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .heroSubtitle {
+    font-size: 18px;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  .infoSection,
+  .philosophySection,
+  .productionSection,
+  .forWhoSection {
+    padding: 40px 0;
+  }
+  
+  .sectionContent {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  
+  .philosophySection h2,
+  .productionSection h2,
+  .forWhoSection h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
