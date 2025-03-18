@@ -21,7 +21,6 @@ export const Header = () => {
   const [mounted, setMounted] = React.useState(false)
   const [collection, setCollection] = React.useState([])
 
-  // Отложенная отрисовка на клиенте, чтобы избежать гидратационных ошибок
   React.useEffect(() => {
     setMounted(true)
     const storedUser = localStorage.getItem('user')
@@ -250,7 +249,7 @@ export const Header = () => {
                         Магазины
                       </li>
                       <li className={cls.default_title} onClick={() => {
-                        router.push('/shipping-payment')
+                        router.push('/delivery')
                         setIsOpen(false)
                       }}
                       >
