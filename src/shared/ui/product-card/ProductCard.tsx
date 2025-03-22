@@ -72,11 +72,11 @@ export const ProductCard: React.FC<Props> = ({
         </p>
         {parseInt(product.discount)  ? (
           <div className={cls.product_price__container}>
-            <span className={`${cls.discount_price__h2} ${cls.price}`}>{parseInt(product.base_price)} сом</span>
-            <span className={cls.price}>{calculateDiscountedPrice(parseInt(product.base_price), parseInt(product.discount))} сом</span>
+            <span className={`${cls.discount_price__h2} ${cls.price}`}>{parseInt(product.base_price)} руб.</span>
+            <span className={cls.price}>{calculateDiscountedPrice(parseInt(product.base_price), parseInt(product.discount))} руб.</span>
           </div>
         ) : (
-          <span className={cls.price}>{parseInt(product.base_price)} сом</span>
+          <span className={cls.price}>{parseInt(product.base_price)} руб.</span>
         )}
       </div>
     </div>

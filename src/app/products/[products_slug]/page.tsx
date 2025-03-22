@@ -232,11 +232,11 @@ export default function Page() {
               <div className={cls.product_price}>
                 {parseInt(defaultProductDetail.discount) ? (
                   <div className={cls.product_price__container}>
-                    <h2 className={`${cls.product_price__h2} ${cls.base_price__h2}`}>{parseInt(defaultProductDetail.base_price)} сом</h2>
-                    <h2 className={cls.product_price__h2}>{calculateDiscountedPrice(parseInt(selectedVariant.price), parseInt(defaultProductDetail.discount))} сом</h2>
+                    <h2 className={`${cls.product_price__h2} ${cls.base_price__h2}`}>{parseInt(defaultProductDetail.base_price)} руб.</h2>
+                    <h2 className={cls.product_price__h2}>{calculateDiscountedPrice(parseInt(defaultProductDetail.base_price), parseInt(defaultProductDetail.discount))} руб.</h2>
                   </div>
                 ) : (
-                  <h2 className={cls.product_price__h2}>{parseInt(selectedVariant.price)} сом</h2>
+                  <h2 className={cls.product_price__h2}>{parseInt(defaultProductDetail.base_price)} руб.</h2>
                 )}
                 {defaultProductDetail.article ? (
                   <span>Артикул: {defaultProductDetail.article}</span>
