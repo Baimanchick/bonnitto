@@ -19,6 +19,7 @@ export namespace ProductTypes {
         article: string
         composition: string
         produced: string
+        size_charts: SizeChart[]
         related_products: RelatedProducts[]
         discount: any
         category: Category
@@ -81,4 +82,16 @@ export namespace ProductTypes {
         id: number
         name: string
     }
+
+    export interface SizeChartItem {
+        size: string;
+        chest: number;
+        waist: number;
+        hips: number;
+      }
+
+    export interface SizeChart {
+        category: string;
+        values: SizeChartItem[];
+      }
 }
