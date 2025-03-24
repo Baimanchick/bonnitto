@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 'use client'
 
 import React from 'react'
@@ -30,11 +31,31 @@ export default function Page() {
   const [expanded, setExpanded] = React.useState(false)
   const [isAdded, setIsAdded] = React.useState(false)
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const openModal = React.useCallback(() => setIsModalOpen(true), [])
+  const closeModal = React.useCallback(() => setIsModalOpen(false), [])
+
+  const [expandedCharts, setExpandedCharts] = React.useState<number[]>([])
+  const toggleChart = React.useCallback((index: number) => {
+    setExpandedCharts((prev) => {
+      if (prev.includes(index)) {
+        return prev.filter((i) => i !== index)
+      }
+
+      return [...prev, index]
+    })
+  }, [])
+  const isChartExpanded = React.useCallback(
+    (index: number) => expandedCharts.includes(index),
+    [expandedCharts],
+  )
+
   const loadData = async () => {
     try {
       const productData = await ProductSlugGET(products_slug)
 
       setDefaultProductDetail(productData)
+
       if (isAuth && productData?.in_cart) {
         setIsAdded(true)
       }
@@ -70,7 +91,7 @@ export default function Page() {
     if (isAuth) {
       localStorage.removeItem('cartItems')
     }
-  })
+  }, [isAuth])
 
   React.useEffect(() => {
     if (productDetail && productDetail.length > 0) {
@@ -161,7 +182,7 @@ export default function Page() {
     } catch (error) {
       console.log(error)
     }
-  }, [isAuth])
+  }, [isAuth, products_slug])
 
   React.useEffect(() => {
     if (products_slug) {
@@ -189,7 +210,6 @@ export default function Page() {
 
   const getFormattedDescription = React.useCallback(() => {
     if (!defaultProductDetail) return ''
-
     const { description } = defaultProductDetail
 
     if (description.length > 245) {
@@ -205,7 +225,9 @@ export default function Page() {
 
   return (
     <div className={cls.page}>
-      {(!productDetail || !defaultProductDetail || !selectedVariant) ? <Spin /> : (
+      {(!productDetail || !defaultProductDetail || !selectedVariant) ? (
+        <Spin />
+      ) : (
         <div className={cls.main}>
           <motion.div
             className={cls.wrapper}
@@ -217,6 +239,7 @@ export default function Page() {
             <div className={cls.wrapper__left}>
               <ProductGallery big_image={defaultProductDetail.main_image} images={images} />
             </div>
+
             <div className={cls.wrapper__right}>
               <div className={cls.product_heading}>
                 <h1>{defaultProductDetail.title}</h1>
@@ -229,11 +252,20 @@ export default function Page() {
                   )}
                 </p>
               </div>
+
               <div className={cls.product_price}>
                 {parseInt(defaultProductDetail.discount) ? (
                   <div className={cls.product_price__container}>
-                    <h2 className={`${cls.product_price__h2} ${cls.base_price__h2}`}>{parseInt(defaultProductDetail.base_price)} руб.</h2>
-                    <h2 className={cls.product_price__h2}>{calculateDiscountedPrice(parseInt(defaultProductDetail.base_price), parseInt(defaultProductDetail.discount))} руб.</h2>
+                    <h2 className={`${cls.product_price__h2} ${cls.base_price__h2}`}>
+                      {parseInt(defaultProductDetail.base_price)} руб.
+                    </h2>
+                    <h2 className={cls.product_price__h2}>
+                      {calculateDiscountedPrice(
+                        parseInt(defaultProductDetail.base_price),
+                        parseInt(defaultProductDetail.discount),
+                      )}{' '}
+                      руб.
+                    </h2>
                   </div>
                 ) : (
                   <h2 className={cls.product_price__h2}>{parseInt(defaultProductDetail.base_price)} руб.</h2>
@@ -242,6 +274,7 @@ export default function Page() {
                   <span>Артикул: {defaultProductDetail.article}</span>
                 ) : null}
               </div>
+
               <div className={cls.product_info}>
                 <div className={cls.colors}>
                   <span>Цвет:</span>
@@ -254,38 +287,49 @@ export default function Page() {
                     ))}
                   </div>
                 </div>
+
                 <div className={cls.size}>
-                  <span>Размер:</span>
+                  <div className={cls.size_header}>
+                    <span>Размер:</span>
+                    <h2 className={cls.sizeCharts_title} onClick={openModal}>
+                      Руководство по размерам
+                    </h2>
+                  </div>
                   <div className={cls.size_container}>
-                    {productDetail.map((variant) => {
-                      return (
-                        <div
-                          key={variant.id}
-                          onClick={() => setSelectedVariant(variant)}
-                          style={{ background: selectedVariant.id === variant.id ? '#ABABAB' : 'transparent' }}
-                        >
-                          {variant.size.name}
-                        </div>
-                      )
-                    })}
+                    {productDetail.map((variant) => (
+                      <div
+                        key={variant.id}
+                        onClick={() => setSelectedVariant(variant)}
+                        style={{ background: selectedVariant.id === variant.id ? '#ABABAB' : 'transparent' }}
+                      >
+                        {variant.size.name}
+                      </div>
+                    ))}
                   </div>
                 </div>
+
                 <div className={cls.stock}>
                   <span>В наличии: {selectedVariant.stock} шт</span>
                 </div>
+
                 <div className={cls.composition}>
                   Состав: {defaultProductDetail.composition}
                 </div>
+
                 <div className={cls.produced}>
                   Производство: {defaultProductDetail.produced}
                 </div>
+
                 {defaultProductDetail.related_products.length ? (
                   <>
                     <div className={cls.part_title}>Собери свой образ:</div>
                     <div className={cls.part_container}>
                       {defaultProductDetail.related_products.map((item, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <div onClick={() => router.push(`/products/${item.slug}/`)} className={cls.part_image__container} key={index}>
+                        <div
+                          onClick={() => router.push(`/products/${item.slug}/`)}
+                          className={cls.part_image__container}
+                          key={index}
+                        >
                           <Image
                             width={0}
                             height={0}
@@ -301,22 +345,79 @@ export default function Page() {
                   </>
                 ) : null}
               </div>
+
               <div className={cls.btn_actions}>
                 {isAdded ? (
-                  <button onClick={() => router.push('/cart')}>
-                    В КОРЗИНЕ ✓
-                  </button>
+                  <button onClick={() => router.push('/cart')}>В КОРЗИНЕ ✓</button>
                 ) : (
-                  <button onClick={handleAddToCart}>
-                    В КОРЗИНУ
-                  </button>
+                  <button onClick={handleAddToCart}>В КОРЗИНУ</button>
                 )}
                 {defaultProductDetail.in_favorite ? (
-                  <Image onClick={() => router.push('/favorites')} src={'/icons/product_detail/detail_heartFilled.svg'} alt="heart svg" className={cls.heart_icon} width={21} height={18} />
+                  <Image
+                    onClick={() => router.push('/favorites')}
+                    src={'/icons/product_detail/detail_heartFilled.svg'}
+                    alt="heart svg"
+                    className={cls.heart_icon}
+                    width={21}
+                    height={18}
+                  />
                 ) : (
-                  <Image onClick={handleAddToFavorite} src={'/icons/product_detail/detail_heart.svg'} alt="heart svg" className={cls.heart_icon} width={21} height={18} />
+                  <Image
+                    onClick={handleAddToFavorite}
+                    src={'/icons/product_detail/detail_heart.svg'}
+                    alt="heart svg"
+                    className={cls.heart_icon}
+                    width={21}
+                    height={18}
+                  />
                 )}
               </div>
+
+              {isModalOpen && (
+                <div className={cls.modalOverlay} onClick={closeModal}>
+                  <div className={cls.modalContent} onClick={(e) => e.stopPropagation()}>
+                    <button onClick={closeModal} className={cls.closeButton}>
+                      ×
+                    </button>
+
+                    <h3 className={cls.modalTitle}>Таблицы размеров</h3>
+                    {defaultProductDetail.size_charts?.map((chart, chartIndex) => (
+                      <div key={chartIndex} className={cls.sizeChart}>
+                        <button
+                          className={cls.sizeChartButton}
+                          onClick={() => toggleChart(chartIndex)}
+                        >
+                          <span>{chart.category}</span>
+                          <span>{isChartExpanded(chartIndex) ? '−' : '+'}</span>
+                        </button>
+
+                        {isChartExpanded(chartIndex) && (
+                          <table className={cls.sizeChartTable}>
+                            <thead>
+                              <tr>
+                                <th>Размер</th>
+                                <th>Грудь</th>
+                                <th>Талия</th>
+                                <th>Бёдра</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {chart.values.map((row, rowIndex) => (
+                                <tr key={rowIndex}>
+                                  <td>{row.size}</td>
+                                  <td>{row.chest}</td>
+                                  <td>{row.waist}</td>
+                                  <td>{row.hips}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
