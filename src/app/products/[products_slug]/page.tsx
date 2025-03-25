@@ -381,7 +381,7 @@ export default function Page() {
                     </button>
 
                     <h3 className={cls.modalTitle}>Таблицы размеров</h3>
-                    {defaultProductDetail.size_charts?.map((chart, chartIndex) => (
+                    {defaultProductDetail.size_charts.length ? defaultProductDetail.size_charts?.map((chart, chartIndex) => (
                       <div key={chartIndex} className={cls.sizeChart}>
                         <button
                           className={cls.sizeChartButton}
@@ -414,7 +414,11 @@ export default function Page() {
                           </table>
                         )}
                       </div>
-                    ))}
+                    )) : (
+                      <div className={cls.size_info}>
+                        <h2>У этого продукта нет руководства по размерам.</h2>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
