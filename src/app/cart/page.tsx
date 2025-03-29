@@ -264,7 +264,7 @@ export default function CartsPage() {
 
                             <div className={cls.price_block}>
                               <span className={cls.cart_price}>
-                                {Number(item.price) * (quantities[item.id] ?? 1)} С
+                                {Number(item.product.base_price) * (quantities[item.id] ?? 1)} С
                               </span>
                             </div>
                           </div>
@@ -300,7 +300,7 @@ export default function CartsPage() {
                                   products.map((item) => (
                                     <div key={item.id} className={cls.cart_card_list}>
                                       <span className={cls.cart_card_list_info}>Товары: {quantities[item.id] ?? 1} шт.</span>
-                                      <span className={cls.cart_card_list_price}>{Number(item.price) * (quantities[item.id] ?? 1)} С</span>
+                                      <span className={cls.cart_card_list_price}>{Number(item.product.base_price) * (quantities[item.id] ?? 1)} С</span>
                                     </div>
                                   ))
                                 }
@@ -309,11 +309,11 @@ export default function CartsPage() {
                               <div className={cls.total}>
                                 <h3 className={cls.total_title}>ИТОГО</h3>
                                 <span className={cls.total_price}>
-                                  {products.reduce((acc, item) => acc + Number(item.price) * (quantities[item.id] ?? 1), 0)} с
+                                  {products.reduce((acc, item) => acc + Number(item.product.base_price) * (quantities[item.id] ?? 1), 0)} с
                                 </span>
                               </div>
 
-                              <button className={cls.order_btn} onClick={() => setOrderActive(true)}>ОФОРМИТЬ ЗАКАЗ</button>
+                              <button className={cls.order_btn} onClick={() => router.push(`/cart/order-process?cartItems=${encodeURIComponent(JSON.stringify(cartItems))}`)}>ОФОРМИТЬ ЗАКАЗ</button>
 
                             </div>
 
@@ -373,7 +373,7 @@ export default function CartsPage() {
 
                           <div className={cls.price_block}>
                             <span className={cls.cart_price}>
-                              {Number(item.variant.price) * (quantities[item.id] ?? 1)} С
+                              {Number(item.variant.product.base_price) * (quantities[item.id] ?? 1)} С
                             </span>
                           </div>
                         </div>
@@ -392,7 +392,7 @@ export default function CartsPage() {
                             productsCart.map((item) => (
                               <div key={item.id} className={cls.cart_card_list}>
                                 <span className={cls.cart_card_list_info}>Товары: {quantities[item.variant.id] ?? 1} шт.</span>
-                                <span className={cls.cart_card_list_price}>{Number(item.variant.price) * (quantities[item.variant.id] ?? 1)} С</span>
+                                <span className={cls.cart_card_list_price}>{Number(item.variant.product.base_price) * (quantities[item.variant.id] ?? 1)} С</span>
                               </div>
                             ))
                           }
@@ -401,14 +401,14 @@ export default function CartsPage() {
                         <div className={cls.total}>
                           <h3 className={cls.total_title}>ИТОГО</h3>
                           <span className={cls.total_price}>
-                            {productsCart.reduce((acc, item) => acc + Number(item.variant.price) * (quantities[item.variant.id] ?? 1), 0)} с
+                            {productsCart.reduce((acc, item) => acc + Number(item.variant.product.base_price) * (quantities[item.variant.id] ?? 1), 0)} с
                           </span>
                         </div>
 
                         {
                           !orderActive && (
                             <button className={cls.order_btn} onClick={() => {
-                              setOrderActive(true)
+                              router.push('/cart/order-process/')
                             }} disabled={isBtnClicked}
                             >ОФОРМИТЬ ЗАКАЗ</button>
                           )

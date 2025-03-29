@@ -1,0 +1,258 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.main_flex {
+    display: flex;
+    column-gap: 32px;
+    overflow: visible;
+}
+
+.flexPage {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.deliveryMethods {
+  flex: 1;
+  border: 1px solid #ededed;
+  padding: 30px;
+}
+
+.deliveryList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.deliveryList li {
+  margin-bottom: 1rem;
+  border: 1px solid #ededed;
+  width: 49%;
+  padding: 22px;
+}
+
+.deliveryOption {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.radio_title {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+.deliveryOption input[type="radio"] {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .deliveryOption input[type="radio"]:checked {
+    border-color: #000000;
+    background-color: #000000;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .deliveryOption input[type="radio"]::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s;
+  }
+  
+  .deliveryOption input[type="radio"]:checked::before {
+    transform: scale(1);
+  }
+  
+.personal_form {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.addressForm {
+  flex: 2;
+  border: 1px solid #ededed;
+  padding: 30px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  width: 49%;
+}
+
+.formGroup label {
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+  font-size: 0.8666em;
+}
+
+.formGroup input,
+.formGroup textarea {
+  padding: 6px 15px;
+  border: 1px solid #ededed;
+  outline: none;
+  height: 50px;
+}
+
+
+.formGroup_address {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  .formGroup_address label {
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+    font-size: 0.8666em;
+  }
+  
+  .formGroup_address input,
+  .formGroup_address textarea {
+    padding: 6px 15px;
+    border: 1px solid #ededed;
+    outline: none;
+    height: 50px;
+  }
+  
+
+  .categories {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+    padding: 2rem 0;
+    height: max-content;
+}
+
+.category_item {
+    text-transform: uppercase;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+.category_item:hover {
+    color: #6e6e6e99;
+}
+
+.search {
+    width: 200px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    .categories {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: static;
+        max-width: none;
+        flex-direction: row;
+        column-gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+    .category_item {
+        width: max-content;
+    }
+}
+
+
+.cart_card {
+    width: 100%;
+    border: 1px solid #ededed;
+    padding: 30px;
+}
+
+.cart_card_dop_info {
+    width: 100%;
+    background-color: #D9D9D980;
+    display: flex;
+    align-items: center;
+    column-gap: 25px;
+    padding: 20px 40px;
+}
+
+.cart_card_dop_info_text {
+    font-size: 11px;
+    width: 200px;
+    line-height: 16px;
+}
+
+.cart_card_title {
+    font-size: 20px;
+}
+
+.cart_card_list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart_card_list_info {
+    font-size: 12px;
+    color: #000000AB;
+}
+
+.cart_card_list_price {
+    font-size: 12px;
+    color: #000000AB;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.order_btn {
+    width: 100%;
+    background-color: #000000;
+    margin-top: 10px;
+    border: none;
+    padding: 15px;
+    color: white;
+    cursor: pointer;
+}
