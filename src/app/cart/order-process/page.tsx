@@ -100,8 +100,6 @@ export default function OrderProcessPage() {
 
       const response = tokens ? await Api.order.OrderWithUserPOST(dataToSend) : await Api.order.OrderWithoutUserPOST(dataToSend)
 
-      console.log('response', response)
-
       if (response.success === true) {
         localStorage.removeItem('cartItems')
         const total = Number(response.data.total)
@@ -152,8 +150,6 @@ export default function OrderProcessPage() {
       }
 
       const response = await Api.order.OrderWithUserPOST(dataToSend)
-
-      console.log('response', response)
 
       if (response) {
         const total = Number(response.total)
@@ -207,7 +203,7 @@ export default function OrderProcessPage() {
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="fullname">Ваш E-Mail</label>
-                  <input type="text" id="fullname" name="fullname" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <input type="email" id="fullname" name="fullname" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="floor">Ваш телефон</label>
@@ -227,7 +223,7 @@ export default function OrderProcessPage() {
                     <div className={cls.radio_title}>
                       <span>Банковской картой</span>
                     </div>
-                    <input type="radio" name="card" value="card" onChange={(value) => setType(value.target.value)} />
+                    <input type="radio" name="payment" value="card" onChange={(value) => setType(value.target.value)} />
                   </label>
                 </li>
                 <li>
@@ -235,11 +231,12 @@ export default function OrderProcessPage() {
                     <div className={cls.radio_title}>
                       <span>Наличными</span>
                     </div>
-                    <input type="radio" name="delivery" value="cash" onChange={(value) => setType(value.target.value)} />
+                    <input type="radio" name="payment" value="cash" onChange={(value) => setType(value.target.value)} />
                   </label>
                 </li>
               </ul>
             </section>
+
             <section className={cls.deliveryMethods}>
               <h2 className={cls.sectionTitle}>Способы доставки</h2>
               <ul className={cls.deliveryList}>
@@ -250,7 +247,7 @@ export default function OrderProcessPage() {
                         <div className={cls.radio_title}>
                           <span>Доставка</span>
                         </div>
-                        <input type="radio" name="delivery" value="delivery" onChange={(value) => setTypeOfDeliver(value.target.value)} />
+                        <input type="radio" name="delivery_method" value="delivery" onChange={(value) => setTypeOfDeliver(value.target.value)} />
                       </label>
                     </li>
                   )
@@ -260,11 +257,12 @@ export default function OrderProcessPage() {
                     <div className={cls.radio_title}>
                       <span>Самовывоз</span>
                     </div>
-                    <input type="radio" name="self_pickup" value="self_pickup" onChange={(value) => setTypeOfDeliver(value.target.value)} />
+                    <input type="radio" name="delivery_method" value="self_pickup" onChange={(value) => setTypeOfDeliver(value.target.value)} />
                   </label>
                 </li>
               </ul>
             </section>
+
             <section className={cls.addressForm}>
               <h2 className={cls.sectionTitle}>{typeOfDeliver === 'delivery' ? 'Выберите адрес доставки' : 'Адрес магазина'}</h2>
               <div>

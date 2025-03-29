@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
-  console.log('called')
   try {
     const body = await request.json()
 
@@ -14,6 +13,8 @@ export async function POST(request: NextRequest) {
     })
 
     const data = await response.json()
+
+    console.log('data', data)
 
     return NextResponse.json({ success: true, data: data })
   } catch (e: any) {
