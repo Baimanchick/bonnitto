@@ -11,6 +11,8 @@ export namespace CartTypes {
         address: string
         items: Item[]
         promocode?: string
+        delivery_method?: string
+        payment_method?: string
     }
     export interface OrderWithUserData {
         email: string
