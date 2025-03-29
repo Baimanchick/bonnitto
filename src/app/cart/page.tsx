@@ -313,7 +313,11 @@ export default function CartsPage() {
                                 </span>
                               </div>
 
-                              <button className={cls.order_btn} onClick={() => router.push(`/cart/order-process?cartItems=${encodeURIComponent(JSON.stringify(cartItems))}`)}>ОФОРМИТЬ ЗАКАЗ</button>
+                              <button className={cls.order_btn} onClick={() => router.push(`/cart/order-process?cartItems=${encodeURIComponent(JSON.stringify(cartItems?.map(item => ({
+                                variant: item.variant,
+                                quantity: quantities[item.variant] ?? 1,
+                              }))))}`)}
+                              >ОФОРМИТЬ ЗАКАЗ</button>
 
                             </div>
 
