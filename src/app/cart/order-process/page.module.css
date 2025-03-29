@@ -256,3 +256,28 @@
     color: white;
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .main_flex {
+    flex-direction: column;
+  }
+  .personal_form {
+    flex-direction: column;
+    width: 100%;
+  }
+  .formGroup {
+    width: 100%;
+  }
+  .formGroup input {
+    width: 100%;
+  }
+  .deliveryList {
+    flex-direction: column;
+  }
+  .deliveryList li {
+    width: 100%;
+  }
+  .page {
+    display: block !important;
+  }
+}
