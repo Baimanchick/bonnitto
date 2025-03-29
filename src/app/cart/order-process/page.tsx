@@ -62,7 +62,7 @@ export default function OrderProcessPage() {
               return acc
             }, {})
 
-            const totals = response.data.reduce((acc: number, item: any) => acc + Number(item.product.base_price) * (quantities[item.id] ?? 1),0)
+            const totals = response.data.reduce((acc: number, item: any) => acc + Number(item.product.base_price) * (initialQuantities[item.id] ?? 1),0)
 
             setTotal(totals)
 
@@ -70,6 +70,22 @@ export default function OrderProcessPage() {
           } catch (error) {
             console.error('Failed to parse cart items:', error)
           }
+        } else {
+          const response = await Api.cart.CartListGET()
+
+          setProducts(response.map((item: any) => item.variant.product))
+
+          const initialQuantities = response.reduce((acc: { [key: number]: number }, cartItem: any) => {
+            acc[cartItem.variant.id] = cartItem.quantity
+
+            return acc
+          }, {})
+
+          const totals = response.reduce((acc: any, item: any) => acc + Number(item.variant.product.base_price) * (initialQuantities[item.variant.id] ?? 1), 0)
+
+          setTotal(totals)
+
+          setQuantities(initialQuantities)
         }
       }
 
