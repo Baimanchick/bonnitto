@@ -14,8 +14,6 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json()
 
-    console.log('data', data)
-
     return NextResponse.json({ success: true, data: data })
   } catch (e: any) {
     console.log('error', e)
