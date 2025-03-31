@@ -21,8 +21,12 @@ export const OrderWithUserPOST = async (data: any) => {
   try {
     const response = await $axios.post(`${API_URL}/orders/from-cart/`, data)
 
-    return response.data
-  } catch (error) {
-    console.log('error getting products', error)
+    console.log('server resoi', response)
+
+    return response
+  } catch (error: any) {
+    console.log('error post order with user', error)
+
+    return error.response
   }
 }

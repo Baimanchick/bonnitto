@@ -167,27 +167,34 @@ export default function OrderProcessPage() {
 
       const response = await Api.order.OrderWithUserPOST(dataToSend)
 
-      if (response) {
-        const total = Number(response.total)
+      console.log('respohse', response)
 
-        if (total !== products.reduce((acc, item) => acc + Number(item.price) * (quantities[item.id] ?? 1), 0))  {
-          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} c`)
-          if (response.payment_url) {
-            router.push(response.payment_url)
+      if (response?.status === 400) {
+        toast.error(`Ошибка: ${response.data.detail || 'Некорректный запрос'}`)
+      } else {
+        if (response?.data) {
+          const total = Number(response.data.total)
+
+          if (total !== products.reduce((acc, item) => acc + Number(item.price) * (quantities[item.id] ?? 1), 0))  {
+            toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} c`)
+            if (response.data.payment_url) {
+              router.push(response.data.payment_url)
+            } else {
+              router.push('/products')
+            }
           } else {
-            router.push('/products')
+            toast.success('Мы добавили ваш заказ')
+            if (response.data.payment_method === 'card' && response.data.payment_url) {
+              router.push(response.data.payment_url)
+            } else {
+              router.push('/products')
+            }
           }
         } else {
-          toast.success('Мы добавили ваш заказ')
-          if (response.payment_method === 'card' && response.payment_url) {
-            router.push(response.payment_url)
-          } else {
-            router.push('/products')
-          }
+          toast.error('Что то пошло не так!')
         }
-      } else {
-        toast.error('Что то пошло не так!')
       }
+
     } catch (error) {
       console.log('Submit error:', error)
     } finally {

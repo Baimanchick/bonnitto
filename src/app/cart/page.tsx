@@ -186,10 +186,10 @@ export default function CartsPage() {
       const response = await Api.order.OrderWithUserPOST(data)
 
       if (response) {
-        const total = Number(response.total)
+        const total = Number(response.data.total)
 
         if (total !== productsCart.reduce((acc, item) => acc + Number(item.variant.price) * (quantities[item.variant.id] ?? 1), 0)) {
-          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${response.total}`)
+          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${response.data.total}`)
           router.push('/products')
         } else {
           toast.success('Мы добавили ваш заказ')
