@@ -47,23 +47,27 @@
 
 .product_price__container{
     display: flex;
+    align-items: center;
     gap: 15px;
 }
 
 .product_price__h2 {
-    font-size: 24px;
+    font-weight: 400;
+    font-size: 17px;
     font-weight: 400;
 }
 
 .base_price__h2{
     text-decoration: line-through;
-    color: #888;
+    color: #000000AB;
+    font-size: 17px;
+    font-weight: 400;
 }
 
-.product_price span {
-    font-size: 15px;
-    font-weight: 400;
+.product_discount__h2{
     color: #000000AB;
+    font-size: 17px;
+    font-weight: 400;
 }
 
 .product_info{

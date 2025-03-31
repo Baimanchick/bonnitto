@@ -1,6 +1,6 @@
-/* eslint-disable react/no-array-index-key */
 'use client'
 
+/* eslint-disable react/no-array-index-key */
 import React from 'react'
 import toast from 'react-hot-toast'
 
@@ -25,25 +25,21 @@ export default function Page() {
   const isAuth = useAppSelector((state) => state.auth.user !== null)
   const { products_slug } = useParams()
 
-  const [defaultProductDetail, setDefaultProductDetail] = React.useState<ProductTypes.DefaultItemDetail | null>(null)
+  const [defaultProductDetail, setDefaultProductDetail] =
+    React.useState<ProductTypes.DefaultItemDetail | null>(null)
   const [productDetail, setProductDetail] = React.useState<ProductTypes.ItemDetail[] | null>(null)
   const [selectedVariant, setSelectedVariant] = React.useState<ProductTypes.ItemDetail | null>(null)
   const [expanded, setExpanded] = React.useState(false)
   const [isAdded, setIsAdded] = React.useState(false)
-
   const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const [expandedCharts, setExpandedCharts] = React.useState<number[]>([])
+
   const openModal = React.useCallback(() => setIsModalOpen(true), [])
   const closeModal = React.useCallback(() => setIsModalOpen(false), [])
-
-  const [expandedCharts, setExpandedCharts] = React.useState<number[]>([])
   const toggleChart = React.useCallback((index: number) => {
-    setExpandedCharts((prev) => {
-      if (prev.includes(index)) {
-        return prev.filter((i) => i !== index)
-      }
-
-      return [...prev, index]
-    })
+    setExpandedCharts((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    )
   }, [])
   const isChartExpanded = React.useCallback(
     (index: number) => expandedCharts.includes(index),
@@ -55,7 +51,6 @@ export default function Page() {
       const productData = await ProductSlugGET(products_slug)
 
       setDefaultProductDetail(productData)
-
       if (isAuth && productData?.in_cart) {
         setIsAdded(true)
       }
@@ -77,15 +72,18 @@ export default function Page() {
     }
   }
 
-  const handleColorClick = React.useCallback(async (colorId: number) => {
-    try {
-      const productColorData = await Api.products.ProductSlugVariantsGET(products_slug, String(colorId))
+  const handleColorClick = React.useCallback(
+    async (colorId: number) => {
+      try {
+        const productColorData = await Api.products.ProductSlugVariantsGET(products_slug, String(colorId))
 
-      setProductDetail(productColorData.data)
-    } catch (error) {
-      console.error('Ошибка при выборе цвета:', error)
-    }
-  }, [products_slug])
+        setProductDetail(productColorData.data)
+      } catch (error) {
+        console.error('Ошибка при выборе цвета:', error)
+      }
+    },
+    [products_slug],
+  )
 
   React.useEffect(() => {
     if (isAuth) {
@@ -101,7 +99,9 @@ export default function Page() {
       if (cartItemsJson) {
         try {
           const cartItems = JSON.parse(cartItemsJson)
-          const alreadyAdded = cartItems.some((item: { variant: number; quantity: number }) => item.variant === productDetail[0].id)
+          const alreadyAdded = cartItems.some(
+            (item: { variant: number; quantity: number }) => item.variant === productDetail[0].id,
+          )
 
           setIsAdded(alreadyAdded)
         } catch (error) {
@@ -113,7 +113,6 @@ export default function Page() {
 
   const handleAddToCart = React.useCallback(async () => {
     if (!selectedVariant) return
-
     if (isAuth) {
       try {
         const dataToSend: CartTypes.Form = {
@@ -140,7 +139,6 @@ export default function Page() {
           console.error('Ошибка парсинга cartItems:', error)
         }
       }
-
       const alreadyAdded = cartItems.some((item) => item.variant === variantId)
 
       if (alreadyAdded) {
@@ -149,7 +147,6 @@ export default function Page() {
 
         return
       }
-
       cartItems.push({ variant: variantId, quantity: 1 })
       localStorage.setItem('cartItems', JSON.stringify(cartItems))
       setIsAdded(true)
@@ -164,13 +161,11 @@ export default function Page() {
 
       return
     }
-
     if (!products_slug) {
       toast.error('Информация о продукте не загружена')
 
       return
     }
-
     try {
       const dataToSend: FavoritesType.Form = {
         product: products_slug,
@@ -219,9 +214,35 @@ export default function Page() {
     return description
   }, [defaultProductDetail, expanded])
 
-  const calculateDiscountedPrice = React.useCallback((originalPrice: number, discountPercent: number) => {
-    return originalPrice * (1 - discountPercent / 100)
-  }, [])
+  const getDiscountPercentage = React.useCallback(() => {
+    const originalPrice = parseInt(defaultProductDetail!.base_price)
+    const discountPrice = parseInt(defaultProductDetail!.discount)
+
+    if (discountPrice && discountPrice < originalPrice) {
+      return Math.round((1 - discountPrice / originalPrice) * 100)
+    }
+
+    return 0
+  }, [defaultProductDetail])
+
+  const renderPrice = React.useCallback(() => {
+    const originalPrice = parseInt(defaultProductDetail!.base_price)
+    const discountPrice = parseInt(defaultProductDetail!.discount)
+
+    if (discountPrice && discountPrice < originalPrice) {
+      return (
+        <div className={cls.product_price__container}>
+          <span className={cls.base_price__h2}>
+            {originalPrice} руб.
+          </span>
+          <span className={cls.product_price__h2}>{discountPrice} руб.</span>
+          <span className={cls.product_discount__h2}>Скидка: {getDiscountPercentage()}%</span>
+        </div>
+      )
+    }
+
+    return <h2 className={cls.product_price__h2}>{originalPrice} руб.</h2>
+  }, [defaultProductDetail, getDiscountPercentage])
 
   return (
     <div className={cls.page}>
@@ -245,7 +266,7 @@ export default function Page() {
                 <h1>{defaultProductDetail.title}</h1>
                 <p>
                   {getFormattedDescription()}
-                  {defaultProductDetail?.description.length > 245 && (
+                  {defaultProductDetail.description.length > 245 && (
                     <button onClick={toggleDescription} className={cls.moreButton}>
                       {expanded ? 'Скрыть' : 'Еще...'}
                     </button>
@@ -254,25 +275,8 @@ export default function Page() {
               </div>
 
               <div className={cls.product_price}>
-                {parseInt(defaultProductDetail.discount) ? (
-                  <div className={cls.product_price__container}>
-                    <h2 className={`${cls.product_price__h2} ${cls.base_price__h2}`}>
-                      {parseInt(defaultProductDetail.base_price)} руб.
-                    </h2>
-                    <h2 className={cls.product_price__h2}>
-                      {calculateDiscountedPrice(
-                        parseInt(defaultProductDetail.base_price),
-                        parseInt(defaultProductDetail.discount),
-                      )}{' '}
-                      руб.
-                    </h2>
-                  </div>
-                ) : (
-                  <h2 className={cls.product_price__h2}>{parseInt(defaultProductDetail.base_price)} руб.</h2>
-                )}
-                {defaultProductDetail.article ? (
-                  <span>Артикул: {defaultProductDetail.article}</span>
-                ) : null}
+                {renderPrice()}
+                {defaultProductDetail.article && <span>Артикул: {defaultProductDetail.article}</span>}
               </div>
 
               <div className={cls.product_info}>
@@ -379,42 +383,42 @@ export default function Page() {
                     <button onClick={closeModal} className={cls.closeButton}>
                       ×
                     </button>
-
                     <h3 className={cls.modalTitle}>Таблицы размеров</h3>
-                    {defaultProductDetail.size_charts.length ? defaultProductDetail.size_charts?.map((chart, chartIndex) => (
-                      <div key={chartIndex} className={cls.sizeChart}>
-                        <button
-                          className={cls.sizeChartButton}
-                          onClick={() => toggleChart(chartIndex)}
-                        >
-                          <span>{chart.category}</span>
-                          <span>{isChartExpanded(chartIndex) ? '−' : '+'}</span>
-                        </button>
-
-                        {isChartExpanded(chartIndex) && (
-                          <table className={cls.sizeChartTable}>
-                            <thead>
-                              <tr>
-                                <th>Размер</th>
-                                <th>Грудь</th>
-                                <th>Талия</th>
-                                <th>Бёдра</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {chart.values.map((row, rowIndex) => (
-                                <tr key={rowIndex}>
-                                  <td>{row.size}</td>
-                                  <td>{row.chest}</td>
-                                  <td>{row.waist}</td>
-                                  <td>{row.hips}</td>
+                    {defaultProductDetail.size_charts.length ? (
+                      defaultProductDetail.size_charts.map((chart, chartIndex) => (
+                        <div key={chartIndex} className={cls.sizeChart}>
+                          <button
+                            className={cls.sizeChartButton}
+                            onClick={() => toggleChart(chartIndex)}
+                          >
+                            <span>{chart.category}</span>
+                            <span>{isChartExpanded(chartIndex) ? '−' : '+'}</span>
+                          </button>
+                          {isChartExpanded(chartIndex) && (
+                            <table className={cls.sizeChartTable}>
+                              <thead>
+                                <tr>
+                                  <th>Размер</th>
+                                  <th>Грудь</th>
+                                  <th>Талия</th>
+                                  <th>Бёдра</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        )}
-                      </div>
-                    )) : (
+                              </thead>
+                              <tbody>
+                                {chart.values.map((row, rowIndex) => (
+                                  <tr key={rowIndex}>
+                                    <td>{row.size}</td>
+                                    <td>{row.chest}</td>
+                                    <td>{row.waist}</td>
+                                    <td>{row.hips}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          )}
+                        </div>
+                      ))
+                    ) : (
                       <div className={cls.size_info}>
                         <h2>У этого продукта нет руководства по размерам.</h2>
                       </div>
