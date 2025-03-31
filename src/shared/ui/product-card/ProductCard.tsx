@@ -37,10 +37,6 @@ export const ProductCard: React.FC<Props> = ({
     }
   }
 
-  const calculateDiscountedPrice = React.useCallback((originalPrice: number, discountPercent: number) => {
-    return originalPrice * (1 - discountPercent / 100)
-  }, [])
-
   return (
     <div className={cls.card}>
       <div className={cls.imageWrapper}>
@@ -73,7 +69,7 @@ export const ProductCard: React.FC<Props> = ({
         {parseInt(product.discount)  ? (
           <div className={cls.product_price__container}>
             <span className={`${cls.discount_price__h2} ${cls.price}`}>{parseInt(product.base_price)} руб.</span>
-            <span className={cls.price}>{calculateDiscountedPrice(parseInt(product.base_price), parseInt(product.discount))} руб.</span>
+            <span className={cls.price}>{parseInt(product.discount)} руб.</span>
           </div>
         ) : (
           <span className={cls.price}>{parseInt(product.base_price)} руб.</span>
