@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { Api } from '@/services'
+import { getDiscount } from '@/shared/tools/discount'
 import { CartTypes } from '@/shared/types/cart-types/CartTypes'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 import { Header } from '@/shared/ui/header/ui/Header'
@@ -300,7 +301,7 @@ export default function CartsPage() {
                                   products.map((item) => (
                                     <div key={item.id} className={cls.cart_card_list}>
                                       <span className={cls.cart_card_list_info}>Товары: {quantities[item.id] ?? 1} шт.</span>
-                                      <span className={cls.cart_card_list_price}>{Number(item.product.base_price) * (quantities[item.id] ?? 1)} С</span>
+                                      <span className={cls.cart_card_list_price}>{getDiscount(Number(item.product.base_price) * (quantities[item.id] ?? 1), item.product.discount)} С</span>
                                     </div>
                                   ))
                                 }
@@ -309,7 +310,7 @@ export default function CartsPage() {
                               <div className={cls.total}>
                                 <h3 className={cls.total_title}>ИТОГО</h3>
                                 <span className={cls.total_price}>
-                                  {products.reduce((acc, item) => acc + Number(item.product.base_price) * (quantities[item.id] ?? 1), 0)} с
+                                  {products.reduce((acc, item) => acc + getDiscount(Number(item.product.base_price) * (quantities[item.id] ?? 1), item.product.discount), 0)} с
                                 </span>
                               </div>
 
@@ -377,7 +378,7 @@ export default function CartsPage() {
 
                           <div className={cls.price_block}>
                             <span className={cls.cart_price}>
-                              {Number(item.variant.product.base_price) * (quantities[item.id] ?? 1)} С
+                              {getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount)} С
                             </span>
                           </div>
                         </div>
@@ -396,7 +397,7 @@ export default function CartsPage() {
                             productsCart.map((item) => (
                               <div key={item.id} className={cls.cart_card_list}>
                                 <span className={cls.cart_card_list_info}>Товары: {quantities[item.variant.id] ?? 1} шт.</span>
-                                <span className={cls.cart_card_list_price}>{Number(item.variant.product.base_price) * (quantities[item.variant.id] ?? 1)} С</span>
+                                <span className={cls.cart_card_list_price}>{getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount)} С</span>
                               </div>
                             ))
                           }
@@ -405,7 +406,7 @@ export default function CartsPage() {
                         <div className={cls.total}>
                           <h3 className={cls.total_title}>ИТОГО</h3>
                           <span className={cls.total_price}>
-                            {productsCart.reduce((acc, item) => acc + Number(item.variant.product.base_price) * (quantities[item.variant.id] ?? 1), 0)} с
+                            {productsCart.reduce((acc, item) => acc + getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount), 0)} с
                           </span>
                         </div>
 

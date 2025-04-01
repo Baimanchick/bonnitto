@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Api } from '@/services'
+import { getDiscount } from '@/shared/tools/discount'
 import { CartTypes } from '@/shared/types/cart-types/CartTypes'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 import { Header } from '@/shared/ui/header/ui/Header'
@@ -62,7 +63,7 @@ export default function OrderProcessPage() {
               return acc
             }, {})
 
-            const totals = response.data.reduce((acc: number, item: any) => acc + Number(item.product.base_price) * (initialQuantities[item.id] ?? 1),0)
+            const totals = response.data.reduce((acc: number, item: any) => acc + getDiscount(Number(item.product.base_price) * (initialQuantities[item.id] ?? 1), item.product.discount),0)
 
             setTotal(totals)
 
@@ -81,7 +82,7 @@ export default function OrderProcessPage() {
             return acc
           }, {})
 
-          const totals = response.reduce((acc: any, item: any) => acc + Number(item.variant.product.base_price) * (initialQuantities[item.variant.id] ?? 1), 0)
+          const totals = response.reduce((acc: any, item: any) => acc + getDiscount(Number(item.variant.product.base_price) * (initialQuantities[item.id] ?? 1), item.variant.product.discount), 0)
 
           setTotal(totals)
 
@@ -166,8 +167,6 @@ export default function OrderProcessPage() {
       }
 
       const response = await Api.order.OrderWithUserPOST(dataToSend)
-
-      console.log('respohse', response)
 
       if (response?.status === 400) {
         toast.error(`Ошибка: ${response.data.detail || 'Некорректный запрос'}`)
