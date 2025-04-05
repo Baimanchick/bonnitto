@@ -163,7 +163,7 @@ export default function CartsPage() {
         const total = Number(response.data.total)
 
         if (total !== products.reduce((acc, item) => acc + Number(item.price) * (quantities[item.id] ?? 1), 0))  {
-          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} c`)
+          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} руб.`)
           router.push('/products')
         } else {
           toast.success('Мы добавили ваш заказ')
@@ -265,7 +265,7 @@ export default function CartsPage() {
 
                             <div className={cls.price_block}>
                               <span className={cls.cart_price}>
-                                {Number(item.product.base_price) * (quantities[item.id] ?? 1)} С
+                                {Number(item.product.base_price) * (quantities[item.id] ?? 1)} руб.
                               </span>
                             </div>
                           </div>
@@ -301,7 +301,7 @@ export default function CartsPage() {
                                   products.map((item) => (
                                     <div key={item.id} className={cls.cart_card_list}>
                                       <span className={cls.cart_card_list_info}>Товары: {quantities[item.id] ?? 1} шт.</span>
-                                      <span className={cls.cart_card_list_price}>{getDiscount(Number(item.product.base_price) * (quantities[item.id] ?? 1), item.product.discount)} С</span>
+                                      <span className={cls.cart_card_list_price}>{getDiscount(Number(item.product.base_price) * (quantities[item.id] ?? 1), item.product.discount)} руб.</span>
                                     </div>
                                   ))
                                 }
@@ -310,7 +310,7 @@ export default function CartsPage() {
                               <div className={cls.total}>
                                 <h3 className={cls.total_title}>ИТОГО</h3>
                                 <span className={cls.total_price}>
-                                  {products.reduce((acc, item) => acc + getDiscount(Number(item.product.base_price) * (quantities[item.id] ?? 1), item.product.discount), 0)} с
+                                  {products.reduce((acc, item) => acc + getDiscount(Number(item.product.base_price) * (quantities[item.id] ?? 1), item.product.discount), 0)} руб.
                                 </span>
                               </div>
 
@@ -378,7 +378,7 @@ export default function CartsPage() {
 
                           <div className={cls.price_block}>
                             <span className={cls.cart_price}>
-                              {getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount)} С
+                              {getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount)} руб.
                             </span>
                           </div>
                         </div>
@@ -397,7 +397,7 @@ export default function CartsPage() {
                             productsCart.map((item) => (
                               <div key={item.id} className={cls.cart_card_list}>
                                 <span className={cls.cart_card_list_info}>Товары: {quantities[item.variant.id] ?? 1} шт.</span>
-                                <span className={cls.cart_card_list_price}>{getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount)} С</span>
+                                <span className={cls.cart_card_list_price}>{getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount)} руб.</span>
                               </div>
                             ))
                           }
@@ -406,7 +406,7 @@ export default function CartsPage() {
                         <div className={cls.total}>
                           <h3 className={cls.total_title}>ИТОГО</h3>
                           <span className={cls.total_price}>
-                            {productsCart.reduce((acc, item) => acc + getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount), 0)} с
+                            {productsCart.reduce((acc, item) => acc + getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount), 0)} руб.
                           </span>
                         </div>
 
