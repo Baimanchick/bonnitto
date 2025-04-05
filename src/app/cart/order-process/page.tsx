@@ -122,7 +122,7 @@ export default function OrderProcessPage() {
         const total = Number(response.data.total)
 
         if (total !== products.reduce((acc, item) => acc + Number(item.price) * (quantities[item.id] ?? 1), 0))  {
-          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} c`)
+          toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} руб.`)
           if (response.data.payment_url) {
             router.push(response.data.payment_url)
           } else {
@@ -175,7 +175,7 @@ export default function OrderProcessPage() {
           const total = Number(response.data.total)
 
           if (total !== products.reduce((acc, item) => acc + Number(item.price) * (quantities[item.id] ?? 1), 0))  {
-            toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} c`)
+            toast.success(`Мы добавили ваш заказ и активировали ваш промокод, итоговая цена составила - ${total} руб.`)
             if (response.data.payment_url) {
               router.push(response.data.payment_url)
             } else {
@@ -321,7 +321,7 @@ export default function OrderProcessPage() {
               <div className={cls.list}>
                 <div className={cls.cart_card_list}>
                   <span className={cls.cart_card_list_info}>Товаров на</span>
-                  <span className={cls.cart_card_list_price}>{total} С</span>
+                  <span className={cls.cart_card_list_price}>{total} руб.</span>
                 </div>
 
               </div>
@@ -329,7 +329,7 @@ export default function OrderProcessPage() {
               <div className={cls.total}>
                 <h3 className={cls.sectionTitle}>ИТОГО</h3>
                 <span className={cls.total_price}>
-                  {total} с
+                  {total} руб.
                 </span>
               </div>
 
