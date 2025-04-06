@@ -216,10 +216,10 @@ export default function Page() {
 
   const getDiscountPercentage = React.useCallback(() => {
     const originalPrice = parseInt(defaultProductDetail!.base_price)
-    const discountPrice = parseInt(defaultProductDetail!.discount)
+    const discountAmount = parseInt(defaultProductDetail!.discount)
 
-    if (discountPrice && discountPrice < originalPrice) {
-      return Math.round((1 - discountPrice / originalPrice) * 100)
+    if (discountAmount && discountAmount < originalPrice) {
+      return Math.round((discountAmount / originalPrice) * 100)
     }
 
     return 0
@@ -227,15 +227,17 @@ export default function Page() {
 
   const renderPrice = React.useCallback(() => {
     const originalPrice = parseInt(defaultProductDetail!.base_price)
-    const discountPrice = parseInt(defaultProductDetail!.discount)
+    const discountAmount = parseInt(defaultProductDetail!.discount)
 
-    if (discountPrice && discountPrice < originalPrice) {
+    if (discountAmount && discountAmount < originalPrice) {
+      const newPrice = originalPrice - discountAmount
+
       return (
         <div className={cls.product_price__container}>
           <span className={cls.base_price__h2}>
             {originalPrice} руб.
           </span>
-          <span className={cls.product_price__h2}>{discountPrice} руб.</span>
+          <span className={cls.product_price__h2}>{newPrice} руб.</span>
           <span className={cls.product_discount__h2}>Скидка: {getDiscountPercentage()}%</span>
         </div>
       )
