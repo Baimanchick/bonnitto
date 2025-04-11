@@ -28,6 +28,10 @@ export default function OrderProcessPage() {
   const [type, setType] = React.useState('')
   const [typeOfDeliver, setTypeOfDeliver] = React.useState('')
   const [total, setTotal] = React.useState(0)
+  const [first_name, setFirstName] = React.useState('')
+  const [last_name, setLastName] = React.useState('')
+  const [surname, setSurname] = React.useState('')
+  const [comment, setComment] = React.useState('')
 
   const router = useRouter()
 
@@ -113,6 +117,10 @@ export default function OrderProcessPage() {
         promocode,
         delivery_method: typeOfDeliver,
         payment_method: type,
+        first_name,
+        last_name,
+        surname,
+        comment,
       }
 
       const response = tokens ? await Api.order.OrderWithUserPOST(dataToSend) : await Api.order.OrderWithoutUserPOST(dataToSend)
@@ -164,6 +172,10 @@ export default function OrderProcessPage() {
         promocode,
         delivery_method: typeOfDeliver,
         payment_method: type,
+        first_name,
+        last_name,
+        surname,
+        comment,
       }
 
       const response = await Api.order.OrderWithUserPOST(dataToSend)
@@ -214,14 +226,19 @@ export default function OrderProcessPage() {
                   <label htmlFor="address">Фамилия</label>
                   <input
                     type="text"
-                    id="address"
-                    name="address"
-                    placeholder="Например, ул. Пушкина, д. Колотушкина"
+                    id="last_name"
+                    name="last_name"
+                    placeholder="Фамилия"
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="index">Имя</label>
-                  <input type="text" id="index" name="index" placeholder="Имя" />
+                  <input type="text" id="first_name" name="first_name" placeholder="Имя" onChange={(e) => setFirstName(e.target.value)} />
+                </div>
+                <div className={cls.formGroup}>
+                  <label htmlFor="index">Отчество</label>
+                  <input type="text" id="surname" name="surname" placeholder="Отчество" onChange={(e) => setSurname(e.target.value)} />
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="fullname">Ваш E-Mail</label>
@@ -230,6 +247,10 @@ export default function OrderProcessPage() {
                 <div className={cls.formGroup}>
                   <label htmlFor="floor">Ваш телефон</label>
                   <input type="text" id="floor" name="floor" placeholder="Номер телефона" required value={phone_number} onChange={(e) => setPhoneNumber(e.target.value)} />
+                </div>
+                <div className={cls.formGroup}>
+                  <label htmlFor="floor">Комментарий</label>
+                  <input type="text" id="comment" name="comment" placeholder="Комментарий к заказу" value={comment} onChange={(e) => setComment(e.target.value)} />
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="floor">Промокод</label>

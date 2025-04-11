@@ -13,6 +13,10 @@ export namespace CartTypes {
         promocode?: string
         delivery_method?: string
         payment_method?: string
+        first_name?: string
+        last_name?: string
+        surname?: string
+        comment?: string
     }
     export interface OrderWithUserData {
         email: string
