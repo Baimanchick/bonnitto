@@ -5,6 +5,9 @@ import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
+import Insta from '../../../shared/assets/black-instagram-icon.svg'
+import Telega from '../../../shared/assets/telegram-black-icon.svg'
+
 import cls from './Footer.module.css'
 
 const footerData = [
@@ -64,6 +67,12 @@ const Footer: React.FC = () => {
               )}
             </div>
           ))}
+          <a href="https://www.instagram.com/bonnitto.store?igsh=amVieGlzeWYyeGM2" style={{ cursor: 'pointer' }}>
+            <Image src={Insta} alt="svg" width={24} height={24} />
+          </a>
+          <a href="https://t.me/bonnittostore" style={{ cursor: 'pointer' }}>
+            <Image src={Telega} alt="svg" width={24} height={24} />
+          </a>
         </div>
       </div>
     </footer>

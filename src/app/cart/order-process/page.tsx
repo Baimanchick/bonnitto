@@ -7,10 +7,14 @@ import toast from 'react-hot-toast'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Api } from '@/services'
+import { useAppSelector } from '@/shared/hooks/reduxHook'
+import { debounce } from '@/shared/tools/debounce'
 import { getDiscount } from '@/shared/tools/discount'
 import { CartTypes } from '@/shared/types/cart-types/CartTypes'
+import { LocationTypes } from '@/shared/types/products/LocationTypes'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 import { Header } from '@/shared/ui/header/ui/Header'
+import { Spin } from '@/shared/ui/spin/Spin'
 import Footer from '@/widgets/footer/ui/Footer'
 
 import cls from './page.module.css'
@@ -25,13 +29,21 @@ export default function OrderProcessPage() {
   const [phone_number, setPhoneNumber] = React.useState('')
   const [address, setAddress] = React.useState('')
   const [promocode, setPromocode] = React.useState('')
-  const [type, setType] = React.useState('')
   const [typeOfDeliver, setTypeOfDeliver] = React.useState('')
   const [total, setTotal] = React.useState(0)
   const [first_name, setFirstName] = React.useState('')
   const [last_name, setLastName] = React.useState('')
   const [surname, setSurname] = React.useState('')
   const [comment, setComment] = React.useState('')
+  const [cdekType, setCdekType] = React.useState(false)
+  const [locations, setLocations] = React.useState<LocationTypes.List[]>([])
+  const [loading, setLoading] = React.useState(false)
+  const [code, setCode] = React.useState<LocationTypes.List | null>(null)
+  const [pvzs, setPvzs] = React.useState<{code: string, office_type: string, address: string, work_time: string}[] | null>(null)
+  const [ploading, setPLoading] = React.useState(false)
+  const [pvz, setPvz] = React.useState<{code: string, office_type: string, address: string, work_time: string} | null>(null)
+
+  const isAuth = useAppSelector((state) => state.auth.user !== null)
 
   const router = useRouter()
 
@@ -99,6 +111,36 @@ export default function OrderProcessPage() {
 
   }, [])
 
+  const getLocations = React.useCallback(async (search: string) => {
+    try {
+      const response = await Api.order.GetLocations(search)
+
+      setLocations(response)
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const getPvzs = async (code: number) => {
+    setPLoading(true)
+    try {
+      const response = await Api.order.GetPvzs(code)
+
+      setPvzs(response)
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setPLoading(false)
+    }
+  }
+
+  const debouncedSearch = React.useMemo(() => debounce((value: string) => {
+    setLoading(true)
+    getLocations(value)
+  }, 700), [getLocations])
+
   const handleOrderWithoutUser = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsBtnClicked(true)
@@ -112,15 +154,15 @@ export default function OrderProcessPage() {
       const dataToSend: CartTypes.OrderWithoutUserData = {
         email,
         phone_number,
-        address,
+        address: pvz ? pvz.address : address,
         items,
         promocode,
         delivery_method: typeOfDeliver,
-        payment_method: type,
         first_name,
         last_name,
         surname,
         comment,
+        cdek_pvz_code: pvz?.code,
       }
 
       const response = tokens ? await Api.order.OrderWithUserPOST(dataToSend) : await Api.order.OrderWithoutUserPOST(dataToSend)
@@ -171,7 +213,6 @@ export default function OrderProcessPage() {
         items,
         promocode,
         delivery_method: typeOfDeliver,
-        payment_method: type,
         first_name,
         last_name,
         surname,
@@ -248,88 +289,208 @@ export default function OrderProcessPage() {
                   <label htmlFor="floor">Ваш телефон</label>
                   <input type="text" id="floor" name="floor" placeholder="Номер телефона" required value={phone_number} onChange={(e) => setPhoneNumber(e.target.value)} />
                 </div>
-                <div className={cls.formGroup}>
-                  <label htmlFor="floor">Комментарий</label>
-                  <input type="text" id="comment" name="comment" placeholder="Комментарий к заказу" value={comment} onChange={(e) => setComment(e.target.value)} />
-                </div>
-                <div className={cls.formGroup}>
-                  <label htmlFor="floor">Промокод</label>
-                  <input type="text" id="promocode" name="promocode" placeholder="Промокод" value={promocode} onChange={(e) => setPromocode(e.target.value)} />
-                </div>
               </div>
             </section>
             <section className={cls.deliveryMethods}>
-              <h2 className={cls.sectionTitle}>Способ оплаты</h2>
-              <ul className={cls.deliveryList}>
-                <li>
-                  <label className={cls.deliveryOption}>
-                    <div className={cls.radio_title}>
-                      <span>Банковской картой</span>
-                    </div>
-                    <input type="radio" name="payment" value="card" onChange={(value) => setType(value.target.value)} />
-                  </label>
-                </li>
-                <li>
-                  <label className={cls.deliveryOption}>
-                    <div className={cls.radio_title}>
-                      <span>Наличными</span>
-                    </div>
-                    <input type="radio" name="payment" value="cash" onChange={(value) => setType(value.target.value)} />
-                  </label>
-                </li>
-              </ul>
-            </section>
-
-            <section className={cls.deliveryMethods}>
               <h2 className={cls.sectionTitle}>Способы доставки</h2>
               <ul className={cls.deliveryList}>
-                {
-                  type !== 'cash' && (
-                    <li>
-                      <label className={cls.deliveryOption}>
-                        <div className={cls.radio_title}>
-                          <span>Доставка</span>
-                        </div>
-                        <input type="radio" name="delivery_method" value="delivery" onChange={(value) => setTypeOfDeliver(value.target.value)} />
-                      </label>
-                    </li>
-                  )
-                }
                 <li>
                   <label className={cls.deliveryOption}>
                     <div className={cls.radio_title}>
                       <span>Самовывоз</span>
                     </div>
-                    <input type="radio" name="delivery_method" value="self_pickup" onChange={(value) => setTypeOfDeliver(value.target.value)} />
+                    <input type="radio" name="delivery_method" value="self_pickup" onChange={(value) => {
+                      if (value.target.value === 'self_pickup') {
+                        setTypeOfDeliver(value.target.value)
+                        setAddress('Земляной Вал 14/16 График работы 10:00-21:00')
+                        setCdekType(false)
+                        setCode(null)
+                        setPvz(null)
+                      }
+                    }}
+                    />
+                  </label>
+                </li>
+                <li>
+                  <label className={cls.deliveryOption}>
+                    <div className={cls.radio_title}>
+                      <span>СДЭК: доставка курьером</span>
+                    </div>
+                    <input type="radio" name="delivery_method" value="cdek_courier" onChange={(value) => {
+                      setTypeOfDeliver(value.target.value)
+                      setAddress('')
+                      setCdekType(false)
+                      setCode(null)
+                      setPvz(null)
+                    }}
+                    />
+                  </label>
+                </li>
+                <li>
+                  <label className={cls.deliveryOption}>
+                    <div className={cls.radio_title}>
+                      <span>СДЭК: пункт выдачи</span>
+                    </div>
+                    <input type="radio" name="delivery_method" value="cdek_pvz" onChange={(value) => {
+                      setTypeOfDeliver(value.target.value)
+                      setCdekType(true)
+                      setAddress('')
+                    }}
+                    />
                   </label>
                 </li>
               </ul>
             </section>
 
-            <section className={cls.addressForm}>
-              <h2 className={cls.sectionTitle}>{typeOfDeliver === 'delivery' ? 'Выберите адрес доставки' : 'Адрес магазина'}</h2>
-              <div>
-                <div className={cls.formGroup_address}>
-                  {typeOfDeliver === 'delivery' && (<label htmlFor="address" />)}
+            {
+              cdekType ? (
+                <>
+                  <section className={cls.addressForm}>
+                    <h2 className={cls.sectionTitle}>Локации СДЕК</h2>
+                    <div>
+                      <div className={cls.formGroup_address}>
+                        <input
+                          type="text"
+                          id="search"
+                          name="search"
+                          placeholder="Поиск локации СДЕК"
+                          required
+                          onChange={(e) => {
+                            setLoading(true)
+                            debouncedSearch(e.target.value)
+                          }}
+                        />
+                      </div>
+
+                      <div className={cls.location_list}>
+                        {
+                          loading && (
+                            <Spin/>
+                          )
+                        }
+                        {
+                          locations && locations.length > 0 && (
+                            code ? (
+                              <div className={cls.formGroup_address}>
+                                <input
+                                  readOnly
+                                  type="text"
+                                  value={code.name}
+                                  style={{ cursor: 'pointer' }}
+                                />
+                              </div>
+                            ) : (
+                              locations.map((location, index) => (
+                              // eslint-disable-next-line react/no-array-index-key
+                                <div key={index} className={cls.formGroup_address} onClick={() => {
+                                  setCode(location)
+                                  getPvzs(location.code)
+                                }}
+                                >
+                                  <input
+                                    readOnly
+                                    type="text"
+                                    value={location.name}
+                                    style={{ cursor: 'pointer' }}
+                                  />
+                                </div>
+                              ))
+                            )
+                          )
+                        }
+                      </div>
+                    </div>
+                  </section>
+
                   {
-                    typeOfDeliver === 'self_pickup' ? (
-                      <input
-                        readOnly
-                        type="text"
-                        id="address"
-                        name="address"
-                        value={'Адрес боннито'}
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        id="address"
-                        name="address"
-                        placeholder="Например, ул. Пушкина, д. Колотушкина"
-                        required value={address} onChange={(e) => setAddress(e.target.value)}
-                      />
+                    code && (
+                      <section className={cls.addressForm}>
+                        <h2 className={cls.sectionTitle}>Пункты выдачи СДЕК</h2>
+                        <div>
+                          <div className={cls.location_list}>
+                            {
+                              ploading && (
+                                <Spin/>
+                              )
+                            }
+                            {
+                              pvzs && pvzs?.length > 0 && (
+                                pvz ? (
+                                  <div className={cls.formGroup_address}>
+                                    <input
+                                      readOnly
+                                      type="text"
+                                      value={pvz?.address}
+                                      style={{ cursor: 'pointer' }}
+                                    />
+                                  </div>
+                                ) : (
+                                  pvzs.map((pvz, index) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <div key={index} className={cls.formGroup_address} onClick={() => setPvz(pvz)}>
+                                      <input
+                                        readOnly
+                                        type="text"
+                                        value={pvz.address}
+                                        style={{ cursor: 'pointer' }}
+                                      />
+                                    </div>
+                                  ))
+                                )
+                              )
+                            }
+                          </div>
+                        </div>
+                      </section>
                     )
                   }
+                </>
+              ) : (
+                <section className={cls.addressForm}>
+                  <h2 className={cls.sectionTitle}>{typeOfDeliver === 'delivery' ? 'Выберите адрес доставки' : 'Адрес магазина'}</h2>
+                  <div>
+                    <div className={cls.formGroup_address}>
+                      {typeOfDeliver === 'delivery' && (<label htmlFor="address" />)}
+                      {
+                        typeOfDeliver === 'self_pickup' ? (
+                          <input
+                            readOnly
+                            type="text"
+                            id="address"
+                            name="address"
+                            value={address}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            placeholder="Например, ул. Пушкина, д. Колотушкина"
+                            required value={address} onChange={(e) => setAddress(e.target.value)}
+                          />
+                        )
+                      }
+                    </div>
+                  </div>
+                </section>
+              )
+            }
+
+            <section className={cls.addressForm}>
+              <h2 className={cls.sectionTitle}>Комментарий</h2>
+              <div>
+                <div className={cls.formGroup_address}>
+                  <label htmlFor="floor" />
+                  <input type="text" id="comment" name="comment" placeholder="Комментарий к заказу" value={comment} onChange={(e) => setComment(e.target.value)} />
+                </div>
+              </div>
+            </section>
+
+            <section className={cls.addressForm}>
+              <h2 className={cls.sectionTitle}>Промокод</h2>
+              <div>
+                <div className={cls.formGroup_address}>
+                  <input type="text" id="promocode" name="promocode" placeholder="Промокод" value={promocode} onChange={(e) => setPromocode(e.target.value)} />
                 </div>
               </div>
             </section>
@@ -339,7 +500,10 @@ export default function OrderProcessPage() {
             <div className={cls.cart_card}>
               <h3 className={cls.sectionTitle}>ВАШ ЗАКАЗ</h3>
 
-              <div className={cls.list}>
+              <span className={cls.cart_card_list_info}>
+                Оплата банковской картой
+              </span>
+              <div className={cls.list} style={{ marginTop: '15px' }}>
                 <div className={cls.cart_card_list}>
                   <span className={cls.cart_card_list_info}>Товаров на</span>
                   <span className={cls.cart_card_list_price}>{total} руб.</span>

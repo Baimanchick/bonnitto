@@ -30,3 +30,27 @@ export const OrderWithUserPOST = async (data: any) => {
     return error.response
   }
 }
+
+export const GetLocations = async (search: string) => {
+  try {
+    const response = await fetch(`${API_URL}/cdek/locations?city_name=${search}`)
+
+    const data = await response.json()
+
+    return data
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
+export const GetPvzs = async (code: number) => {
+  try {
+    const response = await fetch(`${API_URL}/cdek/pvzs?city_code=${code}`)
+
+    const data = await response.json()
+
+    return data
+  } catch (error) {
+    console.log('error', error)
+  }
+}

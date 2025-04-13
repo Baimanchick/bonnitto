@@ -269,6 +269,17 @@ export const Header = () => {
                       >
                         Контакты
                       </li>
+                      {
+                        isAuth && (
+                          <li className={cls.default_title} onClick={() => {
+                            router.push('/history')
+                            setIsOpen(false)
+                          }}
+                          >
+                            История заказов
+                          </li>
+                        )
+                      }
                     </ul>
                   </div>
                 </div>
