@@ -17,6 +17,7 @@ export namespace CartTypes {
         last_name?: string
         surname?: string
         comment?: string
+        cdek_pvz_code?: string
     }
     export interface OrderWithUserData {
         email: string

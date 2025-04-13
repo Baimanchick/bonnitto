@@ -85,3 +85,26 @@ export const ProductsCollectionGET = async (collection_slug: string) => {
     console.log('collection products error', error)
   }
 }
+
+export const getHistory = async () => {
+  try {
+    const response = await $axios.get(`${API_URL}/orders/`)
+
+    return response.data
+  } catch (error) {
+    console.log('error with get history', error)
+  }
+}
+
+export async function getByUrl(url: string) {
+  const response = await fetch(url)
+
+  if (!response.ok) throw new Error('Ошибка при получении данных')
+
+  return response.json()
+}
+
+export const products = {
+  getHistory,
+  getByUrl,
+}

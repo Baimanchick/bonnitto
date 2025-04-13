@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { favoritesDELETE } from '@/services/favorite'
+import { getDiscount, getDiscountPercentage } from '@/shared/tools/discount'
 import { FavoritesType } from '@/shared/types/favorite-types/favorite'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 
@@ -69,10 +70,11 @@ export const ProductCard: React.FC<Props> = ({
         {parseInt(product.discount)  ? (
           <div className={cls.product_price__container}>
             <span className={`${cls.discount_price__h2} ${cls.price}`}>{parseInt(product.base_price)} руб.</span>
-            <span className={cls.price}>{parseInt(product.discount)} руб.</span>
+            <span className={cls.price}>{getDiscount(parseInt(product.base_price), product.discount)} руб.</span>
+            <span className={cls.price}>Скидка: {getDiscountPercentage(parseInt(product.base_price), parseInt(product.discount))}%</span>
           </div>
         ) : (
-          <span className={cls.price}>{parseInt(product.base_price)} руб.</span>
+          <span className={cls.price}>{getDiscount(parseInt(product.base_price), product.discount)} руб.</span>
         )}
       </div>
     </div>

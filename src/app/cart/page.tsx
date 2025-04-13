@@ -265,7 +265,7 @@ export default function CartsPage() {
 
                             <div className={cls.price_block}>
                               <span className={cls.cart_price}>
-                                {Number(item.product.base_price) * (quantities[item.id] ?? 1)} руб.
+                                {getDiscount(Number(item.product.base_price) * (quantities[item.id] ?? 1), item.product.discount)} руб.
                               </span>
                             </div>
                           </div>

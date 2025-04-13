@@ -1,0 +1,78 @@
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.page {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.titles {
+    margin-bottom: 15px;
+}
+
+.title {
+    font-weight: 500;
+}
+
+.image {
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.item {
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.card {
+    display: flex;
+    column-gap: 20px;
+}
+
+.date {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.total {
+    font-size: 24px;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.btn {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: initial;
+    cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+    .container {
+      max-width: 90vw;
+      margin: 0 auto;
+    }
+  }
