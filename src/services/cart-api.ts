@@ -29,7 +29,7 @@ export const CartPOST = async (dataToSend: CartTypes.Form) => {
     const response = await $axios.post(`${API_URL}/cart/`, dataToSend)
 
     return response.data
-  } catch (error) {
+  } catch (error: any) {
     console.log('error change cart', error)
   }
 }
