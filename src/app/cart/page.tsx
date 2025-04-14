@@ -96,8 +96,14 @@ export default function CartsPage() {
   }, [])
 
   const handleQuantityChange = (variantId: number, change: number) => {
+    const variantStock = products.find(product => product.id === variantId)?.stock ?? 1
+
     setQuantities((prev) => {
       const newQuantity = (prev[variantId] ?? 1) + change
+
+      if (newQuantity > variantStock) {
+        return prev
+      }
 
       if (newQuantity <= 0) {
         const updatedCart = cartItems?.filter(item => item.variant !== variantId) ?? []
@@ -122,7 +128,15 @@ export default function CartsPage() {
   }
 
   const handleQuantityChangeWithUser = async (id: number, change: number, variantId: number) => {
+    const variantStock = productsCart.find(product => product.variant.id === variantId)?.variant.stock ?? 1
+
     const newQuantity = (quantities[variantId] || 0) + change
+
+    if (newQuantity > variantStock) {
+      toast.error('Недостаточно товара на складе')
+
+      return
+    }
 
     if (newQuantity < 1) {
       await Api.cart.CartDELETE(id)
@@ -321,11 +335,6 @@ export default function CartsPage() {
                               >ОФОРМИТЬ ЗАКАЗ</button>
 
                             </div>
-
-                            <div className={cls.cart_card_dop_info}>
-                              <Image src={'/icons/cart/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
-                              <p className={cls.cart_card_dop_info_text}>Доступные способы оплаты: на сайте или  при получении</p>
-                            </div>
                           </div>
                         )
                       }
@@ -435,11 +444,6 @@ export default function CartsPage() {
                           )
                         }
 
-                      </div>
-
-                      <div className={cls.cart_card_dop_info}>
-                        <Image src={'/icons/cart/credit-card.svg'} width={24} height={24} alt="lol" className={cls.credit_card_svg} />
-                        <p className={cls.cart_card_dop_info_text}>Доступные способы оплаты: на сайте или  при получении</p>
                       </div>
                     </div>
                   </div>

@@ -54,3 +54,13 @@ export const GetPvzs = async (code: number) => {
     console.log('error', error)
   }
 }
+
+export const changeUser = async (data: any) => {
+  try {
+    const response = await $axios.patch(`${API_URL}/users/me/`, data)
+
+    return response.data
+  } catch (error) {
+    console.log('error', error)
+  }
+}

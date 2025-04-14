@@ -7,7 +7,6 @@ import toast from 'react-hot-toast'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Api } from '@/services'
-import { useAppSelector } from '@/shared/hooks/reduxHook'
 import { debounce } from '@/shared/tools/debounce'
 import { getDiscount } from '@/shared/tools/discount'
 import { CartTypes } from '@/shared/types/cart-types/CartTypes'
@@ -29,7 +28,7 @@ export default function OrderProcessPage() {
   const [phone_number, setPhoneNumber] = React.useState('')
   const [address, setAddress] = React.useState('')
   const [promocode, setPromocode] = React.useState('')
-  const [typeOfDeliver, setTypeOfDeliver] = React.useState('')
+  const [typeOfDeliver, setTypeOfDeliver] = React.useState('self_pickup')
   const [total, setTotal] = React.useState(0)
   const [first_name, setFirstName] = React.useState('')
   const [last_name, setLastName] = React.useState('')
@@ -42,8 +41,7 @@ export default function OrderProcessPage() {
   const [pvzs, setPvzs] = React.useState<{code: string, office_type: string, address: string, work_time: string}[] | null>(null)
   const [ploading, setPLoading] = React.useState(false)
   const [pvz, setPvz] = React.useState<{code: string, office_type: string, address: string, work_time: string} | null>(null)
-
-  const isAuth = useAppSelector((state) => state.auth.user !== null)
+  const [user, setUser] = React.useState<any>(null)
 
   const router = useRouter()
 
@@ -88,6 +86,22 @@ export default function OrderProcessPage() {
             console.error('Failed to parse cart items:', error)
           }
         } else {
+          const userData = localStorage.getItem('user')
+
+          if (userData) {
+            const parsedUser = JSON.parse(userData)
+
+            console.log(parsedUser)
+
+            setUser(parsedUser)
+            setEmail(parsedUser.email)
+            setFirstName(parsedUser.first_name ? parsedUser.first_name : '')
+            setLastName(parsedUser.last_name ? parsedUser.last_name : '')
+            setSurname(parsedUser.surname ? parsedUser.surname : '')
+            setPhoneNumber(parsedUser.phone_number ? parsedUser.phone_number : '')
+            setAddress(parsedUser.address ? parsedUser.address : '')
+          }
+
           const response = await Api.cart.CartListGET()
 
           setProducts(response.map((item: any) => item.variant.product))
@@ -242,6 +256,13 @@ export default function OrderProcessPage() {
               router.push('/products')
             }
           }
+
+          if ((!user.first_name || !user.last_name || !user.surname || !user.phone_number || !user.address) || (user.first_name !== first_name || user.last_name !== last_name || user.surname !== surname || user.phone_number !== phone_number || user.address !== address)) {
+            const newUser = await Api.order.changeUser({ first_name, last_name, phone_number, surname, address })
+
+            console.log('response', newUser)
+            localStorage.setItem('user', JSON.stringify(newUser))
+          }
         } else {
           toast.error('Что то пошло не так!')
         }
@@ -270,16 +291,17 @@ export default function OrderProcessPage() {
                     id="last_name"
                     name="last_name"
                     placeholder="Фамилия"
+                    value={last_name}
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="index">Имя</label>
-                  <input type="text" id="first_name" name="first_name" placeholder="Имя" onChange={(e) => setFirstName(e.target.value)} />
+                  <input type="text" id="first_name" name="first_name" placeholder="Имя" value={first_name} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="index">Отчество</label>
-                  <input type="text" id="surname" name="surname" placeholder="Отчество" onChange={(e) => setSurname(e.target.value)} />
+                  <input type="text" id="surname" name="surname" placeholder="Отчество" value={surname} onChange={(e) => setSurname(e.target.value)} />
                 </div>
                 <div className={cls.formGroup}>
                   <label htmlFor="fullname">Ваш E-Mail</label>
@@ -299,7 +321,7 @@ export default function OrderProcessPage() {
                     <div className={cls.radio_title}>
                       <span>Самовывоз</span>
                     </div>
-                    <input type="radio" name="delivery_method" value="self_pickup" onChange={(value) => {
+                    <input defaultChecked={true} type="radio" name="delivery_method" value="self_pickup" onChange={(value) => {
                       if (value.target.value === 'self_pickup') {
                         setTypeOfDeliver(value.target.value)
                         setAddress('Земляной Вал 14/16 График работы 10:00-21:00')
