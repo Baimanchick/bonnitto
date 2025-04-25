@@ -32,6 +32,7 @@ export default function ProductGallery({ images, big_image }: ProductGalleryProp
           sizes="100vw"
           className={cls.main_image}
           priority
+          unoptimized
           onClick={() => images && images.length !== 0 ? setOpen(true) : toast.error('У продукта нет картинок')}
         />
       </div>
@@ -45,6 +46,7 @@ export default function ProductGallery({ images, big_image }: ProductGalleryProp
             width={0}
             height={0}
             sizes="100vw"
+            unoptimized
             onClick={() => setOpen(true)}
             className={cls.image_container__item}
           />

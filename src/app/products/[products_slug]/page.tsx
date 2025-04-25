@@ -1,6 +1,6 @@
+/* eslint-disable react/no-array-index-key */
 'use client'
 
-/* eslint-disable react/no-array-index-key */
 import React from 'react'
 import toast from 'react-hot-toast'
 
@@ -12,8 +12,6 @@ import { Api } from '@/services'
 import { addFavorite } from '@/services/favorite'
 import { ProductSlugGET } from '@/services/products-api'
 import { useAppSelector } from '@/shared/hooks/reduxHook'
-import { CartTypes } from '@/shared/types/cart-types/CartTypes'
-import { FavoritesType } from '@/shared/types/favorite-types/favorite'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 import ProductGallery from '@/shared/ui/product-gallery/product-gallery'
 import { Spin } from '@/shared/ui/spin/Spin'
@@ -33,6 +31,7 @@ export default function Page() {
   const [isAdded, setIsAdded] = React.useState(false)
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [expandedCharts, setExpandedCharts] = React.useState<number[]>([])
+  const [isImageLoaded, setIsImageLoaded] = React.useState(false)
 
   const openModal = React.useCallback(() => setIsModalOpen(true), [])
   const closeModal = React.useCallback(() => setIsModalOpen(false), [])
@@ -55,27 +54,29 @@ export default function Page() {
         setIsAdded(true)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
   const loadColorData = async () => {
+    if (!defaultProductDetail) return
     try {
-      const productColorData = await Api.products.ProductSlugVariantsGET(
-        products_slug,
-        String(defaultProductDetail?.available_colors[0].id),
-      )
+      const colorId = String(defaultProductDetail.available_colors[0].id)
+      const productColorData = await Api.products.ProductSlugVariantsGET(products_slug, colorId)
 
       setProductDetail(productColorData.data)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
   const handleColorClick = React.useCallback(
     async (colorId: number) => {
       try {
-        const productColorData = await Api.products.ProductSlugVariantsGET(products_slug, String(colorId))
+        const productColorData = await Api.products.ProductSlugVariantsGET(
+          products_slug,
+          String(colorId),
+        )
 
         setProductDetail(productColorData.data)
       } catch (error) {
@@ -92,20 +93,25 @@ export default function Page() {
   }, [isAuth])
 
   React.useEffect(() => {
+    if (products_slug) loadData()
+  }, [products_slug])
+
+  React.useEffect(() => {
+    if (defaultProductDetail?.available_colors.length) loadColorData()
+  }, [defaultProductDetail])
+
+  React.useEffect(() => {
     if (productDetail && productDetail.length > 0) {
       setSelectedVariant(productDetail[0])
-      const cartItemsJson = localStorage.getItem('cartItems')
+      const json = localStorage.getItem('cartItems')
 
-      if (cartItemsJson) {
+      if (json) {
         try {
-          const cartItems = JSON.parse(cartItemsJson)
-          const alreadyAdded = cartItems.some(
-            (item: { variant: number; quantity: number }) => item.variant === productDetail[0].id,
-          )
+          const items = JSON.parse(json)
 
-          setIsAdded(alreadyAdded)
-        } catch (error) {
-          console.error('Ошибка парсинга cartItems:', error)
+          setIsAdded(items.some((i: any) => i.variant === productDetail[0].id))
+        } catch {
+          console.error('Ошибка парсинга cartItems')
         }
       }
     }
@@ -115,48 +121,35 @@ export default function Page() {
     if (!selectedVariant) return
     if (isAuth) {
       try {
-        const dataToSend: CartTypes.Form = {
-          variant: selectedVariant.id,
-          quantity: 1,
-        }
-
-        await Api.cart.CartPOST(dataToSend)
+        await Api.cart.CartPOST({ variant: selectedVariant.id, quantity: 1 })
         toast.success('Продукт добавлен в корзину')
         setIsAdded(true)
-      } catch (error) {
-        console.log(error)
-        toast.error('Произошла ошибка при добавлении в корзину, попробуйте еще раз')
+      } catch {
+        toast.error('Не удалось добавить в корзину')
       }
     } else {
-      const variantId = selectedVariant.id
-      const cartItemsJson = localStorage.getItem('cartItems')
-      let cartItems: { variant: number; quantity: number }[] = []
+      const json = localStorage.getItem('cartItems')
+      let items: { variant: number; quantity: number }[] = []
 
-      if (cartItemsJson) {
+      if (json) {
         try {
-          cartItems = JSON.parse(cartItemsJson)
-        } catch (error) {
-          console.error('Ошибка парсинга cartItems:', error)
-        }
+          items = JSON.parse(json)
+        } catch {}
       }
-      const alreadyAdded = cartItems.some((item) => item.variant === variantId)
-
-      if (alreadyAdded) {
+      if (items.some((i) => i.variant === selectedVariant.id)) {
+        toast('Уже в корзине')
+      } else {
+        items.push({ variant: selectedVariant.id, quantity: 1 })
+        localStorage.setItem('cartItems', JSON.stringify(items))
+        toast.success('Добавлено в корзину')
         setIsAdded(true)
-        toast('Продукт уже добавлен в корзину')
-
-        return
       }
-      cartItems.push({ variant: variantId, quantity: 1 })
-      localStorage.setItem('cartItems', JSON.stringify(cartItems))
-      setIsAdded(true)
-      toast.success('Вы успешно добавили продукт в корзину')
     }
   }, [selectedVariant, isAuth])
 
   const handleAddToFavorite = React.useCallback(async () => {
     if (!isAuth) {
-      toast.error('Вы должны сначало авторизоваться')
+      toast.error('Сначала авторизуйтесь')
       router.push('/auth/register')
 
       return
@@ -167,90 +160,77 @@ export default function Page() {
       return
     }
     try {
-      const dataToSend: FavoritesType.Form = {
-        product: products_slug,
-      }
-
-      await addFavorite(dataToSend)
-      toast.success('Вы успешно добавили продукт в избранные')
+      await addFavorite({ product: products_slug })
+      toast.success('В избранное')
       loadData()
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }, [isAuth, products_slug])
 
-  React.useEffect(() => {
-    if (products_slug) {
-      loadData()
-    }
-  }, [products_slug])
-
-  React.useEffect(() => {
-    if (defaultProductDetail && defaultProductDetail.available_colors.length) {
-      loadColorData()
-    }
-  }, [defaultProductDetail])
-
-  const images = React.useMemo(() => {
-    if (selectedVariant) {
-      return selectedVariant.color.images.map((imgObj) => imgObj.image)
-    }
-
-    return []
-  }, [selectedVariant])
+  const images = React.useMemo(
+    () => selectedVariant?.color.images.map((i) => i.image) || [],
+    [selectedVariant],
+  )
 
   const toggleDescription = React.useCallback(() => {
-    setExpanded((prev) => !prev)
+    setExpanded((p) => !p)
   }, [])
 
   const getFormattedDescription = React.useCallback(() => {
     if (!defaultProductDetail) return ''
-    const { description } = defaultProductDetail
+    const desc = defaultProductDetail.description
 
-    if (description.length > 245) {
-      return expanded ? description : `${description.slice(0, 245)}...`
-    }
-
-    return description
+    return desc.length > 245 ? (expanded ? desc : desc.slice(0, 245) + '...') : desc
   }, [defaultProductDetail, expanded])
 
   const getDiscountPercentage = React.useCallback(() => {
-    const originalPrice = parseInt(defaultProductDetail!.base_price)
-    const discountAmount = parseInt(defaultProductDetail!.discount)
+    if (!defaultProductDetail) return 0
+    const base = +defaultProductDetail.base_price
+    const disc = +defaultProductDetail.discount
 
-    if (discountAmount && discountAmount < originalPrice) {
-      return Math.round((discountAmount / originalPrice) * 100)
-    }
-
-    return 0
+    return disc && disc < base ? Math.round((disc / base) * 100) : 0
   }, [defaultProductDetail])
 
   const renderPrice = React.useCallback(() => {
-    const originalPrice = parseInt(defaultProductDetail!.base_price)
-    const discountAmount = parseInt(defaultProductDetail!.discount)
+    if (!defaultProductDetail) return null
+    const base = +defaultProductDetail.base_price
+    const disc = +defaultProductDetail.discount
 
-    if (discountAmount && discountAmount < originalPrice) {
-      const newPrice = originalPrice - discountAmount
+    if (disc && disc < base) {
+      const price = base - disc
 
       return (
         <div className={cls.product_price__container}>
-          <span className={cls.base_price__h2}>
-            {originalPrice} руб.
+          <span className={cls.base_price__h2}>{base} руб.</span>
+          <span className={cls.product_price__h2}>{price} руб.</span>
+          <span className={cls.product_discount__h2}>
+            Скидка: {getDiscountPercentage()}%
           </span>
-          <span className={cls.product_price__h2}>{newPrice} руб.</span>
-          <span className={cls.product_discount__h2}>Скидка: {getDiscountPercentage()}%</span>
         </div>
       )
     }
 
-    return <h2 className={cls.product_price__h2}>{originalPrice} руб.</h2>
+    return <h2 className={cls.product_price__h2}>{base} руб.</h2>
   }, [defaultProductDetail, getDiscountPercentage])
+
+  const handleMainImageLoaded = React.useCallback(() => {
+    setIsImageLoaded(true)
+  }, [])
+
+  if (!defaultProductDetail || !productDetail || !selectedVariant) {
+    return <Spin />
+  }
 
   return (
     <div className={cls.page}>
-      {(!productDetail || !defaultProductDetail || !selectedVariant) ? (
-        <Spin />
-      ) : (
+      {!isImageLoaded && (
+        <div className={cls.loaderOverlay}>
+          <Spin />
+        </div>
+      )}
+
+      <div style={{ visibility: isImageLoaded ? 'visible' : 'hidden' }}>
         <div className={cls.main}>
           <motion.div
             className={cls.wrapper}
@@ -260,6 +240,19 @@ export default function Page() {
             transition={{ duration: 0.5 }}
           >
             <div className={cls.wrapper__left}>
+              <div className={cls.mainImage_conatiner}>
+                <Image
+                  src={images[0] || defaultProductDetail.main_image}
+                  alt={defaultProductDetail.title}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  priority
+                  unoptimized
+                  onLoadingComplete={handleMainImageLoaded}
+                  className={cls.main_image}
+                />
+              </div>
               <ProductGallery big_image={defaultProductDetail.main_image} images={images} />
             </div>
 
@@ -429,9 +422,10 @@ export default function Page() {
                 </div>
               )}
             </div>
+
           </motion.div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
