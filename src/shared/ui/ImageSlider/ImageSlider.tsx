@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -13,107 +13,114 @@ import { Spin } from '../spin/Spin'
 
 import styles from './ImageSlider.module.css'
 
+const slideVariants = {
+  enter:  { x: '100%', opacity: 0 },
+  center: { x: '0%',   opacity: 1 },
+  exit:   { x: '-100%', opacity: 0 },
+}
+const TRANSITION = { x: { type: 'spring', stiffness: 220, damping: 28 } }
+
 const ImageSlider = () => {
-  const [currentImage, setCurrentImage] = useState(0)
-  const [imageData, setImageData] = useState<string[]>([])
-  const [mainData, setMainData] = useState<MainImageTypes.Item[]>([])
+  const [current, setCurrent] = useState(0)
+  const [images, setImages] = useState<string[]>([])
+  const [meta, setMeta] = useState<MainImageTypes.Item[]>([])
   const router = useRouter()
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const { data } = await Api.mainImages.MainImagesGET()
-
-        setImageData(data.map((item: MainImageTypes.Item) => item.image))
-        setMainData(data)
-
-        const interval = setInterval(() => {
-          setCurrentImage((prev) => (prev + 1) % data.length)
-        }, 3000)
-
-        return () => clearInterval(interval)
-      } catch (error) {
-        console.log('Failed to load images:', error)
-      }
-    }
-
-    loadData()
+    Api.mainImages.MainImagesGET()
+      .then(({ data }) => {
+        setImages(data.map((i: any) => i.image))
+        setMeta(data)
+      })
+      .catch(console.error)
   }, [])
 
-  const imageVariants = {
-    hidden: { opacity: 0, x: 100 },
-    visible: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -100 },
+  useEffect(() => {
+    if (!images.length) return
+    const id = setInterval(
+      () => setCurrent((p) => (p + 1) % images.length),
+      3000,
+    )
+
+    return () => clearInterval(id)
+  }, [images])
+
+  if (!images.length) return <Spin />
+
+  const next = (current + 1) % images.length
+
+  const goTo = (idx: number) => {
+    const item = meta[idx]
+
+    if (item?.collection) {
+      router.push(
+        `/collections/${item.collection.slug}?collection_title=${item.collection.title}`,
+      )
+    } else {
+      router.push('/products')
+    }
   }
 
-  return imageData.length > 0 && mainData.length > 0 ? (
+  return (
     <div className={styles.main_block}>
       <div className={styles.slider}>
         <div className={styles.imageContainer}>
-          <AnimatePresence>
+          <AnimatePresence mode="sync">
             <motion.div
-              key={currentImage}
-              initial="hidden"
-              animate="visible"
+              key={current}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
               exit="exit"
-              variants={imageVariants}
-              transition={{ duration: 0.8 }}
+              transition={TRANSITION}
               className={styles.imageWrapper}
             >
               <Image
-                src={imageData[currentImage]}
-                alt="Slider Image 1"
+                src={images[current]}
+                alt={meta[current]?.collection?.title || 'Image'}
                 fill
                 style={{ objectFit: 'cover' }}
-                onClick={() => {
-                  if (mainData[currentImage].collection) {
-                    router.push(`/collections/${mainData[currentImage].collection.slug}/?collection_title=${mainData[currentImage].collection.title}`)
-                  } else {
-                    router.push('/products')
-                  }
-                }}
+                onClick={() => goTo(current)}
               />
             </motion.div>
           </AnimatePresence>
         </div>
 
         <div className={styles.imageContainer2}>
-          <AnimatePresence>
+          <AnimatePresence mode="sync">
             <motion.div
-              key={(currentImage + 1) % imageData.length}
-              initial="hidden"
-              animate="visible"
+              key={next}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
               exit="exit"
-              variants={imageVariants}
-              transition={{ duration: 0.8 }}
+              transition={TRANSITION}
               className={styles.imageWrapper}
             >
               <Image
-                src={imageData[(currentImage + 1) % imageData.length]}
-                alt="Slider Image 2"
+                src={images[next]}
+                alt={meta[next]?.collection?.title || 'Preview'}
                 fill
                 style={{ objectFit: 'cover' }}
-                onClick={() => router.push(`/collections/${mainData[currentImage].collection.slug}`)}
+                onClick={() => goTo(next)}
               />
             </motion.div>
           </AnimatePresence>
         </div>
 
         <div className={styles.info}>
-          <h1 className={styles.collection_title}>{mainData[currentImage].collection ? mainData[currentImage].collection.title : ''}</h1>
-          <p className={styles.collection_text} onClick={() => {
-            if (mainData[currentImage].collection) {
-              router.push(`/collections/${mainData[currentImage].collection.slug}/?collection_title=${mainData[currentImage].collection.title}`)
-            } else {
-              router.push('/products')
-            }
-          }}
-          >{mainData[currentImage].text || 'НОВИНКИ'}</p>
+          <h1 className={styles.collection_title}>
+            {meta[current]?.collection?.title || ''}
+          </h1>
+          <p
+            className={styles.collection_text}
+            onClick={() => goTo(current)}
+          >
+            {meta[current]?.text || 'НОВИНКИ'}
+          </p>
         </div>
       </div>
     </div>
-  ) : (
-    <Spin />
   )
 }
 

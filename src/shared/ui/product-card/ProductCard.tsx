@@ -76,6 +76,15 @@ export const ProductCard: React.FC<Props> = ({
         ) : (
           <span className={cls.price}>{getDiscount(parseInt(product.base_price), product.discount)} руб.</span>
         )}
+        <div className={cls.color_container}>
+          {
+            product.available_colors.map((item) => (
+              <div key={item.id}>
+                <div className={cls.rectangle} style={{ backgroundColor: item.hex_code }} />
+              </div>
+            ))
+          }
+        </div>
       </div>
     </div>
   )
