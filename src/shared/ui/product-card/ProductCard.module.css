@@ -63,6 +63,18 @@
     gap: 15px;
 }
 
+.color_container{
+    display: flex;
+    gap: 8px;
+}
+
+.rectangle {
+    width: 15px !important;
+    height: 15px !important;
+    cursor: pointer;
+    border: 0.3px solid #00000080;
+}
+
 @media (max-width: 768px) {
     .card {
         width: 49%;

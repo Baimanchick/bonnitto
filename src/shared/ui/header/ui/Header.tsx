@@ -20,6 +20,7 @@ export const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [mounted, setMounted] = React.useState(false)
   const [collection, setCollection] = React.useState([])
+  const [cards, setCards] = React.useState([])
 
   React.useEffect(() => {
     setMounted(true)
@@ -56,7 +57,9 @@ export const Header = () => {
   React.useEffect(() => {
     const loadData = async () => {
       const response = await axios.get(`${API_URL}/collections/`)
+      const response2 = await axios.get(`${API_URL}/menu-images/`)
 
+      setCards(response2.data.results)
       setCollection(response.data.results)
     }
 
@@ -285,33 +288,25 @@ export const Header = () => {
                 </div>
 
                 <div className={cls.menuRight}>
-                  <motion.div
-                    className={cls.menuImage}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                    onClick={() => {
-                      router.push('/shops')
-                      setIsOpen(false)
-                    }}
-                    style={{ height: '400px' }}
-                  >
-                    <Image src="/images/header/default_image_1.png" alt="Магазины" width={300} height={400} />
-                    <p>МАГАЗИНЫ</p>
-                  </motion.div>
-
-                  <motion.div
-                    className={cls.menuImage}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                    onClick={() => {
-                      router.push('/brands')
-                      setIsOpen(false)
-                    }}
-                    style={{ height: '400px' }}
-                  >
-                    <Image src="/images/header/default_image_2.png" alt="О бренде" width={300} height={400} />
-                    <p>О БРЕНДЕ</p>
-                  </motion.div>
+                  {
+                    cards.map((item: {image: string, title: string}, index) => (
+                      <motion.div
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        className={cls.menuImage}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => {
+                          router.push('/shops')
+                          setIsOpen(false)
+                        }}
+                        style={{ height: '400px' }}
+                      >
+                        <Image src={item.image} alt="Магазины" width={300} height={400} />
+                        <p>{item.title}</p>
+                      </motion.div>
+                    ))
+                  }
                 </div>
               </motion.div>
             </AnimatePresence>

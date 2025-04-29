@@ -11,6 +11,7 @@ export namespace ProductTypes {
         produced: string
         composition: string
         collection: string
+        available_colors: Color[]
     }
 
     export interface DefaultItemDetail {
