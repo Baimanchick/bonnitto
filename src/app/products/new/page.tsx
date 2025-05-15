@@ -14,7 +14,7 @@ import styles from './page.module.css'
 
 export default function NewProductsPage() {
   const [filterLoading, setFilterLoading] = useState(false)
-  const [products, setProducts] = useState<ProductTypes.Item[]>([])
+  const [products, setProducts] = useState<ProductTypes.List[]>([])
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
@@ -68,8 +68,8 @@ export default function NewProductsPage() {
               >
                 {
                   products.length > 0 ? (
-                    products.map((product: ProductTypes.Item) => (
-                      <ProductCard key={product.slug} product={product} />
+                    products.map((product: ProductTypes.List) => (
+                      <ProductCard key={product.id} product={product} />
                     ))
                   ) : (
                     <div>

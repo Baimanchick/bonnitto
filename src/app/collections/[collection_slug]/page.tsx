@@ -15,7 +15,7 @@ import styles from './page.module.css'
 
 export default function CollectionProductsPage(context: { params: Promise<{ collection_slug: string }> }) {
   const [filterLoading, setFilterLoading] = useState(false)
-  const [products, setProducts] = useState<ProductTypes.Item[]>([])
+  const [products, setProducts] = useState<ProductTypes.List[]>([])
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
@@ -74,8 +74,8 @@ export default function CollectionProductsPage(context: { params: Promise<{ coll
                 transition={{ duration: 0.5 }}
               >
                 {
-                  products.map((product: ProductTypes.Item) => (
-                    <ProductCard key={product.slug} product={product} />
+                  products.map((product: ProductTypes.List) => (
+                    <ProductCard key={product.id} product={product} />
                   ))
                 }
               </motion.div>
