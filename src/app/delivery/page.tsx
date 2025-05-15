@@ -7,8 +7,6 @@ import { motion } from 'framer-motion'
 import { Header } from '@/shared/ui/header/ui/Header'
 import Footer from '@/widgets/footer/ui/Footer'
 
-import DeliveryGif  from '../../../public/icons/delivery/delivery.gif'
-
 import cls from './page.module.css'
 
 export default function Delivery() {
@@ -18,14 +16,6 @@ export default function Delivery() {
 
       <section className={cls.heroSection}>
         <div className="container">
-          <motion.img
-            src={DeliveryGif.src}
-            alt="Delivery Animation"
-            className={cls.heroImage}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          />
 
           <motion.h1
             className={cls.heroTitle}

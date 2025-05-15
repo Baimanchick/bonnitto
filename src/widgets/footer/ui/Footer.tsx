@@ -18,23 +18,23 @@ const footerData = [
   {
     id: 'column1',
     links: [
-      { text: 'Оплата и доставка' },
-      { text: 'Возврат и обмен' },
-      { text: 'Контакты' },
+      { text: 'Доставка и оплата', link: '/delivery' },
+      { text: 'Обмен и возрат', link: '/return-exchanges' },
+      { text: 'Контакты', link: '/contacts' },
     ],
   },
   {
     id: 'column2',
     links: [
-      { text: 'Политика конфиденциальности' },
-      { text: 'Договор-оферта' },
+      { text: 'Политика конфиденциальности', link: '/privacy' },
+      { text: 'Договор-оферта', link:'/offer-agreement' },
     ],
   },
   {
     id: 'column3',
     links: [
-      { text: 'О нас' },
-      { text: 'Найти нас' },
+      { text: 'О нас', link: '/about' },
+      { text: 'Найти нас', link: '/found' },
     ],
   },
 ]
