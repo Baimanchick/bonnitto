@@ -16,7 +16,7 @@ import styles from './page.module.css'
 export default function ProductsPage() {
   const [loadingData, setLoadingData] = useState(true)
   const [filterLoading, setFilterLoading] = useState(false)
-  const [products, setProducts] = useState<ProductTypes.Item[]>([])
+  const [products, setProducts] = useState<ProductTypes.List[]>([])
   const [categories, setCategories] = useState<ProductTypes.Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState<ProductTypes.Category | null>(null)
   const [page, setPage] = useState(1)
@@ -111,8 +111,8 @@ export default function ProductsPage() {
                 notFound ? (
                   <h1>Не нашли ваш товар</h1>
                 ) : (
-                  products.map((product: ProductTypes.Item) => (
-                    <ProductCard key={product.slug} product={product} />
+                  products.map((product: ProductTypes.List) => (
+                    <ProductCard key={product.id} product={product} />
                   ))
                 )
               }

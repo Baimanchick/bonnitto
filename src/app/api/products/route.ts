@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       (isArrived ? `&is_arrived=${isArrived}` : '')
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/products/?offset=${offset}&limit=${limit}${query}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/product-variants-list/?offset=${offset}&limit=${limit}${query}`,
       {
         cache: 'no-store',
         method: 'GET',

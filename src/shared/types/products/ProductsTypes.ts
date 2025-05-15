@@ -95,4 +95,18 @@ export namespace ProductTypes {
         category: string;
         values: SizeChartItem[];
       }
+
+    export interface List {
+        id: number
+        product: Item
+        main_image_of_variant: {
+            id: number
+            image: string
+        }
+        color: {
+            id: number
+            name: string
+            hex_code: string
+        }
+    }
 }
