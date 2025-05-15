@@ -1,0 +1,96 @@
+.card {
+    width: 100%;
+    max-width: 330px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    cursor: pointer;
+}
+
+.info_section {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.description {
+    max-height: 40px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+
+.image {
+    object-fit: cover;
+}
+
+.title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    font-size: 15px;
+}
+
+.price {
+    font-size: 15px;
+}
+
+.discount_price__h2{
+    text-decoration: line-through;
+    color: gray;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.heart_icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.product_price__container{
+    display: flex;
+    gap: 15px;
+}
+
+.color_container{
+    display: flex;
+    gap: 8px;
+}
+
+.rectangle {
+    width: 15px !important;
+    height: 15px !important;
+    cursor: pointer;
+    border: 0.3px solid #00000080;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 49%;
+        max-width: 49%;
+    }
+    .image {
+        width: 100%;
+        height: 250px;
+    }
+    .title {
+        font-size: 12px;
+    }
+    .description {
+        font-size: 9px;
+    }
+    .price {
+        font-size: 12px;
+    }
+}

@@ -9,7 +9,7 @@ import { favoritesGET } from '@/services/favorite'
 import { useAppSelector } from '@/shared/hooks/reduxHook'
 import { FavoritesType } from '@/shared/types/favorite-types/favorite'
 import { Header } from '@/shared/ui/header/ui/Header'
-import { ProductCard } from '@/shared/ui/product-card/ProductCard'
+import { ProductListCard } from '@/shared/ui/product-card/product-list-card/product-list-card'
 import { Spin } from '@/shared/ui/spin/Spin'
 import Footer from '@/widgets/footer/ui/Footer'
 
@@ -63,7 +63,7 @@ export default function Favorites() {
         ) : (
           <div className={'container'}>
             {favorites?.results.map((item) => (
-              <ProductCard
+              <ProductListCard
                 favorite={item}
                 is_favorite={true}
                 key={item.id}

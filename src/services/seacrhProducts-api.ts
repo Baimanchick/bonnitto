@@ -3,7 +3,7 @@ import { ProductTypes } from '@/shared/types/products/ProductsTypes'
 interface SearchResponse {
   success: boolean
   data: {
-    results: ProductTypes.Item[]
+    results: ProductTypes.List[]
   }
   error?: string
 }
