@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 import { Api } from '@/services'
 import { addFavorite } from '@/services/favorite'
@@ -20,8 +20,10 @@ import cls from './page.module.css'
 
 export default function Page() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const isAuth = useAppSelector((state) => state.auth.user !== null)
   const { products_slug } = useParams()
+  const color = searchParams.get('color')
 
   const [defaultProductDetail, setDefaultProductDetail] =
     React.useState<ProductTypes.DefaultItemDetail | null>(null)
@@ -61,7 +63,7 @@ export default function Page() {
   const loadColorData = async () => {
     if (!defaultProductDetail) return
     try {
-      const colorId = String(defaultProductDetail.available_colors[0].id)
+      const colorId = String(color ? color : defaultProductDetail.available_colors[0].id)
       const productColorData = await Api.products.ProductSlugVariantsGET(products_slug, colorId)
 
       setProductDetail(productColorData.data)
