@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { motion } from 'framer-motion'
-
 import { Api } from '@/services'
 import { debounce } from '@/shared/tools/debounce'
 import { ProductTypes } from '@/shared/types/products/ProductsTypes'
@@ -23,7 +21,7 @@ export default function ProductsPage() {
   const [hasMore, setHasMore] = useState(true)
   const [notFound, setNotFound] = React.useState(false)
 
-  const pageSize = 10
+  const pageSize = 8
 
   const loadData = useCallback(async (categorySlug?: string, pageNumber: number = 1) => {
     try {
@@ -100,12 +98,8 @@ export default function ProductsPage() {
         <main className={'container'}>
           <div className={styles.flex_page}>
             <Navigation navigationItems={categories} onCategorySelect={handleCategorySelect} onSearchChange={(value) => searchProducts(value)} />
-            <motion.div
+            <div
               className={styles.list_products}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: filterLoading ? 0 : 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
             >
               {
                 notFound ? (
@@ -116,7 +110,7 @@ export default function ProductsPage() {
                   ))
                 )
               }
-            </motion.div>
+            </div>
           </div>
           {hasMore && (
             <div className={styles.btn_block}>

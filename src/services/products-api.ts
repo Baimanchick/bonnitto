@@ -1,7 +1,7 @@
 import $axios from '@/shared/api/axios'
 import { API_URL } from '@/shared/utils/const'
 
-export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 10, collection_slug?: string, isArrived?: boolean) => {
+export const ProductsGET = async (category_slug?: string, page: number = 1, limit: number = 9, collection_slug?: string, isArrived?: boolean) => {
   try {
     const query =
       category_slug || collection_slug || isArrived

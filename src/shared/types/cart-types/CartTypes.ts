@@ -18,6 +18,8 @@ export namespace CartTypes {
         surname?: string
         comment?: string
         cdek_pvz_code?: string
+        city?: number
+        city_name?: string
     }
     export interface OrderWithUserData {
         email: string
