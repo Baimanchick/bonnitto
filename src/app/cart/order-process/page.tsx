@@ -112,7 +112,12 @@ export default function OrderProcessPage() {
             return acc
           }, {})
 
-          const totals = response.reduce((acc: any, item: any) => acc + getDiscount(Number(item.variant.product.base_price) * (initialQuantities[item.id] ?? 1), item.variant.product.discount), 0)
+          const totals = response.reduce((acc: any, item: any) =>
+            acc + getDiscount(
+              Number(item.variant.product.base_price) * (initialQuantities[item.variant.id] ?? 1),
+              item.variant.product.discount,
+            ), 0,
+          )
 
           setTotal(totals)
 

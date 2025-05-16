@@ -86,16 +86,30 @@ export const Header = () => {
               <span />
               <span />
             </div>
-            <div className={cls.searchContainer}>
-              <Image
-                onClick={() => router.push('/auth/register')}
-                src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'}
-                style={{ display: `${isAuth ? 'none' : ''}` }}
-                alt="profile"
-                width={22}
-                height={22}
-              />
-            </div>
+            {
+              isAuth ? (
+                <div className={cls.searchContainer}>
+                  <Image
+                    onClick={handleLogout}
+                    src={isOpen ? '/icons/header/logout-icon-white.svg' : '/icons/header/logout-icon.svg'}
+                    alt="profile"
+                    width={22}
+                    height={22}
+                  />
+                </div>
+              ) : (
+                <div className={cls.searchContainer}>
+                  <Image
+                    onClick={() => router.push('/auth/register')}
+                    src={isOpen ? '/icons/header/user_light.svg' : '/icons/header/user.svg'}
+                    style={{ display: `${isAuth ? 'none' : ''}` }}
+                    alt="profile"
+                    width={22}
+                    height={22}
+                  />
+                </div>
+              )
+            }
           </div>
 
           <div className={cls.item_logo}>

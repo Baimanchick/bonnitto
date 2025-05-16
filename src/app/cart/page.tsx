@@ -406,7 +406,12 @@ export default function CartsPage() {
                             productsCart.map((item) => (
                               <div key={item.id} className={cls.cart_card_list}>
                                 <span className={cls.cart_card_list_info}>Товары: {quantities[item.variant.id] ?? 1} шт.</span>
-                                <span className={cls.cart_card_list_price}>{getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount)} руб.</span>
+                                <span className={cls.cart_price}>
+                                  {getDiscount(
+                                    Number(item.variant.product.base_price) * (quantities[item.variant.id] ?? 1),
+                                    item.variant.product.discount,
+                                  )} руб.
+                                </span>
                               </div>
                             ))
                           }
@@ -415,7 +420,12 @@ export default function CartsPage() {
                         <div className={cls.total}>
                           <h3 className={cls.total_title}>ИТОГО</h3>
                           <span className={cls.total_price}>
-                            {productsCart.reduce((acc, item) => acc + getDiscount(Number(item.variant.product.base_price) * (quantities[item.id] ?? 1), item.variant.product.discount), 0)} руб.
+                            {productsCart.reduce((acc, item) =>
+                              acc + getDiscount(
+                                Number(item.variant.product.base_price) * (quantities[item.variant.id] ?? 1),
+                                item.variant.product.discount,
+                              ), 0,
+                            )} руб.
                           </span>
                         </div>
 
