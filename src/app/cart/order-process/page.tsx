@@ -123,6 +123,7 @@ export default function OrderProcessPage() {
       loadData()
     }
 
+    setAddress('Земляной Вал 14/16 График работы 10:00-21:00')
   }, [])
 
   const getLocations = React.useCallback(async (search: string) => {
@@ -177,6 +178,8 @@ export default function OrderProcessPage() {
         surname,
         comment,
         cdek_pvz_code: pvz?.code,
+        city: code?.code,
+        city_name: code?.name,
       }
 
       const response = tokens ? await Api.order.OrderWithUserPOST(dataToSend) : await Api.order.OrderWithoutUserPOST(dataToSend)
@@ -231,6 +234,8 @@ export default function OrderProcessPage() {
         last_name,
         surname,
         comment,
+        city: code?.code,
+        city_name: code?.name,
       }
 
       const response = await Api.order.OrderWithUserPOST(dataToSend)
@@ -357,12 +362,75 @@ export default function OrderProcessPage() {
                       setTypeOfDeliver(value.target.value)
                       setCdekType(true)
                       setAddress('')
+                      setCode(null)
+                      setPvz(null)
                     }}
                     />
                   </label>
                 </li>
               </ul>
             </section>
+
+            {
+              typeOfDeliver === 'cdek_courier' && (
+                <section className={cls.addressForm}>
+                  <h2 className={cls.sectionTitle}>Выберите город</h2>
+                  <div>
+                    <div className={cls.formGroup_address}>
+                      <input
+                        type="text"
+                        id="search"
+                        name="search"
+                        placeholder="Город"
+                        required
+                        onChange={(e) => {
+                          setLoading(true)
+                          debouncedSearch(e.target.value)
+                        }}
+                      />
+                    </div>
+
+                    <div className={cls.location_list}>
+                      {
+                        loading && (
+                          <Spin/>
+                        )
+                      }
+                      {
+                        locations && locations.length > 0 && (
+                          code ? (
+                            <div className={cls.formGroup_address}>
+                              <input
+                                readOnly
+                                type="text"
+                                value={code.name}
+                                style={{ cursor: 'pointer' }}
+                              />
+                            </div>
+                          ) : (
+                            locations.map((location, index) => (
+                              // eslint-disable-next-line react/no-array-index-key
+                              <div key={index} className={cls.formGroup_address} onClick={() => {
+                                setCode(location)
+                                getPvzs(location.code)
+                              }}
+                              >
+                                <input
+                                  readOnly
+                                  type="text"
+                                  value={location.name}
+                                  style={{ cursor: 'pointer' }}
+                                />
+                              </div>
+                            ))
+                          )
+                        )
+                      }
+                    </div>
+                  </div>
+                </section>
+              )
+            }
 
             {
               cdekType ? (
@@ -469,7 +537,7 @@ export default function OrderProcessPage() {
                 </>
               ) : (
                 <section className={cls.addressForm}>
-                  <h2 className={cls.sectionTitle}>{typeOfDeliver === 'delivery' ? 'Выберите адрес доставки' : 'Адрес магазина'}</h2>
+                  <h2 className={cls.sectionTitle}>{typeOfDeliver === 'delivery' || typeOfDeliver === 'cdek_courier' ? 'Выберите адрес доставки' : 'Адрес магазина'}</h2>
                   <div>
                     <div className={cls.formGroup_address}>
                       {typeOfDeliver === 'delivery' && (<label htmlFor="address" />)}
