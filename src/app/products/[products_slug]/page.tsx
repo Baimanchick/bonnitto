@@ -309,9 +309,9 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div className={cls.stock}>
+                {/* <div className={cls.stock}>
                   <span>В наличии: {selectedVariant.stock} шт</span>
-                </div>
+                </div> */}
 
                 <div className={cls.composition}>
                   Состав: {defaultProductDetail.composition}
